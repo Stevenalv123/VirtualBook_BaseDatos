@@ -60,7 +60,6 @@ namespace VirtualBook_API.Controllers
             }
         }
 
-        [HttpPost("register")]
         public async Task<IActionResult> Register([FromForm] DTO.RegisterRequest registerRequest)
         {
             string? fotoPerfilPath = null;
@@ -69,7 +68,6 @@ namespace VirtualBook_API.Controllers
             {
                 if (registerRequest.FotoPerfil != null && registerRequest.FotoPerfil.Length > 0)
                 {
-                    // Definir la carpeta de destino
                     var uploadsFolder = Path.Combine(_env.WebRootPath, "Uploads", "ProfilePictures");
                     if (!Directory.Exists(uploadsFolder))
                     {

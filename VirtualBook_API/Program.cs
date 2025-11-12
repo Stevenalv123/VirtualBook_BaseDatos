@@ -9,8 +9,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<VirtualBook_API.Data.DbContext>();
-builder.Services.AddSingleton<VirtualBook_API.Services.JwtServices>();
+builder.Services.AddScoped<VirtualBook_API.Data.DbContext>();
+builder.Services.AddScoped<VirtualBook_API.Services.JwtServices>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -55,7 +55,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseCors("AllowAllOrigins");
 
