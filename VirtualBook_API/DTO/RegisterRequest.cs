@@ -15,6 +15,7 @@ namespace VirtualBook_API.DTO
 
         [Required, MinLength(6)]
         public string Contrasena { get; set; } = string.Empty;
+        public IFormFile? FotoPerfil { get; set; }
 
         [Required, Range(1, 3)]
         public int IdRol { get; set; }

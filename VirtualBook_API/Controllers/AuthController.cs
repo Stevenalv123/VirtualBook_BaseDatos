@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using VirtualBook_API.Data;
@@ -16,12 +15,14 @@ namespace VirtualBook_API.Controllers
         private readonly DbContext _dbContext;
         private readonly JwtServices _jwtServices;
         private readonly IConfiguration _config;
+        private readonly IWebHostEnvironment _env;
 
-        public AuthController(DbContext dbContext, JwtServices jwtServices, IConfiguration config)
+        public AuthController(DbContext dbContext, JwtServices jwtServices, IConfiguration config, IWebHostEnvironment env)
         {
             _dbContext = dbContext;
             _jwtServices = jwtServices;
             _config = config;
+            _env = env;
         }
 
         [HttpPost("login")]
@@ -60,10 +61,33 @@ namespace VirtualBook_API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] DTO.RegisterRequest registerRequest)
+        public async Task<IActionResult> Register([FromForm] DTO.RegisterRequest registerRequest)
         {
+            string? fotoPerfilPath = null;
+
             try
             {
+                if (registerRequest.FotoPerfil != null && registerRequest.FotoPerfil.Length > 0)
+                {
+                    // Definir la carpeta de destino
+                    var uploadsFolder = Path.Combine(_env.WebRootPath, "Uploads", "ProfilePictures");
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    var extension = Path.GetExtension(registerRequest.FotoPerfil.FileName);
+                    var uniqueFileName = $"{Guid.NewGuid()}{extension}";
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    await using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await registerRequest.FotoPerfil.CopyToAsync(stream);
+                    }
+
+                    fotoPerfilPath = $"/Uploads/ProfilePictures/{uniqueFileName}";
+                }
+
                 await using var connection = _dbContext!.GetConnection();
                 var command = new SqlCommand(Procedimientos.SP_RegistrarUsuario, connection)
                 {
@@ -74,6 +98,7 @@ namespace VirtualBook_API.Controllers
                 command.Parameters.AddWithValue("@Apellidos", registerRequest.Apellidos);
                 command.Parameters.AddWithValue("@Correo_Electronico", registerRequest.Correo_Electronico);
                 command.Parameters.AddWithValue("@Contrasena", registerRequest.Contrasena);
+                command.Parameters.AddWithValue("@FotoPerfil", (object)fotoPerfilPath ?? DBNull.Value);
                 command.Parameters.AddWithValue("@IdRol", registerRequest.IdRol);
                 command.Parameters.AddWithValue("@FechaNacimiento", registerRequest.FechaNacimiento);
                 command.Parameters.AddWithValue("@Genero", registerRequest.Genero);

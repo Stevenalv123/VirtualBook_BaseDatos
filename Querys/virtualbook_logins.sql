@@ -46,6 +46,7 @@ create procedure sp_RegistrarUsuario
 	@Apellidos varchar(50),
 	@Correo_Electronico varchar(100),
 	@Contrasena nvarchar(64),
+	@FotoPerfil nvarchar(max) = null,
 	@IdRol int,
 	@FechaNacimiento datetime,
 	@Genero varchar(10)
@@ -54,8 +55,8 @@ begin
 	set nocount on;
 	
 	declare @Hash varbinary(32) = Hashbytes('SHA2_256', Cast(@Contrasena as nvarchar(256)));
-	insert into Usuario (Nombres, Apellidos, Correo_Electronico, Contrasena, IdRol, FechaNacimiento, Genero)
-	values (@Nombres, @Apellidos, @Correo_Electronico, @Hash, @IdRol, @FechaNacimiento, @Genero);
+	insert into Usuario (Nombres, Apellidos, Correo_Electronico, Contrasena, FotoPerfil, IdRol, FechaNacimiento, Genero)
+	values (@Nombres, @Apellidos, @Correo_Electronico, @Hash, @FotoPerfil, @IdRol, @FechaNacimiento, @Genero);
 end;
 go
 
