@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using VirtualBook.DTOs;
+//using VirtualBook.DTOs;
 
 namespace VirtualBook.Views.DocentesViews
 {
@@ -71,25 +71,25 @@ namespace VirtualBook.Views.DocentesViews
         {
             try
             {
-                var respuesta = await cliente.GetAsync($"{baseUrl}/{idUsuario}");
-                if (respuesta != null && respuesta.IsSuccessStatusCode)
-                {
-                    var json = await respuesta.Content.ReadAsStringAsync();
-                    var usuario = JsonConvert.DeserializeObject<ReadUsuarioDTO>(json);
+                //var respuesta = await cliente.GetAsync($"{baseUrl}/{idUsuario}");
+                //if (respuesta != null && respuesta.IsSuccessStatusCode)
+                //{
+                //    var json = await respuesta.Content.ReadAsStringAsync();
+                //    var usuario = JsonConvert.DeserializeObject<ReadUsuarioDTO>(json);
 
-                    if (usuario != null)
-                    {
-                        PcbCargandoUser.Visible = false;
-                        LblNombreUsuario.Text = $"{usuario.Nombres} {usuario.Apellidos}";
-                        LblCorreoUsuario.Text = usuario.CorreoElectronico;
-                        PcbFotoUsuario.Image = usuario.FotoPerfil != null ? Image.FromStream(new MemoryStream(usuario.FotoPerfil)) : Properties.Resources.avatar;
-                    }
-                    else
-                    {
-                        PcbCargandoUser.Visible = false;
-                    }
+                //    if (usuario != null)
+                //    {
+                //        PcbCargandoUser.Visible = false;
+                //        LblNombreUsuario.Text = $"{usuario.Nombres} {usuario.Apellidos}";
+                //        LblCorreoUsuario.Text = usuario.CorreoElectronico;
+                //        PcbFotoUsuario.Image = usuario.FotoPerfil != null ? Image.FromStream(new MemoryStream(usuario.FotoPerfil)) : Properties.Resources.avatar;
+                //    }
+                //    else
+                //    {
+                //        PcbCargandoUser.Visible = false;
+                //    }
 
-                }
+                //}
             }
             catch (HttpRequestException ex)
             {

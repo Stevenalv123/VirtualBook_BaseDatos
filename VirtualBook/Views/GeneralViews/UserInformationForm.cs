@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Json;
-using VirtualBook.DTOs;
+//using VirtualBook.DTOs;
 using VirtualBook.Views.AdminViews;
 
 
@@ -48,54 +48,54 @@ namespace VirtualBook.Views
             {
                 try
                 {
-                    var nuevoUsuario = new CreateUserDTO
-                    {
-                        Nombres = TxtNombreUsuario.Text,
-                        Apellidos = TxtApellidosUsuarios.Text,
-                        CorreoElectronico = register_Form._Correo,
-                        Contraseña = register_Form._Contraseña,
-                        FotoPerfil = fotoPerfil,
-                        Rol = idRol,
-                        FechaNacimiento = dtmfechanacimiento.Value,
-                        Genero = cbogenero.SelectedItem?.ToString()
-                    };
+                    //var nuevoUsuario = new CreateUserDTO
+                    //{
+                    //    Nombres = TxtNombreUsuario.Text,
+                    //    Apellidos = TxtApellidosUsuarios.Text,
+                    //    CorreoElectronico = register_Form._Correo,
+                    //    Contraseña = register_Form._Contraseña,
+                    //    FotoPerfil = fotoPerfil,
+                    //    Rol = idRol,
+                    //    FechaNacimiento = dtmfechanacimiento.Value,
+                    //    Genero = cbogenero.SelectedItem?.ToString()
+                    //};
 
-                    var response = await client.PostAsJsonAsync(BaseUrl, nuevoUsuario);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var usuarioRegistrado = await response.Content.ReadFromJsonAsync<ReadUsuarioDTO>();
-                        if (usuarioRegistrado != null)
-                        {
-                            Cookies.GuardarCookie(usuarioRegistrado.IdUsuario, usuarioRegistrado.Rol);
+                    //var response = await client.PostAsJsonAsync(BaseUrl, nuevoUsuario);
+                    //if (response.IsSuccessStatusCode)
+                    //{
+                    //    var usuarioRegistrado = await response.Content.ReadFromJsonAsync<ReadUsuarioDTO>();
+                    //    if (usuarioRegistrado != null)
+                    //    {
+                    //        Cookies.GuardarCookie(usuarioRegistrado.IdUsuario, usuarioRegistrado.Rol);
 
-                            if (usuarioRegistrado.Rol == 1)
-                            {
-                                var adminForm = new AdministradorMainForm(idRol);
-                                adminForm.Show();
-                                this.Hide();
-                            }
-                            else if (usuarioRegistrado.Rol == 2)
-                            {
-                                var userform = new DocentesViews.DocentesMainForm(usuarioRegistrado.IdUsuario);
-                                userform.Show();
-                                this.Hide();
-                            }
-                            else if (usuarioRegistrado.Rol == 3)
-                            {
-                                var mainform = new MainForm(usuarioRegistrado.IdUsuario);
-                                mainform.Show();
-                                this.Hide();
-                            }
+                    //        if (usuarioRegistrado.Rol == 1)
+                    //        {
+                    //            var adminForm = new AdministradorMainForm(idRol);
+                    //            adminForm.Show();
+                    //            this.Hide();
+                    //        }
+                    //        else if (usuarioRegistrado.Rol == 2)
+                    //        {
+                    //            var userform = new DocentesViews.DocentesMainForm(usuarioRegistrado.IdUsuario);
+                    //            userform.Show();
+                    //            this.Hide();
+                    //        }
+                    //        else if (usuarioRegistrado.Rol == 3)
+                    //        {
+                    //            var mainform = new MainForm(usuarioRegistrado.IdUsuario);
+                    //            mainform.Show();
+                    //            this.Hide();
+                    //        }
 
-                            this.Hide();
-                            register_Form.Hide();
-                        }
-                    }
-                    else
-                    {
-                        string errorMessage = await response.Content.ReadAsStringAsync();
-                        MessageBox.Show("Error al registrar usuario:\n" + response.StatusCode + "\n" + errorMessage);
-                    }
+                    //        this.Hide();
+                    //        register_Form.Hide();
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    string errorMessage = await response.Content.ReadAsStringAsync();
+                    //    MessageBox.Show("Error al registrar usuario:\n" + response.StatusCode + "\n" + errorMessage);
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -146,25 +146,25 @@ namespace VirtualBook.Views
         {
             using (HttpClient client = new HttpClient())
             {
-                try
-                {
-                    var response = await client.GetAsync("https://localhost:7014/api/Roles");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var roles = await response.Content.ReadFromJsonAsync<List<ReadRolesDTO>>();
-                        cborol.DataSource = roles;
-                        cborol.DisplayMember = "NombreRol";
-                        cborol.ValueMember = "IdRol";
-                    }
-                    else
-                    {
-                        MessageBox.Show("Error al cargar los roles: " + response.StatusCode);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al conectar con el servidor: " + ex.Message);
-                }
+                //try
+                //{
+                //    var response = await client.GetAsync("https://localhost:7014/api/Roles");
+                //    if (response.IsSuccessStatusCode)
+                //    {
+                //        var roles = await response.Content.ReadFromJsonAsync<List<ReadRolesDTO>>();
+                //        cborol.DataSource = roles;
+                //        cborol.DisplayMember = "NombreRol";
+                //        cborol.ValueMember = "IdRol";
+                //    }
+                //    else
+                //    {
+                //        MessageBox.Show("Error al cargar los roles: " + response.StatusCode);
+                //    }
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show("Error al conectar con el servidor: " + ex.Message);
+                //}
             }
         }
     }

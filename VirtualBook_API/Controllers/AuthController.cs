@@ -60,6 +60,7 @@ namespace VirtualBook_API.Controllers
             }
         }
 
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromForm] DTO.RegisterRequest registerRequest)
         {
             string? fotoPerfilPath = null;

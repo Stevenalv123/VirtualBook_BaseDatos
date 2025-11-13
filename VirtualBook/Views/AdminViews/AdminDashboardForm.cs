@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System.Net.Http.Json;
-using VirtualBook.DTOs;
 using VirtualBook.Views.AdminViews;
 using VirtualBook.Views.UploadBookForm;
 
@@ -33,37 +32,37 @@ namespace VirtualBook.Views
             string LibrosURL = "https://localhost:7014/api/Libroes/dataLibro";
             string TotalUsuariosURL = "https://localhost:7014/api/Usuarios/total";
 
-            using (HttpClient client = new HttpClient())
-            {
-                try
-                {
-                    var response = await client.GetAsync(LibrosURL);
-                    var TotalLibros = await client.GetAsync(totalLibrosURL);
-                    var Usuarios = await client.GetAsync(TotalUsuariosURL);
+            //using (HttpClient client = new HttpClient())
+            //{
+            //    try
+            //    {
+            //        var response = await client.GetAsync(LibrosURL);
+            //        var TotalLibros = await client.GetAsync(totalLibrosURL);
+            //        var Usuarios = await client.GetAsync(TotalUsuariosURL);
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        //var usuarios = await response.Content.ReadFromJsonAsync<List<DTOs.ReadLibroDTO>>();
-                        var json = await response.Content.ReadAsStringAsync();
-                        var list = JsonConvert.DeserializeObject<List<DTOs.ReadDataLibroDTO>>(json);
-                        int total = Convert.ToInt32(await TotalLibros.Content.ReadAsStringAsync());
-                        int totalUsuarios = Convert.ToInt32(await Usuarios.Content.ReadAsStringAsync());
+            //        if (response.IsSuccessStatusCode)
+            //        {
+            //            //var usuarios = await response.Content.ReadFromJsonAsync<List<DTOs.ReadLibroDTO>>();
+            //            var json = await response.Content.ReadAsStringAsync();
+            //            var list = JsonConvert.DeserializeObject<List<DTOs.ReadDataLibroDTO>>(json);
+            //            int total = Convert.ToInt32(await TotalLibros.Content.ReadAsStringAsync());
+            //            int totalUsuarios = Convert.ToInt32(await Usuarios.Content.ReadAsStringAsync());
 
-                        lblTotalLibros.Text = total.ToString();
-                        lblTotalUsuarios.Text = totalUsuarios.ToString();
-                        dgvShowBooks.DataSource = list;
-                    }
-                    else
-                    {
-                        MessageBox.Show(Text = $"Error al cargar los Libros: {response.ReasonPhrase}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al cargar los libros: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                ;
-            }
+            //            lblTotalLibros.Text = total.ToString();
+            //            lblTotalUsuarios.Text = totalUsuarios.ToString();
+            //            dgvShowBooks.DataSource = list;
+            //        }
+            //        else
+            //        {
+            //            MessageBox.Show(Text = $"Error al cargar los Libros: {response.ReasonPhrase}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show($"Error al cargar los libros: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    }
+            //    ;
+            //}
         }
 
         private void BtnAgregarNuevoLibro_Click(object sender, EventArgs e)
@@ -108,46 +107,46 @@ namespace VirtualBook.Views
             string api = $"https://localhost:7014/api/Libroes/buscar?Busqueda={filtro}";
 
 
-            using (HttpClient client = new HttpClient())
-            {
-                try
-                {
-                    var response = await client.GetAsync(api);
+            //using (HttpClient client = new HttpClient())
+            //{
+            //    try
+            //    {
+            //        var response = await client.GetAsync(api);
 
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var libros = await response.Content.ReadFromJsonAsync<List<DTOs.ReadDataLibroDTO>>();
+            //        if (response.IsSuccessStatusCode)
+            //        {
+            //            var libros = await response.Content.ReadFromJsonAsync<List<DTOs.ReadDataLibroDTO>>();
 
-                        dgvShowBooks.DataSource = libros;
+            //            dgvShowBooks.DataSource = libros;
 
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Error al cargar los libros: {response.ReasonPhrase}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al cargar los libros: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            //        }
+            //        else
+            //        {
+            //            MessageBox.Show($"Error al cargar los libros: {response.ReasonPhrase}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show($"Error al cargar los libros: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    }
+            //}
         }
 
-        private List<ReadDescargaDTO> todasLasDescargas = new List<ReadDescargaDTO>();
+        //private List<ReadDescargaDTO> todasLasDescargas = new List<ReadDescargaDTO>();
 
         private async Task CargarDescargas()
         {
-            try
-            {
-                todasLasDescargas = await cliente.GetFromJsonAsync<List<ReadDescargaDTO>>(descargasUrl);
-                ActualizarContadorDescargas(todasLasDescargas.Count);
-                lblDescargas.Text = todasLasDescargas.Count.ToString();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error cargando descargas: " + ex.Message);
-            }
+            //try
+            //{
+            //    todasLasDescargas = await cliente.GetFromJsonAsync<List<ReadDescargaDTO>>(descargasUrl);
+            //    ActualizarContadorDescargas(todasLasDescargas.Count);
+            //    lblDescargas.Text = todasLasDescargas.Count.ToString();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Error cargando descargas: " + ex.Message);
+            //}
         }
         private void ActualizarContadorDescargas(int total)
         {

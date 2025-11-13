@@ -1,6 +1,4 @@
-﻿using System.Text;
-using System.Text.Json;
-using VirtualBook.DTOs;
+﻿using VirtualBook.Controller;
 using VirtualBook.Views;
 
 namespace VirtualBook
@@ -8,12 +6,12 @@ namespace VirtualBook
     public partial class LoginForm : Form
     {
         bool visible = false;
-        public string baseUrl = "https://localhost:7014/api/Usuarios";
-        public HttpClient http = new();
+        private readonly ApiClient _apiClient;
         public LoginForm()
         {
             InitializeComponent();
             BtnVerContraseña.Visible = true;
+            _apiClient = new ApiClient();
         }
 
         private void BtnIrRegistrarmeForm_Click(object sender, EventArgs e)

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using VirtualBook.UserControls;
 using System.Drawing.Drawing2D;
-using VirtualBook.DTOs;
+//using VirtualBook.DTOs;
 using System.Net.Http.Json;
 
 namespace VirtualBook.Views
@@ -94,40 +94,40 @@ namespace VirtualBook.Views
             flpLibros.Controls.Clear();
             PcbCargando.Visible = true;
             PcbCargando.BringToFront();
-            try
-            {
-                var response = await cliente.GetAsync($"{baseUrl}Libroes");
-                response.EnsureSuccessStatusCode();
+            //try
+            //{
+            //    var response = await cliente.GetAsync($"{baseUrl}Libroes");
+            //    response.EnsureSuccessStatusCode();
 
-                var libros = await response.Content.ReadFromJsonAsync<List<ReadVistaPreviaLibro>>();
+            //    var libros = await response.Content.ReadFromJsonAsync<List<ReadVistaPreviaLibro>>();
 
-                if (libros != null)
-                {
-                    foreach (var libro in libros)
-                    {
-                        var tarjeta = new LibroCard(libro, mainform); // ya carga todo internamente
-                        flpLibros.Controls.Add(tarjeta);
-                    }
-                }
-                PcbCargando.Visible = false;
-            }
-            catch (Exception ex)
-            {
-                PcbCargando.Visible = false;
-                MessageBox.Show("Error al cargar libros: " + ex.Message);
-            }
+            //    if (libros != null)
+            //    {
+            //        foreach (var libro in libros)
+            //        {
+            //            var tarjeta = new LibroCard(libro, mainform); // ya carga todo internamente
+            //            flpLibros.Controls.Add(tarjeta);
+            //        }
+            //    }
+            //    PcbCargando.Visible = false;
+            //}
+            //catch (Exception ex)
+            //{
+            //    PcbCargando.Visible = false;
+            //    MessageBox.Show("Error al cargar libros: " + ex.Message);
+            //}
         }
 
-        public void MostrarLibrosFiltrados(List<ReadVistaPreviaLibro> libros)
-        {
-            flpLibros.Controls.Clear();
+        //public void MostrarLibrosFiltrados(List<ReadVistaPreviaLibro> libros)
+        //{
+        //    flpLibros.Controls.Clear();
 
-            foreach (var libro in libros)
-            {
-                var tarjeta = new LibroCard(libro, mainform);
-                flpLibros.Controls.Add(tarjeta);
-            }
-        }
+        //    foreach (var libro in libros)
+        //    {
+        //        var tarjeta = new LibroCard(libro, mainform);
+        //        flpLibros.Controls.Add(tarjeta);
+        //    }
+        //}
 
     }
 }

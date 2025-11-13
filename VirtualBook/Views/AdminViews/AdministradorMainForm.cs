@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using VirtualBook.DTOs;
+//using VirtualBook.DTOs;
 
 namespace VirtualBook.Views.AdminViews
 {
@@ -69,20 +69,20 @@ namespace VirtualBook.Views.AdminViews
                 var respuesta = await cliente.GetAsync($"{baseUrl}/{_idUsuario}");
                 if (respuesta.IsSuccessStatusCode)
                 {
-                    var json = await respuesta.Content.ReadAsStringAsync();
-                    var usuario = JsonConvert.DeserializeObject<ReadUsuarioDTO>(json);
+                    //var json = await respuesta.Content.ReadAsStringAsync();
+                    //var usuario = JsonConvert.DeserializeObject<ReadUsuarioDTO>(json);
 
-                    if (usuario != null)
-                    {
-                        PcbCargandoUser.Visible = false;
-                        LblNombre.Text = $"{usuario.Nombres} {usuario.Apellidos}";
-                        LblCorreo.Text = usuario.CorreoElectronico;
-                        PcbPerfilFoto.Image = usuario.FotoPerfil != null ? Image.FromStream(new MemoryStream(usuario.FotoPerfil)) : Properties.Resources.avatar1;
-                    }
-                    else
-                    {
-                        PcbCargandoUser.Visible = true;
-                    }
+                    //if (usuario != null)
+                    //{
+                    //    PcbCargandoUser.Visible = false;
+                    //    LblNombre.Text = $"{usuario.Nombres} {usuario.Apellidos}";
+                    //    LblCorreo.Text = usuario.CorreoElectronico;
+                    //    PcbPerfilFoto.Image = usuario.FotoPerfil != null ? Image.FromStream(new MemoryStream(usuario.FotoPerfil)) : Properties.Resources.avatar1;
+                    //}
+                    //else
+                    //{
+                    //    PcbCargandoUser.Visible = true;
+                    //}
 
                 }
                 else

@@ -28,32 +28,32 @@ namespace VirtualBook.Views
         }
         private async void CargarUsuarios()
         {
-            string TotalUrl = "https://localhost:7014/api/Usuarios/total";
-            using (HttpClient client = new HttpClient())
-            {
-                try
-                {
-                    var response = await client.GetAsync(BaseUrl + "/dataUser");
-                    var nusuarios = await client.GetAsync(TotalUrl);
+            //string TotalUrl = "https://localhost:7014/api/Usuarios/total";
+            //using (HttpClient client = new HttpClient())
+            //{
+            //    try
+            //    {
+            //        var response = await client.GetAsync(BaseUrl + "/dataUser");
+            //        var nusuarios = await client.GetAsync(TotalUrl);
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var usuarios = await response.Content.ReadFromJsonAsync<List<DTOs.ReadDataUserDTO>>();
-                        int totalUsuarios = Convert.ToInt32(await nusuarios.Content.ReadAsStringAsync());
+            //        if (response.IsSuccessStatusCode)
+            //        {
+            //            var usuarios = await response.Content.ReadFromJsonAsync<List<DTOs.ReadDataUserDTO>>();
+            //            int totalUsuarios = Convert.ToInt32(await nusuarios.Content.ReadAsStringAsync());
 
-                        lblusuariosregistrados.Text = totalUsuarios.ToString();
-                        dgvUsuarios.DataSource = usuarios;
-                    }
-                    else
-                    {
-                        MessageBox.Show(Text = $"Error al cargar los usuarios: {response.ReasonPhrase}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al cargar los usuarios: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                };
-            }
+            //            lblusuariosregistrados.Text = totalUsuarios.ToString();
+            //            dgvUsuarios.DataSource = usuarios;
+            //        }
+            //        else
+            //        {
+            //            MessageBox.Show(Text = $"Error al cargar los usuarios: {response.ReasonPhrase}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show($"Error al cargar los usuarios: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    };
+            //}
         }
 
         private void AdminFormUsers_Load(object sender, EventArgs e)
@@ -71,27 +71,27 @@ namespace VirtualBook.Views
 
             using (HttpClient client = new HttpClient())
             {
-                try
-                {
-                    var response = await client.GetAsync(apiUrl);
+                //try
+                //{
+                //    var response = await client.GetAsync(apiUrl);
 
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var usuarios = await response.Content.ReadFromJsonAsync<List<DTOs.ReadDataUserDTO>>();
+                //    if (response.IsSuccessStatusCode)
+                //    {
+                //        var usuarios = await response.Content.ReadFromJsonAsync<List<DTOs.ReadDataUserDTO>>();
 
-                        dgvUsuarios.DataSource = usuarios;
+                //        dgvUsuarios.DataSource = usuarios;
 
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Error al cargar los usuarios: {response.ReasonPhrase}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al cargar los usuarios: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                //    }
+                //    else
+                //    {
+                //        MessageBox.Show($"Error al cargar los usuarios: {response.ReasonPhrase}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //    }
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show($"Error al cargar los usuarios: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //}
             }
         }
 

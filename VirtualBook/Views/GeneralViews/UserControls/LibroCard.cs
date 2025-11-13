@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Net.Http.Json;
-using VirtualBook.DTOs;
+//using VirtualBook.DTOs;
 using VirtualBook.Views;
 
 namespace VirtualBook.UserControls
@@ -27,42 +27,42 @@ namespace VirtualBook.UserControls
             set => PicPortada.Load(value);
         }
 
-        ReadVistaPreviaLibro _libro;
-        string baseUrl = "https://localhost:7014/api/";
-        HttpClient cliente = new();
-        IMainForm _mainform;
+        //ReadVistaPreviaLibro _libro;
+        //string baseUrl = "https://localhost:7014/api/";
+        //HttpClient cliente = new();
+        //IMainForm _mainform;
 
-        public LibroCard(ReadVistaPreviaLibro libro, IMainForm mainForm)
-        {
-            InitializeComponent();
+        //public LibroCard(ReadVistaPreviaLibro libro, IMainForm mainForm)
+        //{
+        //    InitializeComponent();
 
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint |
-                  ControlStyles.UserPaint |
-                  ControlStyles.DoubleBuffer, true);
+        //    this.SetStyle(ControlStyles.AllPaintingInWmPaint |
+        //          ControlStyles.UserPaint |
+        //          ControlStyles.DoubleBuffer, true);
 
-            this.Margin = new Padding(10);
+        //    this.Margin = new Padding(10);
 
-            // Redondeo automático al cambiar tamaño
-            this.Resize += (s, e) => this.Invalidate();
+        //    // Redondeo automático al cambiar tamaño
+        //    this.Resize += (s, e) => this.Invalidate();
 
 
 
-            // Efecto hover
-            Color originalColor = this.BackColor;
+        //    // Efecto hover
+        //    Color originalColor = this.BackColor;
 
-            this.MouseEnter += (s, e) => this.BackColor = Color.AliceBlue;
-            this.MouseLeave += (s, e) => this.BackColor = originalColor;
+        //    this.MouseEnter += (s, e) => this.BackColor = Color.AliceBlue;
+        //    this.MouseLeave += (s, e) => this.BackColor = originalColor;
 
-            foreach (Control c in this.Controls)
-            {
-                c.MouseEnter += (s, e) => this.BackColor = Color.AliceBlue;
-                c.MouseLeave += (s, e) => this.BackColor = originalColor;
-            }
+        //    foreach (Control c in this.Controls)
+        //    {
+        //        c.MouseEnter += (s, e) => this.BackColor = Color.AliceBlue;
+        //        c.MouseLeave += (s, e) => this.BackColor = originalColor;
+        //    }
 
-            _libro = libro;
-            CargarInfo();
-            _mainform = mainForm;
-        }
+        //    _libro = libro;
+        //    CargarInfo();
+        //    _mainform = mainForm;
+        //}
 
 
         protected override void OnPaint(PaintEventArgs e)
@@ -94,32 +94,32 @@ namespace VirtualBook.UserControls
             return path;
         }
 
-        private void CargarInfo()
-        {
-            LblTitulo.Text = _libro.Titulo;
-            LblAutor.Text = _libro.Autor;
-            LblCategoria.Text = _libro.Categoria;
-            if (_libro.Portada != null && _libro.Portada.Length > 0)
-            {
-                using (var ms = new MemoryStream(_libro.Portada))
-                {
-                    PicPortada.Image = Image.FromStream(ms);
-                    PicPortada.SizeMode = PictureBoxSizeMode.Zoom;
-                }
-            }
-            else
-            {
-                PicPortada.Image = null;
-            }
-        }
+        //private void CargarInfo()
+        //{
+        //    LblTitulo.Text = _libro.Titulo;
+        //    LblAutor.Text = _libro.Autor;
+        //    LblCategoria.Text = _libro.Categoria;
+        //    if (_libro.Portada != null && _libro.Portada.Length > 0)
+        //    {
+        //        using (var ms = new MemoryStream(_libro.Portada))
+        //        {
+        //            PicPortada.Image = Image.FromStream(ms);
+        //            PicPortada.SizeMode = PictureBoxSizeMode.Zoom;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        PicPortada.Image = null;
+        //    }
+        //}
 
-        private void BtnDetalles_Click(object sender, EventArgs e)
-        {
-            if (_mainform != null)
-            {
-                var detalles=new BookInfoForms(_libro.IdLibro, _mainform);
-                _mainform.OpenForm(detalles);
-            }
-        }
+        //private void BtnDetalles_Click(object sender, EventArgs e)
+        //{
+        //    if (_mainform != null)
+        //    {
+        //        var detalles=new BookInfoForms(_libro.IdLibro, _mainform);
+        //        _mainform.OpenForm(detalles);
+        //    }
+        //}
     }
 }

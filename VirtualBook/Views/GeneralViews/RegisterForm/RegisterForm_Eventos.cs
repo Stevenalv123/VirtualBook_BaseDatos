@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
 using System.Printing;
 using System.Text.RegularExpressions;
-using VirtualBook.DTOs;
+//using VirtualBook.DTOs;
 
 namespace VirtualBook.Views
 {
@@ -201,19 +201,19 @@ namespace VirtualBook.Views
                         </html>";
 
 
-            var email = new CreateEmailDTO
-            {
-                EmailReceptor = emailReceptor,
-                Tema = tema,
-                Cuerpo = cuerpo
-            };
+            //var email = new CreateEmailDTO
+            //{
+            //    EmailReceptor = emailReceptor,
+            //    Tema = tema,
+            //    Cuerpo = cuerpo
+            //};
 
 
-            var response=await cliente.PostAsJsonAsync("https://localhost:7014/api/Emails", email);
-            if (!response.IsSuccessStatusCode)
-            {
-                MessageBox.Show("Error al enviar el código. Por favor, inténtalo de nuevo.");
-            }
+            //var response=await cliente.PostAsJsonAsync("https://localhost:7014/api/Emails", email);
+            //if (!response.IsSuccessStatusCode)
+            //{
+            //    MessageBox.Show("Error al enviar el código. Por favor, inténtalo de nuevo.");
+            //}
         }
 
         private string GenerarCodigo()

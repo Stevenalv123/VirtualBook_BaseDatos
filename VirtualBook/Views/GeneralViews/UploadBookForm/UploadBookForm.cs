@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Json;
-using VirtualBook.DTOs;
+//using VirtualBook.DTOs;
 using VirtualBook.Views.GeneralViews;
 
 namespace VirtualBook.Views.UploadBookForm
@@ -132,105 +132,105 @@ namespace VirtualBook.Views.UploadBookForm
 
         private async Task SubirLibro(string archivoPdf, string archivoPortada)
         {
-            var autorSeleccionado = LstAutores.SelectedItem as ReadAutorDTO;
-            var categoriaSeleccionada = CmbCategoria.SelectedItem as ReadCategoriaDTO;
+            //var autorSeleccionado = LstAutores.SelectedItem as ReadAutorDTO;
+            //var categoriaSeleccionada = CmbCategoria.SelectedItem as ReadCategoriaDTO;
 
-            var form = new MultipartFormDataContent();
+            //var form = new MultipartFormDataContent();
 
-            //Leer archivo pdf
-            var pdfBytes = File.ReadAllBytes(archivoPdf);
-            var contenidoPdf = new ByteArrayContent(pdfBytes);
-            contenidoPdf.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/pdf");
+            ////Leer archivo pdf
+            //var pdfBytes = File.ReadAllBytes(archivoPdf);
+            //var contenidoPdf = new ByteArrayContent(pdfBytes);
+            //contenidoPdf.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/pdf");
 
-            //Leer portada
-            var portadaBytes = File.ReadAllBytes(archivoPortada);
-            var contenidoPortada = new ByteArrayContent(portadaBytes);
-            contenidoPortada.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
+            ////Leer portada
+            //var portadaBytes = File.ReadAllBytes(archivoPortada);
+            //var contenidoPortada = new ByteArrayContent(portadaBytes);
+            //contenidoPortada.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
 
-            //Agregar contenido al formulario
-            form.Add(new StringContent(TxtTitulo.Text), "Titulo");
-            form.Add(new StringContent(autorSeleccionado.IdAutor.ToString()), "Autor");
-            form.Add(new StringContent(_idUsuario.ToString()), "Publicador");
-            form.Add(new StringContent(categoriaSeleccionada.IdCategoria.ToString()), "IdCategoria");
-            form.Add(new StringContent(TxtFormato.Text), "Formato");
-            form.Add(new StringContent(CmbIdioma.Text), "Idioma");
-            form.Add(new StringContent(TxtNumeroPaginas.Text), "NumeroPaginas");
-            form.Add(new StringContent(DateTime.Now.ToString("yyyy-MM-dd")), "FechaPublicacion");
-            form.Add(new StringContent(TxtDescripcion.Text), "Descripcion");
+            ////Agregar contenido al formulario
+            //form.Add(new StringContent(TxtTitulo.Text), "Titulo");
+            //form.Add(new StringContent(autorSeleccionado.IdAutor.ToString()), "Autor");
+            //form.Add(new StringContent(_idUsuario.ToString()), "Publicador");
+            //form.Add(new StringContent(categoriaSeleccionada.IdCategoria.ToString()), "IdCategoria");
+            //form.Add(new StringContent(TxtFormato.Text), "Formato");
+            //form.Add(new StringContent(CmbIdioma.Text), "Idioma");
+            //form.Add(new StringContent(TxtNumeroPaginas.Text), "NumeroPaginas");
+            //form.Add(new StringContent(DateTime.Now.ToString("yyyy-MM-dd")), "FechaPublicacion");
+            //form.Add(new StringContent(TxtDescripcion.Text), "Descripcion");
 
-            //Agregar archivos
-            form.Add(contenidoPdf, "ArchivoPdf", "libro.pdf");
-            form.Add(contenidoPortada, "Portada", "portada.jpg");
+            ////Agregar archivos
+            //form.Add(contenidoPdf, "ArchivoPdf", "libro.pdf");
+            //form.Add(contenidoPortada, "Portada", "portada.jpg");
 
-            try
-            {
-                var respuesta = await cliente.PostAsync($"{baseUrl}Libroes", form);
-                if (respuesta.IsSuccessStatusCode)
-                {
-                    MessageBox.Show("Libro subido correctamente.");
-                    var menu = new AdminDashboardForm(_mf, _idUsuario);
-                    _mf.OpenForm(menu);
-                }
-                else
-                {
-                    MessageBox.Show($"Error en la API: {respuesta.StatusCode}");
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                MessageBox.Show("Error de conexión con la API: " + ex.Message);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Otro error: " + ex.Message);
-            }
+            //try
+            //{
+            //    var respuesta = await cliente.PostAsync($"{baseUrl}Libroes", form);
+            //    if (respuesta.IsSuccessStatusCode)
+            //    {
+            //        MessageBox.Show("Libro subido correctamente.");
+            //        var menu = new AdminDashboardForm(_mf, _idUsuario);
+            //        _mf.OpenForm(menu);
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show($"Error en la API: {respuesta.StatusCode}");
+            //    }
+            //}
+            //catch (HttpRequestException ex)
+            //{
+            //    MessageBox.Show("Error de conexión con la API: " + ex.Message);
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Otro error: " + ex.Message);
+            //}
         }
 
         private async void CargarAutores()
         {
-            var response = await cliente.GetAsync($"{baseUrl}Autores");
-            if (response.IsSuccessStatusCode)
-            {
-                var autores = await response.Content.ReadFromJsonAsync<List<ReadAutorDTO>>();
-                LstAutores.DataSource = autores;
-                LstAutores.DisplayMember = "NombreAutor";
-                LstAutores.ValueMember = "IdAutor";
-            }
-            else
-            {
-                var error = await response.Content.ReadAsStringAsync();
-                MessageBox.Show($"Error al cargar los autores.{error}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //var response = await cliente.GetAsync($"{baseUrl}Autores");
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var autores = await response.Content.ReadFromJsonAsync<List<ReadAutorDTO>>();
+            //    LstAutores.DataSource = autores;
+            //    LstAutores.DisplayMember = "NombreAutor";
+            //    LstAutores.ValueMember = "IdAutor";
+            //}
+            //else
+            //{
+            //    var error = await response.Content.ReadAsStringAsync();
+            //    MessageBox.Show($"Error al cargar los autores.{error}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
 
         private async void CargarCategorias()
         {
-            try
-            {
-                var response = await cliente.GetAsync($"{baseUrl}Categorias");
-                response.EnsureSuccessStatusCode();
+            //try
+            //{
+            //    var response = await cliente.GetAsync($"{baseUrl}Categorias");
+            //    response.EnsureSuccessStatusCode();
 
-                var categorias = await response.Content.ReadFromJsonAsync<List<ReadCategoriaDTO>>();
-                if (categorias != null)
-                {
-                    CmbCategoria.DataSource = categorias;
-                    CmbCategoria.DisplayMember = "NombreCategoria";
-                    CmbCategoria.ValueMember = "IdCategoria";
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al cargar las categorias.\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //    var categorias = await response.Content.ReadFromJsonAsync<List<ReadCategoriaDTO>>();
+            //    if (categorias != null)
+            //    {
+            //        CmbCategoria.DataSource = categorias;
+            //        CmbCategoria.DisplayMember = "NombreCategoria";
+            //        CmbCategoria.ValueMember = "IdCategoria";
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Error al cargar las categorias.\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
 
         private void LstAutores_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (LstAutores.SelectedItem is ReadAutorDTO autorSeleccionado)
-            {
-                TxtAutor.Text = autorSeleccionado.NombreAutor;
-                LstAutores.Visible = false;
-            }
+            //if (LstAutores.SelectedItem is ReadAutorDTO autorSeleccionado)
+            //{
+            //    TxtAutor.Text = autorSeleccionado.NombreAutor;
+            //    LstAutores.Visible = false;
+            //}
         }
 
         private void TxtAutor_Enter(object sender, EventArgs e)

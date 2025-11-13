@@ -10,7 +10,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using VirtualBook.DTOs;
+//using VirtualBook.DTOs;
 using VirtualBook.UserControls;
 
 namespace VirtualBook.Views
@@ -34,15 +34,15 @@ namespace VirtualBook.Views
             if (response.IsSuccessStatusCode)
             {
                 var json=await response.Content.ReadAsStringAsync();
-                var favoritos=JsonConvert.DeserializeObject<List<ReadVistaPreviaLibro>>(json);
-                if (favoritos != null && favoritos.Count > 0)
-                {
-                    foreach (var libro in favoritos)
-                    {
-                        var card = new LibroCard(libro, mainform);
-                        flpLibros.Controls.Add(card);
-                    }
-                }
+                //var favoritos=JsonConvert.DeserializeObject<List<ReadVistaPreviaLibro>>(json);
+                //if (favoritos != null && favoritos.Count > 0)
+                //{
+                //    foreach (var libro in favoritos)
+                //    {
+                //        var card = new LibroCard(libro, mainform);
+                //        flpLibros.Controls.Add(card);
+                //    }
+                //}
             }
             else
             {

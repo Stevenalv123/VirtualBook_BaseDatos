@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Drawing.Drawing2D;
-using VirtualBook.DTOs;
 
 namespace VirtualBook.Views
 {
@@ -9,7 +7,7 @@ namespace VirtualBook.Views
         public void OpenForm(Form ChildForm)
         {
             if (activeForm != null)
-                activeForm.Hide();        // <-- aquí, Hide() en vez de Close()
+                activeForm.Hide();      
 
             activeForm = ChildForm;
 
@@ -41,7 +39,7 @@ namespace VirtualBook.Views
 
         private void MostrarInformacionPerfilForm()
         {
-            OpenForm(new ProfileForm(idUsuario)); 
+            //OpenForm(new ProfileForm(_apiClient)); 
 
         }
 
@@ -67,32 +65,32 @@ namespace VirtualBook.Views
 
         public async Task CargarUsuario()
         {
-            try
-            {
-                var respuesta = await cliente.GetAsync($"{baseUrl}/{idUsuario}");
-                if (respuesta != null && respuesta.IsSuccessStatusCode)
-                {
-                    var json = await respuesta.Content.ReadAsStringAsync();
-                    var usuario = JsonConvert.DeserializeObject<ReadUsuarioDTO>(json);
+            //try
+            //{
+            //    var respuesta = await _apiClient.GetAsync($"{baseUrl}/{idUsuario}");
+            //    if (respuesta != null && respuesta.IsSuccessStatusCode)
+            //    {
+            //        var json = await respuesta.Content.ReadAsStringAsync();
+            //        var usuario = JsonConvert.DeserializeObject<ReadUsuarioDTO>(json);
 
-                    if(usuario!= null)
-                    {
-                        PcbCargandoUser.Visible = false;
-                        LblNombre.Text = $"{usuario.Nombres} {usuario.Apellidos}";
-                        LblCorreo.Text = usuario.CorreoElectronico;
-                        PcbFotoPerfil.Image = usuario.FotoPerfil != null ? Image.FromStream(new MemoryStream(usuario.FotoPerfil)) : Properties.Resources.avatar;
-                    }
-                    else
-                    {
-                        PcbCargandoUser.Visible = true;
-                    }
+            //        if(usuario!= null)
+            //        {
+            //            PcbCargandoUser.Visible = false;
+            //            LblNombre.Text = $"{usuario.Nombres} {usuario.Apellidos}";
+            //            LblCorreo.Text = usuario.CorreoElectronico;
+            //            PcbFotoPerfil.Image = usuario.FotoPerfil != null ? Image.FromStream(new MemoryStream(usuario.FotoPerfil)) : Properties.Resources.avatar;
+            //        }
+            //        else
+            //        {
+            //            PcbCargandoUser.Visible = true;
+            //        }
 
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                MessageBox.Show($"Error al cargar el usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //    }
+            //}
+            //catch (HttpRequestException ex)
+            //{
+            //    MessageBox.Show($"Error al cargar el usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
     }
 }

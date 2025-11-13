@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using VirtualBook.DTOs;
+//using VirtualBook.DTOs;
 
 namespace VirtualBook.Views.DocentesViews
 {
@@ -34,24 +34,24 @@ namespace VirtualBook.Views.DocentesViews
 
         private async void CargarLibros()
         {
-            var response=await cliente.GetAsync($"{baseUrl}/usuario/{_idDocente}");
-            response.EnsureSuccessStatusCode();
-            if(response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                var libros=JsonConvert.DeserializeObject<List<ReadDataLibroDTO>>(json);
-                if (libros != null && libros.Count > 0)
-                {
-                    DgvLibros.DataSource = null;
-                    DgvLibros.DataSource = libros;
-                    LblTotalBooks.Text = $"{libros.Count} libros";
-                    await CargarCantidadSeguidores(_idDocente);
-                }
-            }
-            else
-            {
-                MessageBox.Show("Error al cargar los libros.");
-            }
+            //var response=await cliente.GetAsync($"{baseUrl}/usuario/{_idDocente}");
+            //response.EnsureSuccessStatusCode();
+            //if(response.IsSuccessStatusCode)
+            //{
+            //    var json = await response.Content.ReadAsStringAsync();
+            //    var libros=JsonConvert.DeserializeObject<List<ReadDataLibroDTO>>(json);
+            //    if (libros != null && libros.Count > 0)
+            //    {
+            //        DgvLibros.DataSource = null;
+            //        DgvLibros.DataSource = libros;
+            //        LblTotalBooks.Text = $"{libros.Count} libros";
+            //        await CargarCantidadSeguidores(_idDocente);
+            //    }
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Error al cargar los libros.");
+            //}
         }
 
         private async Task CargarCantidadSeguidores(int idUsuario)

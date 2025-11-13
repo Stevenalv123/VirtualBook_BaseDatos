@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Json;
-using VirtualBook.Model;
+//using VirtualBook.Model;
 using VirtualBook.Views;
 using VirtualBook.Views.AdminViews;
 using VirtualBook.Views.DocentesViews;
@@ -9,15 +9,11 @@ namespace VirtualBook
 {
     public partial class LoginForm:Form
     {
-        //Evento que le asigna al boton de cerrar que cierre el formulario
         private void BtnCerrar_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
-        //Aplico logica para poder ver y ocultar la contraseña
-
-        //Validamos antes de continuar que los campos esten correctos
         private async void BtnContinuar_Click(object sender, EventArgs e)
         {
             ErrorValidaciones.Clear();
@@ -42,45 +38,11 @@ namespace VirtualBook
 
             try
             {
-                var response = await http.PostAsJsonAsync($"{baseUrl}/login", loginData);
-                
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var usuario = await response.Content.ReadFromJsonAsync<Usuario>();
-                    Cookies.GuardarCookie(usuario.IdUsuario, usuario.Rol);
-
-                    if (usuario.Rol == 1)
-                    {
-                        var adminForm = new AdministradorMainForm(usuario.IdUsuario);
-                        adminForm.Show();
-                        this.Hide();
-                    }
-                    else if (usuario.Rol == 2)
-                    {
-                        var userForm = new DocentesMainForm(usuario.IdUsuario);
-                        userForm.Show();
-                        this.Hide();
-                    }
-                    else if (usuario.Rol == 3)
-                    {
-                        var mainform = new MainForm(usuario.IdUsuario);
-                        mainform.Show();
-                        this.Hide();
-                    }
-                }
-                else
-                {
-                    var statusCode = (int)response.StatusCode;
-                    var content = await response.Content.ReadAsStringAsync();
-                    MessageBox.Show($"Error {statusCode}: {content}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-
-                }
+                await LoginAsync();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al conectar con el servidor: {ex.Message}");
+                MessageBox.Show($"Error: {ex.Message}", "Error de Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }
