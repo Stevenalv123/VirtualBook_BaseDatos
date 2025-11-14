@@ -8,12 +8,10 @@ namespace VirtualBook.Models.Repository
     internal class UserRepository : IUserRepository
     {
         private readonly HttpClient _httpClient;
-        private readonly string _endpoint;
 
-        public UserRepository(HttpClient httpClient, string endpoint)
+        public UserRepository(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _endpoint = endpoint;
         }
 
         public async Task<LoginResponse> ValidateCredentialsAsync(string email, string password)
@@ -27,14 +25,14 @@ namespace VirtualBook.Models.Repository
             var content = new StringContent(JsonConvert.SerializeObject(loginRequest),
                 Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync(_endpoint, content);
+            var response = await _httpClient.PostAsync("Auth/login", content);
 
             if (response.IsSuccessStatusCode)
             {
                 var responseData = await response.Content.ReadAsStringAsync();
                 var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseData);
 
-                if(loginResponse != null && !string.IsNullOrEmpty(loginResponse.Token))
+                if (loginResponse != null && !string.IsNullOrEmpty(loginResponse.Token))
                 {
                     return loginResponse;
                 }
@@ -48,6 +46,27 @@ namespace VirtualBook.Models.Repository
                 var errorData = await response.Content.ReadAsStringAsync();
                 throw new Exception($"{errorData}");
             }
+        }
+
+        public async Task<LoginResponse> GetMyProfileAsync()
+        {
+            var response = await _httpClient.GetAsync("Auth/me");
+            if (response.IsSuccessStatusCode)
+            {
+                var responseData = await response.Content.ReadAsStringAsync();
+                var profileResponse = JsonConvert.DeserializeObject<LoginResponse>(responseData);
+                if (profileResponse != null)
+                {
+                    return profileResponse;
+                }
+                else
+                {
+                    throw new Exception("Datos de perfil invalido.");
+                }
+            }
+
+            var errorData = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Error al obtener perfil: {errorData}");
         }
     }
 }

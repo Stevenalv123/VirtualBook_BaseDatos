@@ -5,6 +5,7 @@ using VirtualBook_API.Data;
 using VirtualBook_API.DTO;
 using VirtualBook_API.Models;
 using VirtualBook_API.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace VirtualBook_API.Controllers
 {
@@ -43,10 +44,12 @@ namespace VirtualBook_API.Controllers
                 {
                     Token = token,
                     Expiration = expiration,
+                    IdUsuario = usuario.IdUsuario,
                     Nombres = usuario.Nombres,
                     Apellidos = usuario.Apellidos,
                     Correo_Electronico = usuario.Correo_Electronico,
                     IdRol = usuario.IdRol,
+                    NombreRol = usuario.NombreRol,
                     FotoPerfil = usuario.FotoPerfil ?? "",
                     FechaNacimiento = usuario.FechaNacimiento,
                     Genero = usuario.Genero ?? ""
@@ -154,6 +157,60 @@ namespace VirtualBook_API.Controllers
                 };
             }
 
+            return usuario;
+        }
+
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<IActionResult> GetMyProfile()
+        {
+            var userEmail = User.Identity?.Name;
+
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return Unauthorized();
+            }
+
+            var usuario = await GetUsuarioDataByEmail(userEmail);
+
+            if (usuario == null)
+            {
+                return NotFound("Usuario no encontrado.");
+            }
+
+            return Ok(usuario);
+        }
+
+        private async Task<LoginResponse?> GetUsuarioDataByEmail(string correo)
+        {
+            LoginResponse? usuario = null;
+            await using var connection = _dbContext.GetConnection();
+
+            var command = new SqlCommand(Procedimientos.SP_ObtenerUsuarioPorCorreo, connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            command.Parameters.AddWithValue("@CorreoUsuario", correo);
+
+            await connection.OpenAsync();
+            var reader = await command.ExecuteReaderAsync();
+
+            if (reader.HasRows)
+            {
+                await reader.ReadAsync();
+                usuario = new LoginResponse
+                {
+                    IdUsuario = (int)reader["IdUsuario"],
+                    Nombres = reader["Nombres"].ToString(),
+                    Apellidos = reader["Apellidos"].ToString(),
+                    Correo_Electronico = reader["Correo_Electronico"].ToString(),
+                    FotoPerfil = reader["FotoPerfil"] == DBNull.Value ? null : reader["FotoPerfil"].ToString(),
+                    IdRol = (int)reader["IdRol"],
+                    NombreRol = reader["NombreRol"].ToString(),
+                    FechaNacimiento = (DateTime)reader["FechaNacimiento"],
+                    Genero = reader["Genero"] == DBNull.Value ? null : reader["Genero"].ToString()
+                };
+            }
             return usuario;
         }
     }

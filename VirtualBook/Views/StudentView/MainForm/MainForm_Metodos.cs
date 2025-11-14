@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Configuration;
 
 namespace VirtualBook.Views
 {
@@ -40,7 +41,6 @@ namespace VirtualBook.Views
         private void MostrarInformacionPerfilForm()
         {
             //OpenForm(new ProfileForm(_apiClient)); 
-
         }
 
         private void MostrarMenuPrincipal()
@@ -65,32 +65,35 @@ namespace VirtualBook.Views
 
         public async Task CargarUsuario()
         {
-            //try
-            //{
-            //    var respuesta = await _apiClient.GetAsync($"{baseUrl}/{idUsuario}");
-            //    if (respuesta != null && respuesta.IsSuccessStatusCode)
-            //    {
-            //        var json = await respuesta.Content.ReadAsStringAsync();
-            //        var usuario = JsonConvert.DeserializeObject<ReadUsuarioDTO>(json);
-
-            //        if(usuario!= null)
-            //        {
-            //            PcbCargandoUser.Visible = false;
-            //            LblNombre.Text = $"{usuario.Nombres} {usuario.Apellidos}";
-            //            LblCorreo.Text = usuario.CorreoElectronico;
-            //            PcbFotoPerfil.Image = usuario.FotoPerfil != null ? Image.FromStream(new MemoryStream(usuario.FotoPerfil)) : Properties.Resources.avatar;
-            //        }
-            //        else
-            //        {
-            //            PcbCargandoUser.Visible = true;
-            //        }
-
-            //    }
-            //}
-            //catch (HttpRequestException ex)
-            //{
-            //    MessageBox.Show($"Error al cargar el usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
+            try
+            {
+                var usuario = await _apiClient.LoginUsers.GetMyProfileAsync();
+                if (usuario != null)
+                {
+                    PcbCargandoUser.Visible = false;
+                    LblNombre.Text = $"{usuario.Nombres} {usuario.Apellidos}";
+                    LblCorreo.Text = usuario.Correo_Electronico;
+                    if(!string.IsNullOrEmpty(usuario.FotoPerfil))
+                    {
+                        string? apiBaseUrl = ConfigurationManager.AppSettings["ApiBaseUrl"];
+                        string? rootUrl = apiBaseUrl?.Replace("api/", "/");
+                        string fullImageUrl = rootUrl + usuario.FotoPerfil.TrimStart('/');
+                        PcbFotoPerfil.LoadAsync(fullImageUrl);
+                    }
+                    else
+                    {
+                        PcbFotoPerfil.Image = Properties.Resources.avatar;
+                    }
+                }   
+                else
+                {
+                    PcbCargandoUser.Visible = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar el usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -19,7 +19,7 @@ namespace VirtualBook.Controller
             {
                 BaseAddress = new Uri(apiBaseUrl)
             };
-            LoginUsers = new UserRepository(_httpClient, "Auth/login");
+            LoginUsers = new UserRepository(_httpClient);
         }
 
         internal void SetAuthToken(string token)

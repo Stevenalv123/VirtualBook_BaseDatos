@@ -60,6 +60,29 @@ begin
 end;
 go
 
+--Procedimiento almacenado para encontrar al usuario por email y cargar su informacion
+create procedure sp_ObtenerUsuarioPorCorreo
+	@CorreoUsuario nvarchar(100)
+as
+begin
+	set nocount on;
+	
+	select u.IdUsuario,
+			u.Nombres,
+			u.Apellidos,
+			u.Correo_Electronico,
+			u.FotoPerfil,
+			u.IdRol,
+			r.NombreRol,
+			u.FechaNacimiento,
+			u.Genero
+	from Usuario u
+	inner join Rol r on u.IdRol=r.IdRol
+	where u.Correo_Electronico = @CorreoUsuario
+end;
+go
+
 grant execute on sp_ValidarUsuario to virtualbooksystemUser;
 grant execute on sp_RegistrarUsuario to virtualbooksystemUser;
-go
+grant execute on sp_ObtenerUsuarioPorCorreo to virtualbooksystemUser;
+go;
