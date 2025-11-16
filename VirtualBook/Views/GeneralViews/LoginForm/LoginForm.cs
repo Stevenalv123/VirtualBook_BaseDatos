@@ -1,5 +1,7 @@
 ﻿using VirtualBook.Controller;
 using VirtualBook.Views;
+using VirtualBook.Views.AdminViews;
+using VirtualBook.Views.DocentesViews;
 
 namespace VirtualBook
 {
@@ -11,7 +13,7 @@ namespace VirtualBook
         {
             InitializeComponent();
             BtnVerContraseña.Visible = true;
-            _apiClient = new ApiClient();
+            _apiClient = ApiClient.Instance;
         }
 
         private void BtnIrRegistrarmeForm_Click(object sender, EventArgs e)
@@ -35,6 +37,81 @@ namespace VirtualBook
                 BtnVerContraseña.IconChar = FontAwesome.Sharp.IconChar.EyeSlash;
                 visible = true;
             }
+        }
+        private async Task LoginAsync()
+        {
+            string email = TxtCorreo.Text;
+            string password = TxtContraseña.Text;
+
+            var loginResponse = await _apiClient.LoginUsers.ValidateCredentialsAsync(email, password);
+
+            if (!string.IsNullOrEmpty(loginResponse.Token))
+            {
+                MessageBox.Show($"¡Bienvenido {loginResponse.Nombres}!", "Login Exitoso");
+                _apiClient.SetAuthToken(loginResponse.Token);
+
+                this.Hide();
+
+                switch (loginResponse.IdRol)
+                {
+                    case 1: // Administrador
+                        var adminForm = new AdministradorMainForm(loginResponse.IdUsuario);
+                        adminForm.Show();
+                        MessageBox.Show("Abriendo formulario de Administrador (descomentar línea)");
+                        break;
+                    case 2: // Docente
+                        var docenForm = new DocentesMainForm(loginResponse.IdUsuario);
+                        docenForm.Show();
+                        MessageBox.Show("Abriendo formulario de Docente (descomentar línea)");
+                        break;
+                    case 3:
+                        var mainForm = new MainForm();
+                        mainForm.Show();
+                        MessageBox.Show("Abriendo formulario de Estudiante (descomentar línea)");
+                        break;
+                    default:
+                        MessageBox.Show("Rol desconocido. Contacte a soporte.");
+                        this.Show();
+                        break;
+                }
+            }
+        }
+        private void BtnCerrar_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private async void BtnContinuar_Click(object sender, EventArgs e)
+        {
+            ErrorValidaciones.Clear();
+
+            if (string.IsNullOrEmpty(TxtCorreo.Text))
+            {
+                ErrorValidaciones.SetError(TxtCorreo, "Ingrese su correo");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(TxtContraseña.Text))
+            {
+                ErrorValidaciones.SetError(TxtContraseña, "Ingrese una contraseña");
+                return;
+            }
+
+            var loginData = new
+            {
+                CorreoElectronico = TxtCorreo.Text,
+                Contraseña = TxtContraseña.Text.Trim()
+            };
+
+            try
+            {
+                await LoginAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error de Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
     }
 }

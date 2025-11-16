@@ -31,10 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UploadBookForm));
             panel1 = new Panel();
             BtnAñadirAutor = new VirtualBook.Controls.BorderedPanel();
-            LstAutores = new ListBox();
             BtnAgregarAutor = new VirtualBook.Controls.RJButton();
             borderedPanel13 = new VirtualBook.Controls.BorderedPanel();
-            TxtFormato = new TextBox();
+            CmbFormato = new ComboBox();
             borderedPanel11 = new VirtualBook.Controls.BorderedPanel();
             CmbIdioma = new ComboBox();
             btnCancel = new VirtualBook.Controls.RJButton();
@@ -47,7 +46,6 @@
             label13 = new Label();
             label12 = new Label();
             borderedPanel7 = new VirtualBook.Controls.BorderedPanel();
-            TxtAutor = new TextBox();
             label10 = new Label();
             borderedPanel6 = new VirtualBook.Controls.BorderedPanel();
             TxtDescripcion = new TextBox();
@@ -64,6 +62,7 @@
             LblStatus = new Label();
             btnAddCover = new VirtualBook.Controls.RJButton();
             label1 = new Label();
+            CmbAutor = new ComboBox();
             panel1.SuspendLayout();
             BtnAñadirAutor.SuspendLayout();
             borderedPanel13.SuspendLayout();
@@ -95,7 +94,6 @@
             BtnAñadirAutor.BorderColor = Color.FromArgb(224, 224, 224);
             BtnAñadirAutor.BorderRadius = 20;
             BtnAñadirAutor.BorderSize = 2;
-            BtnAñadirAutor.Controls.Add(LstAutores);
             BtnAñadirAutor.Controls.Add(BtnAgregarAutor);
             BtnAñadirAutor.Controls.Add(borderedPanel13);
             BtnAñadirAutor.Controls.Add(borderedPanel11);
@@ -118,18 +116,6 @@
             BtnAñadirAutor.Size = new Size(617, 686);
             BtnAñadirAutor.TabIndex = 1;
             // 
-            // LstAutores
-            // 
-            LstAutores.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            LstAutores.FormattingEnabled = true;
-            LstAutores.ItemHeight = 15;
-            LstAutores.Location = new Point(323, 73);
-            LstAutores.Name = "LstAutores";
-            LstAutores.Size = new Size(219, 79);
-            LstAutores.TabIndex = 29;
-            LstAutores.Visible = false;
-            LstAutores.SelectedIndexChanged += LstAutores_SelectedIndexChanged;
-            // 
             // BtnAgregarAutor
             // 
             BtnAgregarAutor.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -151,7 +137,6 @@
             BtnAgregarAutor.Text = "+";
             BtnAgregarAutor.TextColor = Color.White;
             BtnAgregarAutor.UseVisualStyleBackColor = false;
-            BtnAgregarAutor.Click += BtnAgregarAutor_Click;
             // 
             // borderedPanel13
             // 
@@ -160,21 +145,22 @@
             borderedPanel13.BorderColor = Color.FromArgb(113, 113, 122);
             borderedPanel13.BorderRadius = 10;
             borderedPanel13.BorderSize = 2;
-            borderedPanel13.Controls.Add(TxtFormato);
+            borderedPanel13.Controls.Add(CmbFormato);
             borderedPanel13.Location = new Point(318, 101);
             borderedPanel13.Name = "borderedPanel13";
             borderedPanel13.Size = new Size(274, 34);
             borderedPanel13.TabIndex = 27;
             // 
-            // TxtFormato
+            // CmbFormato
             // 
-            TxtFormato.BorderStyle = BorderStyle.None;
-            TxtFormato.Enabled = false;
-            TxtFormato.Location = new Point(12, 9);
-            TxtFormato.Name = "TxtFormato";
-            TxtFormato.Size = new Size(251, 16);
-            TxtFormato.TabIndex = 3;
-            TxtFormato.Text = "PDF";
+            CmbFormato.BackColor = Color.White;
+            CmbFormato.FlatStyle = FlatStyle.Flat;
+            CmbFormato.ForeColor = Color.FromArgb(64, 64, 64);
+            CmbFormato.FormattingEnabled = true;
+            CmbFormato.Location = new Point(12, 5);
+            CmbFormato.Name = "CmbFormato";
+            CmbFormato.Size = new Size(248, 23);
+            CmbFormato.TabIndex = 5;
             // 
             // borderedPanel11
             // 
@@ -323,22 +309,11 @@
             borderedPanel7.BorderColor = Color.FromArgb(113, 113, 122);
             borderedPanel7.BorderRadius = 10;
             borderedPanel7.BorderSize = 2;
-            borderedPanel7.Controls.Add(TxtAutor);
+            borderedPanel7.Controls.Add(CmbAutor);
             borderedPanel7.Location = new Point(318, 38);
             borderedPanel7.Name = "borderedPanel7";
             borderedPanel7.Size = new Size(226, 34);
             borderedPanel7.TabIndex = 14;
-            // 
-            // TxtAutor
-            // 
-            TxtAutor.BorderStyle = BorderStyle.None;
-            TxtAutor.Location = new Point(12, 8);
-            TxtAutor.Name = "TxtAutor";
-            TxtAutor.PlaceholderText = "Busca autor";
-            TxtAutor.Size = new Size(201, 16);
-            TxtAutor.TabIndex = 3;
-            TxtAutor.Enter += TxtAutor_Enter;
-            TxtAutor.Leave += TxtAutor_Leave;
             // 
             // label10
             // 
@@ -414,7 +389,7 @@
             label4.AutoSize = true;
             label4.Location = new Point(15, 20);
             label4.Name = "label4";
-            label4.Size = new Size(43, 15);
+            label4.Size = new Size(42, 15);
             label4.TabIndex = 0;
             label4.Text = "Titulo*";
             // 
@@ -463,7 +438,7 @@
             LblStatusArchivo.ForeColor = Color.Gray;
             LblStatusArchivo.Location = new Point(29, 486);
             LblStatusArchivo.Name = "LblStatusArchivo";
-            LblStatusArchivo.Size = new Size(239, 13);
+            LblStatusArchivo.Size = new Size(238, 13);
             LblStatusArchivo.TabIndex = 6;
             LblStatusArchivo.Text = "Supported formats: PDF, Max file size: 100MB";
             LblStatusArchivo.Visible = false;
@@ -504,7 +479,7 @@
             LblStatus.ForeColor = Color.Gray;
             LblStatus.Location = new Point(29, 378);
             LblStatus.Name = "LblStatus";
-            LblStatus.Size = new Size(284, 13);
+            LblStatus.Size = new Size(283, 13);
             LblStatus.TabIndex = 3;
             LblStatus.Text = "Recommended size: 600x900 pixels. Max file size: 2MB.";
             LblStatus.Visible = false;
@@ -538,6 +513,17 @@
             label1.TabIndex = 1;
             label1.Text = "Portada";
             // 
+            // CmbAutor
+            // 
+            CmbAutor.BackColor = Color.White;
+            CmbAutor.FlatStyle = FlatStyle.Flat;
+            CmbAutor.ForeColor = Color.FromArgb(64, 64, 64);
+            CmbAutor.FormattingEnabled = true;
+            CmbAutor.Location = new Point(7, 5);
+            CmbAutor.Name = "CmbAutor";
+            CmbAutor.Size = new Size(211, 23);
+            CmbAutor.TabIndex = 5;
+            // 
             // UploadBookForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -551,13 +537,11 @@
             BtnAñadirAutor.ResumeLayout(false);
             BtnAñadirAutor.PerformLayout();
             borderedPanel13.ResumeLayout(false);
-            borderedPanel13.PerformLayout();
             borderedPanel11.ResumeLayout(false);
             borderedPanel10.ResumeLayout(false);
             borderedPanel9.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)TxtNumeroPaginas).EndInit();
             borderedPanel7.ResumeLayout(false);
-            borderedPanel7.PerformLayout();
             borderedPanel6.ResumeLayout(false);
             borderedPanel6.PerformLayout();
             borderedPanel3.ResumeLayout(false);
@@ -600,10 +584,10 @@
         private Controls.BorderedPanel borderedPanel11;
         private Controls.BorderedPanel borderedPanel13;
         private Label LblStatusArchivo;
-        private TextBox TxtFormato;
         private NumericUpDown TxtNumeroPaginas;
         private Controls.RJButton BtnAgregarAutor;
-        private TextBox TxtAutor;
         private ListBox LstAutores;
+        private ComboBox CmbFormato;
+        private ComboBox CmbAutor;
     }
 }

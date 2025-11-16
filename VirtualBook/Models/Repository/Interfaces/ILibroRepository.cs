@@ -10,5 +10,6 @@ namespace VirtualBook.Models.Repository.Interfaces
     public interface ILibroRepository
     {
         Task<List<LibroDto>> GetLibrosAsync();
+        Task<bool> SubirLibroAsync(LibroUploadModel model);
     }
 }

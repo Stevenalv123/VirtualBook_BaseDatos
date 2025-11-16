@@ -1,4 +1,8 @@
 ﻿using System.Net.Http.Json;
+using VirtualBook.Controller;
+using VirtualBook.Models.DTO;
+
+
 //using VirtualBook.DTOs;
 using VirtualBook.Views.GeneralViews;
 
@@ -7,25 +11,29 @@ namespace VirtualBook.Views.UploadBookForm
     public partial class UploadBookForm : Form
     {
         Label lblSoltarAqui;
-        string baseUrl = "https://localhost:7014/api/";
-        HttpClient cliente = new();
+
+        private readonly ApiClient _apiClient;
+
         int _idUsuario;
-        private string portada { get; set; }
-        private string archivoPdf { get; set; }
+        private string? portada { get; set; }
+        private string? archivoPdf { get; set; }
         IMainForm _mf;
 
         public UploadBookForm(int idUsuario, IMainForm mf)
         {
             InitializeComponent();
+
             _idUsuario = idUsuario;
+            _mf = mf;
+            _apiClient = ApiClient.Instance;
+
             PcbLibroPortada.AllowDrop = true;
             lblSoltarAqui = new Label();
             _mf = mf;
             CrearLabel(lblSoltarAqui);
-            CargarAutores();
-            CargarCategorias();
-        }
 
+            _ = CargarDatosFormulario();
+        }
 
         //DragEnter
         private void ArrastrarArchivo(object sender, DragEventArgs e)
@@ -124,136 +132,15 @@ namespace VirtualBook.Views.UploadBookForm
             PcbLibroPortada.Controls.Add(lblSuelteAqui);
             lblSuelteAqui.BringToFront(); // Asegura que el texto esté arriba
         }
-
-        private async void BtnAgregarLibro_Click(object sender, EventArgs e)
-        {
-            SubirLibro(archivoPdf, portada);
-        }
-
-        private async Task SubirLibro(string archivoPdf, string archivoPortada)
-        {
-            //var autorSeleccionado = LstAutores.SelectedItem as ReadAutorDTO;
-            //var categoriaSeleccionada = CmbCategoria.SelectedItem as ReadCategoriaDTO;
-
-            //var form = new MultipartFormDataContent();
-
-            ////Leer archivo pdf
-            //var pdfBytes = File.ReadAllBytes(archivoPdf);
-            //var contenidoPdf = new ByteArrayContent(pdfBytes);
-            //contenidoPdf.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/pdf");
-
-            ////Leer portada
-            //var portadaBytes = File.ReadAllBytes(archivoPortada);
-            //var contenidoPortada = new ByteArrayContent(portadaBytes);
-            //contenidoPortada.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
-
-            ////Agregar contenido al formulario
-            //form.Add(new StringContent(TxtTitulo.Text), "Titulo");
-            //form.Add(new StringContent(autorSeleccionado.IdAutor.ToString()), "Autor");
-            //form.Add(new StringContent(_idUsuario.ToString()), "Publicador");
-            //form.Add(new StringContent(categoriaSeleccionada.IdCategoria.ToString()), "IdCategoria");
-            //form.Add(new StringContent(TxtFormato.Text), "Formato");
-            //form.Add(new StringContent(CmbIdioma.Text), "Idioma");
-            //form.Add(new StringContent(TxtNumeroPaginas.Text), "NumeroPaginas");
-            //form.Add(new StringContent(DateTime.Now.ToString("yyyy-MM-dd")), "FechaPublicacion");
-            //form.Add(new StringContent(TxtDescripcion.Text), "Descripcion");
-
-            ////Agregar archivos
-            //form.Add(contenidoPdf, "ArchivoPdf", "libro.pdf");
-            //form.Add(contenidoPortada, "Portada", "portada.jpg");
-
-            //try
-            //{
-            //    var respuesta = await cliente.PostAsync($"{baseUrl}Libroes", form);
-            //    if (respuesta.IsSuccessStatusCode)
-            //    {
-            //        MessageBox.Show("Libro subido correctamente.");
-            //        var menu = new AdminDashboardForm(_mf, _idUsuario);
-            //        _mf.OpenForm(menu);
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show($"Error en la API: {respuesta.StatusCode}");
-            //    }
-            //}
-            //catch (HttpRequestException ex)
-            //{
-            //    MessageBox.Show("Error de conexión con la API: " + ex.Message);
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Otro error: " + ex.Message);
-            //}
-        }
-
-        private async void CargarAutores()
-        {
-            //var response = await cliente.GetAsync($"{baseUrl}Autores");
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    var autores = await response.Content.ReadFromJsonAsync<List<ReadAutorDTO>>();
-            //    LstAutores.DataSource = autores;
-            //    LstAutores.DisplayMember = "NombreAutor";
-            //    LstAutores.ValueMember = "IdAutor";
-            //}
-            //else
-            //{
-            //    var error = await response.Content.ReadAsStringAsync();
-            //    MessageBox.Show($"Error al cargar los autores.{error}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
-        }
-
-        private async void CargarCategorias()
-        {
-            //try
-            //{
-            //    var response = await cliente.GetAsync($"{baseUrl}Categorias");
-            //    response.EnsureSuccessStatusCode();
-
-            //    var categorias = await response.Content.ReadFromJsonAsync<List<ReadCategoriaDTO>>();
-            //    if (categorias != null)
-            //    {
-            //        CmbCategoria.DataSource = categorias;
-            //        CmbCategoria.DisplayMember = "NombreCategoria";
-            //        CmbCategoria.ValueMember = "IdCategoria";
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Error al cargar las categorias.\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
-        }
-
-        private void LstAutores_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //if (LstAutores.SelectedItem is ReadAutorDTO autorSeleccionado)
-            //{
-            //    TxtAutor.Text = autorSeleccionado.NombreAutor;
-            //    LstAutores.Visible = false;
-            //}
-        }
-
-        private void TxtAutor_Enter(object sender, EventArgs e)
-        {
-            LstAutores.Visible = true;
-        }
-
         private void TxtAutor_Leave(object sender, EventArgs e)
         {
             //if (!LstAutores.Bounds.Contains(PointToClient(Cursor.Position)))
             //    LstAutores.Visible = false;
         }
 
-        private void BtnAgregarAutor_Click(object sender, EventArgs e)
-        {
-            var nuevoAutorForm = new NuevoAutorForm();
-            nuevoAutorForm.FormClosed += (s, e) => CargarAutores();
-            nuevoAutorForm.ShowDialog();
-        }
-
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            int rol=Cookies.GetRol();
+            int rol = Cookies.GetRol();
 
             if (rol == 1)
             {
@@ -264,6 +151,103 @@ namespace VirtualBook.Views.UploadBookForm
             {
                 var menu = new DocentesViews.DocentesViews(_idUsuario, _mf);
                 _mf.OpenForm(menu);
+            }
+        }
+
+        private async Task CargarDatosFormulario()
+        {
+            try
+            {
+                var autores = await _apiClient.Data.GetAutoresAsync();
+
+                CmbAutor.DataSource = autores;
+                CmbAutor.DisplayMember = "Nombre";
+                CmbAutor.ValueMember = "Id";
+                CmbAutor.SelectedItem = null;
+
+                var categorias = await _apiClient.Data.GetCategoriasAsync();
+                CmbCategoria.DataSource = categorias;
+                CmbCategoria.DisplayMember = "Nombre";
+                CmbCategoria.ValueMember = "Id";
+
+                var formatos = await _apiClient.Data.GetFormatosAsync();
+                CmbFormato.DataSource = formatos;
+                CmbFormato.DisplayMember = "Nombre";
+                CmbFormato.ValueMember = "Id";
+
+                var idiomas = await _apiClient.Data.GetIdiomasAsync();
+                CmbIdioma.DataSource = idiomas;
+                CmbIdioma.DisplayMember = "Nombre";
+                CmbIdioma.ValueMember = "Id";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar datos: {ex.Message}", "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async void BtnAgregarLibro_Click(object sender, EventArgs e)
+        {
+            // --- 1. Validaciones de Campos ---
+            if (string.IsNullOrEmpty(TxtTitulo.Text))
+            {
+                MessageBox.Show("El título es obligatorio.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (string.IsNullOrEmpty(archivoPdf) || string.IsNullOrEmpty(portada))
+            {
+                MessageBox.Show("La portada y el archivo PDF son obligatorios.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (CmbAutor.SelectedValue == null)
+            {
+                MessageBox.Show("Debe seleccionar al menos un autor.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (CmbCategoria.SelectedValue == null || CmbFormato.SelectedValue == null || CmbIdioma.SelectedValue == null)
+            {
+                MessageBox.Show("Debe seleccionar Categoría, Formato e Idioma.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var modelo = new LibroUploadModel
+            {
+                Titulo = TxtTitulo.Text,
+                Descripcion = TxtDescripcion.Text,
+                RutaArchivoPDF = this.archivoPdf,
+                RutaArchivoPortada = this.portada,
+
+                IdCategoria = (int)CmbCategoria.SelectedValue,
+                IdFormato = (int)CmbFormato.SelectedValue,
+                IdIdioma = (int)CmbIdioma.SelectedValue,
+
+                IdsAutores = new List<int> { (int)CmbAutor.SelectedValue },
+
+                NumeroPaginas = int.TryParse(TxtNumeroPaginas.Text, out int paginas) ? paginas : null
+            };
+
+            try
+            {
+                //PcbCargando.Visible = true;
+                bool exito = await _apiClient.Libros.SubirLibroAsync(modelo);
+                //PcbCargando.Visible = false;
+
+                if (exito)
+                {
+                    MessageBox.Show("¡Libro subido exitosamente!", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    btnCancel_Click(sender, e);
+                }
+                else
+                {
+                    MessageBox.Show("La API rechazó la subida. Revise los datos (ej: ¿IDs de FK correctos?).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                //PcbCargando.Visible = false;
+                MessageBox.Show($"Error fatal al conectar con la API: {ex.Message}", "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

@@ -15,7 +15,7 @@ namespace VirtualBook.Views
         public MenuPrincipalFormcs(IMainForm mf)
         {
             InitializeComponent();
-            _apiClient = new ApiClient();
+            _apiClient = ApiClient.Instance;
             _apiRootUrl = ConfigurationManager.AppSettings["ApiRootURL"]!; // URL raíz del App.config
 
             pnlTabs.BackColor = Color.White;

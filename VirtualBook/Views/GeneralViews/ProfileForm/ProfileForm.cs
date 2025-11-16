@@ -17,7 +17,7 @@ namespace VirtualBook.Views
             InitializeComponent();
             this.idUsuario = IdUsuario;
             CargarDataUsuario();
-            mainForm = new MainForm(null);
+            mainForm = new MainForm();
             docentesMainForm = new DocentesViews.DocentesMainForm(idUsuario);
         }
 

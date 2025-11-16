@@ -8,22 +8,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VirtualBook.Controller;
 //using VirtualBook.DTOs;
 
 namespace VirtualBook.Views.DocentesViews
 {
     public partial class DocentesMainForm : Form, IMainForm
     {
-        private string baseUrl = "https://localhost:7014/api/Usuarios";
-        private HttpClient cliente = new();
-        private MenuPrincipalFormcs mPf; // Declare without initialization
+        private readonly ApiClient _apiClient;
+        private MenuPrincipalFormcs mPf;
         private Form? activeForm = null;
         int idUsuario = 0;
         public DocentesMainForm(int IdUsuario)
         {
             InitializeComponent();
             idUsuario = IdUsuario;
-            mPf = new MenuPrincipalFormcs(this); // Initialize here where 'this' is valid
+            _apiClient = ApiClient.Instance;
+            mPf = new MenuPrincipalFormcs(this);
             OpenForm(new MenuPrincipalFormcs(this));
             CargarUsuario();
         }
@@ -71,29 +72,33 @@ namespace VirtualBook.Views.DocentesViews
         {
             try
             {
-                //var respuesta = await cliente.GetAsync($"{baseUrl}/{idUsuario}");
-                //if (respuesta != null && respuesta.IsSuccessStatusCode)
-                //{
-                //    var json = await respuesta.Content.ReadAsStringAsync();
-                //    var usuario = JsonConvert.DeserializeObject<ReadUsuarioDTO>(json);
+                var usuario = await _apiClient.LoginUsers.GetMyProfileAsync();
+                if (usuario != null)
+                {
+                    PcbCargandoUser.Visible = false;
+                    LblNombreUsuario.Text = $"{usuario.Nombres} {usuario.Apellidos}";
+                    LblCorreoUsuario.Text = usuario.Correo_Electronico;
 
-                //    if (usuario != null)
-                //    {
-                //        PcbCargandoUser.Visible = false;
-                //        LblNombreUsuario.Text = $"{usuario.Nombres} {usuario.Apellidos}";
-                //        LblCorreoUsuario.Text = usuario.CorreoElectronico;
-                //        PcbFotoUsuario.Image = usuario.FotoPerfil != null ? Image.FromStream(new MemoryStream(usuario.FotoPerfil)) : Properties.Resources.avatar;
-                //    }
-                //    else
-                //    {
-                //        PcbCargandoUser.Visible = false;
-                //    }
-
-                //}
+                    if (!string.IsNullOrEmpty(usuario.FotoPerfil))
+                    {
+                        string fullImageUrl = _apiClient.RootUrl + usuario.FotoPerfil.TrimStart('/');
+                        PcbFotoUsuario.LoadAsync(fullImageUrl);
+                    }
+                    else
+                    {
+                        PcbFotoUsuario.Image = Properties.Resources.avatar;
+                    }
+                }
+                else
+                {
+                    PcbCargandoUser.Visible = false;
+                    MessageBox.Show("No se pudo cargar la información del usuario.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            catch (HttpRequestException ex)
+            catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar el usuario: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                PcbCargandoUser.Visible = false;
+                MessageBox.Show($"Error al cargar el usuario: {ex.Message}", "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
