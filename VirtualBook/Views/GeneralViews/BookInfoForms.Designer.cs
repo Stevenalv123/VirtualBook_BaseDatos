@@ -33,8 +33,8 @@
             panel1 = new Panel();
             panel2 = new Panel();
             PcbCargando = new PictureBox();
-            PcbFotoPerfilPublicador = new Controls.RoundedPictureBox();
-            BtnSeguir = new Controls.RJButton();
+            PcbFotoPerfilPublicador = new VirtualBook.Controls.RoundedPictureBox();
+            BtnSeguir = new VirtualBook.Controls.RJButton();
             LblNumeroPaginas = new Label();
             label7 = new Label();
             BtnCompartir = new FontAwesome.Sharp.IconButton();

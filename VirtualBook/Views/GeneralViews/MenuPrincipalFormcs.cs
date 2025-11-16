@@ -1,28 +1,32 @@
-﻿using Microsoft.Data.SqlClient;
-using VirtualBook.UserControls;
+﻿using System.Configuration;
 using System.Drawing.Drawing2D;
+using VirtualBook.Controller;
+using VirtualBook.UserControls;
 //using VirtualBook.DTOs;
-using System.Net.Http.Json;
 
 namespace VirtualBook.Views
 {
     public partial class MenuPrincipalFormcs : Form
     {
-        string baseUrl = "https://localhost:7014/api/";
-        HttpClient cliente = new();
+        private readonly ApiClient _apiClient;
+        private readonly string _apiRootUrl;
+
         IMainForm mainform;
         public MenuPrincipalFormcs(IMainForm mf)
         {
             InitializeComponent();
+            _apiClient = new ApiClient();
+            _apiRootUrl = ConfigurationManager.AppSettings["ApiRootURL"]!; // URL raíz del App.config
+
             pnlTabs.BackColor = Color.White;
             pnlTabs.Padding = new Padding(15, 10, 0, 10); // Espacio interno
-            pnlTabs.BorderStyle = BorderStyle.None; // Sin borde duro
+            pnlTabs.BorderStyle = BorderStyle.None;
 
-            //aqui rendondemamos los botones del filter
             RedondearBoton(btnBrowseBooks, 30);
             RedondearBoton(btnRecommended, 30);
             RedondearBoton(btnRecentlyViewed, 30);
-            CargarLibros();
+
+            _ = CargarLibros();
             mainform = mf;
         }
 
@@ -94,40 +98,53 @@ namespace VirtualBook.Views
             flpLibros.Controls.Clear();
             PcbCargando.Visible = true;
             PcbCargando.BringToFront();
-            //try
-            //{
-            //    var response = await cliente.GetAsync($"{baseUrl}Libroes");
-            //    response.EnsureSuccessStatusCode();
+            try
+            {
+                var libros = await _apiClient.Libros.GetLibrosAsync();
 
-            //    var libros = await response.Content.ReadFromJsonAsync<List<ReadVistaPreviaLibro>>();
+                if (libros != null)
+                {
+                    foreach (var libro in libros)
+                    {
+                        var tarjeta = new LibroCard();
+                        tarjeta.Titulo = libro.Titulo;
+                        tarjeta.Autor = libro.Autores;
+                        tarjeta.Sinopsis = libro.NombreCategoria;
 
-            //    if (libros != null)
-            //    {
-            //        foreach (var libro in libros)
-            //        {
-            //            var tarjeta = new LibroCard(libro, mainform); // ya carga todo internamente
-            //            flpLibros.Controls.Add(tarjeta);
-            //        }
-            //    }
-            //    PcbCargando.Visible = false;
-            //}
-            //catch (Exception ex)
-            //{
-            //    PcbCargando.Visible = false;
-            //    MessageBox.Show("Error al cargar libros: " + ex.Message);
-            //}
+                        if (!string.IsNullOrEmpty(libro.Portada))
+                        {
+                            // URL raíz (https://localhost:7216) 
+                            // ruta relativa (/Uploads/mi_imagen.jpg)
+                            tarjeta.UrlPortada = _apiRootUrl + libro.Portada;
+                        }
+
+                        // MAEEEEE este evento hay que descomentarlo para abrir el Form BookInfoForms
+                        tarjeta.Click += (s, e) => AbrirDetallesLibro(libro.IdLibro);
+                        foreach (Control c in tarjeta.Controls)
+                        {
+                            c.Click += (s, e) => AbrirDetallesLibro(libro.IdLibro);
+                        }
+
+                        flpLibros.Controls.Add(tarjeta);
+                    }
+                }
+                PcbCargando.Visible = false;
+            }
+            catch (Exception ex)
+            {
+                PcbCargando.Visible = false;
+                MessageBox.Show("Error al cargar libros: " + ex.Message);
+            }
+            finally
+            {
+                PcbCargando.Visible = false;
+            }
         }
 
-        //public void MostrarLibrosFiltrados(List<ReadVistaPreviaLibro> libros)
-        //{
-        //    flpLibros.Controls.Clear();
-
-        //    foreach (var libro in libros)
-        //    {
-        //        var tarjeta = new LibroCard(libro, mainform);
-        //        flpLibros.Controls.Add(tarjeta);
-        //    }
-        //}
-
+        private void AbrirDetallesLibro(int libroId)
+        {
+            var detallesForm = new BookInfoForms(libroId, mainform);
+            mainform.OpenForm(detallesForm);
+        }
     }
 }

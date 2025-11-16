@@ -11,6 +11,7 @@ namespace VirtualBook.Controller
     {
         private readonly HttpClient _httpClient;
         public IUserRepository LoginUsers { get; }
+        public ILibroRepository Libros { get; }
 
         public ApiClient()
         {
@@ -20,6 +21,7 @@ namespace VirtualBook.Controller
                 BaseAddress = new Uri(apiBaseUrl)
             };
             LoginUsers = new UserRepository(_httpClient);
+            Libros = new LibroRepository(_httpClient);
         }
 
         internal void SetAuthToken(string token)

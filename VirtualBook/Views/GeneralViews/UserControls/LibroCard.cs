@@ -8,6 +8,11 @@ namespace VirtualBook.UserControls
 {
     public partial class LibroCard : UserControl
     {
+        public LibroCard()
+        {
+            InitializeComponent();
+        }
+
         private int radioBorde = 40;
 
         [Browsable(false)]

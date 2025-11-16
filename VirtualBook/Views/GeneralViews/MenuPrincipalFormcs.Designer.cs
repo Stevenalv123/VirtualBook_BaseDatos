@@ -34,14 +34,14 @@
             btnRecentlyViewed = new Button();
             btnBrowseBooks = new Button();
             flpLibros = new FlowLayoutPanel();
-            PcbCargando = new PictureBox();
             panel1 = new Panel();
             panel2 = new Panel();
+            PcbCargando = new PictureBox();
             pnlTabs.SuspendLayout();
             flpLibros.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)PcbCargando).BeginInit();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)PcbCargando).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -114,17 +114,6 @@
             flpLibros.Size = new Size(967, 506);
             flpLibros.TabIndex = 6;
             // 
-            // PcbCargando
-            // 
-            PcbCargando.Image = Properties.Resources.LoadinScreen;
-            PcbCargando.Location = new Point(3, 3);
-            PcbCargando.Name = "PcbCargando";
-            PcbCargando.Size = new Size(964, 503);
-            PcbCargando.SizeMode = PictureBoxSizeMode.CenterImage;
-            PcbCargando.TabIndex = 0;
-            PcbCargando.TabStop = false;
-            PcbCargando.Visible = false;
-            // 
             // panel1
             // 
             panel1.Controls.Add(label1);
@@ -143,6 +132,17 @@
             panel2.Size = new Size(967, 48);
             panel2.TabIndex = 10;
             // 
+            // PcbCargando
+            // 
+            PcbCargando.Image = Properties.Resources.LoadinScreen;
+            PcbCargando.Location = new Point(3, 3);
+            PcbCargando.Name = "PcbCargando";
+            PcbCargando.Size = new Size(964, 503);
+            PcbCargando.SizeMode = PictureBoxSizeMode.CenterImage;
+            PcbCargando.TabIndex = 0;
+            PcbCargando.TabStop = false;
+            PcbCargando.Visible = false;
+            // 
             // MenuPrincipalFormcs
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -158,10 +158,10 @@
             Text = "MenuPrincipalFormcs";
             pnlTabs.ResumeLayout(false);
             flpLibros.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)PcbCargando).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)PcbCargando).EndInit();
             ResumeLayout(false);
         }
 
