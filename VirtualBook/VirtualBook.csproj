@@ -51,7 +51,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\placeholder.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="C:\Users\steve\Desktop\Proyecto\VirtualBook\VirtualBook\Controls\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\placeholder.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

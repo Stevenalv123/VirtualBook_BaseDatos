@@ -113,8 +113,6 @@ namespace VirtualBook.Views
 
                         if (!string.IsNullOrEmpty(libro.Portada))
                         {
-                            // URL raíz (https://localhost:7216) 
-                            // ruta relativa (/Uploads/mi_imagen.jpg)
                             tarjeta.UrlPortada = _apiRootUrl + libro.Portada;
                         }
 

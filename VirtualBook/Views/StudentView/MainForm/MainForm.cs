@@ -6,7 +6,7 @@ namespace VirtualBook.Views
     public partial class MainForm : Form, IMainForm
     {
         private ApiClient _apiClient;
-        private MenuPrincipalFormcs mPf; // Declare without initialization
+        private MenuPrincipalFormcs mPf; 
         private Form? activeForm = null;
 
         public MainForm()
@@ -66,7 +66,6 @@ namespace VirtualBook.Views
             DialogResult result = MessageBox.Show("¿Estás seguro de que quieres cerrar sesión?", "Cerrar sesión", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                Cookies.EliminarCookie();
                 var loginForm = new LoginForm();
                 loginForm.Show();
                 this.Hide();
@@ -149,7 +148,6 @@ namespace VirtualBook.Views
 
                     if (!string.IsNullOrEmpty(usuario.FotoPerfil))
                     {
-                        // Usa la nueva propiedad RootUrl del ApiClient
                         string fullImageUrl = _apiClient.RootUrl + usuario.FotoPerfil.TrimStart('/');
                         PcbFotoPerfil.LoadAsync(fullImageUrl);
                     }

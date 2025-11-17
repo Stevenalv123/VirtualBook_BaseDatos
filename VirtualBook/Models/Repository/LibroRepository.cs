@@ -36,7 +36,7 @@ namespace VirtualBook.Models.Repository
             }
             catch (Exception ex)
             {
-                return new List<LibroDto>();
+                throw new Exception("Error al obtener los libros.", ex);
             }
         }
 

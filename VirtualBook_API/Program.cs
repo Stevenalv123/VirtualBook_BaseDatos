@@ -63,6 +63,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddScoped<VirtualBook_API.Data.DbContext>();
 builder.Services.AddScoped<VirtualBook_API.Services.JwtServices>();
+builder.Services.AddScoped<VirtualBook_API.Services.EmailService>();
 
 builder.Services.AddAuthorization();
 

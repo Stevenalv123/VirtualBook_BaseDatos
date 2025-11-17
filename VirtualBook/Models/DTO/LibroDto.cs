@@ -10,8 +10,6 @@ namespace VirtualBook.Models.DTO
     {
         public int IdLibro { get; set; }
         public string? Titulo { get; set; }
-
-        // Uploads/portada.jpg
         public string? Portada { get; set; }
         public string? Descripcion { get; set; }
         public int? NumeroPaginas { get; set; }

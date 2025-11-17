@@ -45,14 +45,14 @@
             iconPictureBox1 = new FontAwesome.Sharp.IconPictureBox();
             TxtCorreo = new VirtualBook.Controls.RoundedTextBox();
             BtnCerrar = new FontAwesome.Sharp.IconButton();
-            circularButton3 = new VirtualBook.Controls.CircularButton();
-            circularButton2 = new VirtualBook.Controls.CircularButton();
-            circularButton1 = new VirtualBook.Controls.CircularButton();
             BtnContinuar = new VirtualBook.Controls.RJButton();
             label4 = new Label();
             label3 = new Label();
             ErrorValidaciones = new ErrorProvider(components);
             toolTip1 = new ToolTip(components);
+            circularButton3 = new VirtualBook.Controls.CircularButton();
+            circularButton2 = new VirtualBook.Controls.CircularButton();
+            circularButton1 = new VirtualBook.Controls.CircularButton();
             panel1.SuspendLayout();
             panelIniciarSesion.SuspendLayout();
             borderedPanel2.SuspendLayout();
@@ -123,14 +123,14 @@
             // panelIniciarSesion
             // 
             panelIniciarSesion.BackColor = SystemColors.Window;
+            panelIniciarSesion.Controls.Add(circularButton3);
+            panelIniciarSesion.Controls.Add(circularButton2);
+            panelIniciarSesion.Controls.Add(circularButton1);
             panelIniciarSesion.Controls.Add(LblRestablecerContraseña);
             panelIniciarSesion.Controls.Add(label5);
             panelIniciarSesion.Controls.Add(borderedPanel2);
             panelIniciarSesion.Controls.Add(borderedPanel1);
             panelIniciarSesion.Controls.Add(BtnCerrar);
-            panelIniciarSesion.Controls.Add(circularButton3);
-            panelIniciarSesion.Controls.Add(circularButton2);
-            panelIniciarSesion.Controls.Add(circularButton1);
             panelIniciarSesion.Controls.Add(BtnContinuar);
             panelIniciarSesion.Controls.Add(label4);
             panelIniciarSesion.Controls.Add(label3);
@@ -278,53 +278,6 @@
             BtnCerrar.UseVisualStyleBackColor = true;
             BtnCerrar.Click += BtnCerrar_Click;
             // 
-            // circularButton3
-            // 
-            circularButton3.BackColor = Color.White;
-            circularButton3.Cursor = Cursors.Hand;
-            circularButton3.FlatAppearance.BorderColor = Color.White;
-            circularButton3.FlatAppearance.BorderSize = 0;
-            circularButton3.FlatAppearance.MouseDownBackColor = Color.Silver;
-            circularButton3.FlatStyle = FlatStyle.Flat;
-            circularButton3.ForeColor = Color.White;
-            circularButton3.Image = (Image)resources.GetObject("circularButton3.Image");
-            circularButton3.Location = new Point(307, 105);
-            circularButton3.Name = "circularButton3";
-            circularButton3.Size = new Size(44, 44);
-            circularButton3.TabIndex = 7;
-            circularButton3.UseVisualStyleBackColor = false;
-            // 
-            // circularButton2
-            // 
-            circularButton2.BackColor = Color.White;
-            circularButton2.Cursor = Cursors.Hand;
-            circularButton2.FlatAppearance.BorderColor = Color.Black;
-            circularButton2.FlatAppearance.BorderSize = 0;
-            circularButton2.FlatAppearance.MouseDownBackColor = Color.Silver;
-            circularButton2.FlatStyle = FlatStyle.Flat;
-            circularButton2.ForeColor = Color.White;
-            circularButton2.Image = (Image)resources.GetObject("circularButton2.Image");
-            circularButton2.Location = new Point(215, 105);
-            circularButton2.Name = "circularButton2";
-            circularButton2.Size = new Size(44, 44);
-            circularButton2.TabIndex = 6;
-            circularButton2.UseVisualStyleBackColor = false;
-            // 
-            // circularButton1
-            // 
-            circularButton1.BackColor = Color.White;
-            circularButton1.Cursor = Cursors.Hand;
-            circularButton1.FlatAppearance.BorderColor = Color.White;
-            circularButton1.FlatAppearance.MouseDownBackColor = Color.Silver;
-            circularButton1.FlatStyle = FlatStyle.Flat;
-            circularButton1.ForeColor = Color.White;
-            circularButton1.Image = (Image)resources.GetObject("circularButton1.Image");
-            circularButton1.Location = new Point(123, 105);
-            circularButton1.Name = "circularButton1";
-            circularButton1.Size = new Size(44, 44);
-            circularButton1.TabIndex = 5;
-            circularButton1.UseVisualStyleBackColor = false;
-            // 
             // BtnContinuar
             // 
             BtnContinuar.BackColor = Color.FromArgb(59, 176, 155);
@@ -376,6 +329,53 @@
             // 
             toolTip1.ToolTipIcon = ToolTipIcon.Info;
             // 
+            // circularButton3
+            // 
+            circularButton3.Cursor = Cursors.Hand;
+            circularButton3.FlatAppearance.BorderColor = Color.White;
+            circularButton3.FlatAppearance.BorderSize = 0;
+            circularButton3.FlatAppearance.MouseDownBackColor = Color.Silver;
+            circularButton3.FlatStyle = FlatStyle.Flat;
+            circularButton3.ForeColor = Color.White;
+            circularButton3.Image = (Image)resources.GetObject("circularButton3.Image");
+            circularButton3.Location = new Point(307, 104);
+            circularButton3.Name = "circularButton3";
+            circularButton3.Size = new Size(49, 44);
+            circularButton3.TabIndex = 27;
+            toolTip1.SetToolTip(circularButton3, "Inicia sesión con tu cuenta de Apple");
+            circularButton3.UseVisualStyleBackColor = true;
+            // 
+            // circularButton2
+            // 
+            circularButton2.Cursor = Cursors.Hand;
+            circularButton2.FlatAppearance.BorderColor = Color.Black;
+            circularButton2.FlatAppearance.BorderSize = 0;
+            circularButton2.FlatAppearance.MouseDownBackColor = Color.Silver;
+            circularButton2.FlatStyle = FlatStyle.Flat;
+            circularButton2.ForeColor = Color.White;
+            circularButton2.Image = (Image)resources.GetObject("circularButton2.Image");
+            circularButton2.Location = new Point(215, 104);
+            circularButton2.Name = "circularButton2";
+            circularButton2.Size = new Size(49, 44);
+            circularButton2.TabIndex = 26;
+            toolTip1.SetToolTip(circularButton2, "Inicia sesión con tu cuenta de Google");
+            circularButton2.UseVisualStyleBackColor = true;
+            // 
+            // circularButton1
+            // 
+            circularButton1.Cursor = Cursors.Hand;
+            circularButton1.FlatAppearance.BorderColor = Color.White;
+            circularButton1.FlatAppearance.MouseDownBackColor = Color.Silver;
+            circularButton1.FlatStyle = FlatStyle.Flat;
+            circularButton1.ForeColor = Color.White;
+            circularButton1.Image = (Image)resources.GetObject("circularButton1.Image");
+            circularButton1.Location = new Point(123, 104);
+            circularButton1.Name = "circularButton1";
+            circularButton1.Size = new Size(49, 44);
+            circularButton1.TabIndex = 25;
+            toolTip1.SetToolTip(circularButton1, "Inicia sesión con tu cuenta de Facebook");
+            circularButton1.UseVisualStyleBackColor = true;
+            // 
             // LoginForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -411,9 +411,6 @@
         private Label label3;
         private Button btnContinue;
         private Controls.RJButton BtnContinuar;
-        private Controls.CircularButton circularButton1;
-        private Controls.CircularButton circularButton2;
-        private Controls.CircularButton circularButton3;
         private FontAwesome.Sharp.IconButton BtnCerrar;
         private Controls.RJButton BtnIrRegistrarmeForm;
         private ErrorProvider ErrorValidaciones;
@@ -427,5 +424,8 @@
         private Label LblRestablecerContraseña;
         private Label label5;
         private ToolTip toolTip1;
+        private Controls.CircularButton circularButton3;
+        private Controls.CircularButton circularButton2;
+        private Controls.CircularButton circularButton1;
     }
 }

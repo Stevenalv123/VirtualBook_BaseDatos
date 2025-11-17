@@ -47,27 +47,23 @@ namespace VirtualBook
 
             if (!string.IsNullOrEmpty(loginResponse.Token))
             {
-                MessageBox.Show($"¡Bienvenido {loginResponse.Nombres}!", "Login Exitoso");
                 _apiClient.SetAuthToken(loginResponse.Token);
 
                 this.Hide();
 
                 switch (loginResponse.IdRol)
                 {
-                    case 1: // Administrador
+                    case 1:
                         var adminForm = new AdministradorMainForm(loginResponse.IdUsuario);
                         adminForm.Show();
-                        MessageBox.Show("Abriendo formulario de Administrador (descomentar línea)");
                         break;
-                    case 2: // Docente
+                    case 2:
                         var docenForm = new DocentesMainForm(loginResponse.IdUsuario);
                         docenForm.Show();
-                        MessageBox.Show("Abriendo formulario de Docente (descomentar línea)");
                         break;
                     case 3:
                         var mainForm = new MainForm();
                         mainForm.Show();
-                        MessageBox.Show("Abriendo formulario de Estudiante (descomentar línea)");
                         break;
                     default:
                         MessageBox.Show("Rol desconocido. Contacte a soporte.");

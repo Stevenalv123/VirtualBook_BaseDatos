@@ -29,7 +29,24 @@ namespace VirtualBook.UserControls
         public string UrlPortada
         {
             get => PicPortada.ImageLocation;
-            set => PicPortada.Load(value);
+            set
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        PicPortada.LoadAsync(value);
+                    }
+                    else
+                    {
+                        PicPortada.Image = Properties.Resources.placeholder; 
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error al cargar imagen {value}: {ex.Message}");
+                }
+            }
         }
 
         //ReadVistaPreviaLibro _libro;
