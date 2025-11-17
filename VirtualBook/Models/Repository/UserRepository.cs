@@ -145,8 +145,43 @@ namespace VirtualBook.Models.Repository
             }
             catch (Exception ex)
             {
-                //throw new Exception($"Error al registrar usuario: {ex.Message}");
-                return false;
+                throw new Exception($"Error al registrar usuario: {ex.Message}");
+            }
+        }
+
+        public async Task<bool> UpdateProfileAsync(UpdateUserDTO userDto)
+        {
+            using var form = new MultipartFormDataContent();
+            try
+            {
+                form.Add(new StringContent(userDto.Nombres), "Nombres");
+                form.Add(new StringContent(userDto.Apellidos), "Apellidos");
+                form.Add(new StringContent(userDto.FechaNacimiento.ToString("o")), "FechaNacimiento");
+                form.Add(new StringContent(userDto.Genero), "Genero");
+
+                if (!string.IsNullOrEmpty(userDto.RutaNuevaFoto) && File.Exists(userDto.RutaNuevaFoto))
+                {
+                    var fileStream = File.OpenRead(userDto.RutaNuevaFoto);
+                    var streamContent = new StreamContent(fileStream);
+                    streamContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
+                    form.Add(streamContent, "FotoPerfil", Path.GetFileName(userDto.RutaNuevaFoto));
+                }
+
+                var response = await _httpClient.PutAsync("Auth/update", form);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    var errorMsg = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Error del servidor ({response.StatusCode}): {errorMsg}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }

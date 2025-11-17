@@ -149,7 +149,7 @@ namespace VirtualBook.Views.UploadBookForm
             }
             else
             {
-                var menu = new DocentesViews.DocentesViews(_idUsuario, _mf);
+                var menu = new DocentesViews.DocentesViews(_mf);
                 _mf.OpenForm(menu);
             }
         }

@@ -60,9 +60,6 @@
             borderedPanel5 = new VirtualBook.Controls.BorderedPanel();
             CmbGenero = new ComboBox();
             pictureBox5 = new PictureBox();
-            borderedPanel2 = new VirtualBook.Controls.BorderedPanel();
-            pictureBox2 = new PictureBox();
-            TxtEmail = new VirtualBook.Controls.RoundedTextBox();
             borderedPanel1 = new VirtualBook.Controls.BorderedPanel();
             pictureBox1 = new PictureBox();
             TxtNombres = new VirtualBook.Controls.RoundedTextBox();
@@ -80,8 +77,6 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox9).BeginInit();
             borderedPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox5).BeginInit();
-            borderedPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             borderedPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ErrorValidaciones).BeginInit();
@@ -305,7 +300,6 @@
             PanelLateral.Controls.Add(BtnRegresar);
             PanelLateral.Controls.Add(label3);
             PanelLateral.Controls.Add(borderedPanel5);
-            PanelLateral.Controls.Add(borderedPanel2);
             PanelLateral.Controls.Add(borderedPanel1);
             PanelLateral.Dock = DockStyle.Right;
             PanelLateral.Location = new Point(619, 0);
@@ -323,7 +317,7 @@
             borderedPanel3.BorderSize = 2;
             borderedPanel3.Controls.Add(pictureBox3);
             borderedPanel3.Controls.Add(dtmfechanacimiento);
-            borderedPanel3.Location = new Point(6, 249);
+            borderedPanel3.Location = new Point(6, 201);
             borderedPanel3.Name = "borderedPanel3";
             borderedPanel3.Padding = new Padding(3);
             borderedPanel3.Size = new Size(337, 36);
@@ -462,7 +456,7 @@
             borderedPanel5.BorderSize = 2;
             borderedPanel5.Controls.Add(CmbGenero);
             borderedPanel5.Controls.Add(pictureBox5);
-            borderedPanel5.Location = new Point(6, 200);
+            borderedPanel5.Location = new Point(6, 152);
             borderedPanel5.Name = "borderedPanel5";
             borderedPanel5.Padding = new Padding(3);
             borderedPanel5.Size = new Size(339, 34);
@@ -488,43 +482,6 @@
             pictureBox5.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox5.TabIndex = 28;
             pictureBox5.TabStop = false;
-            // 
-            // borderedPanel2
-            // 
-            borderedPanel2.BackColor = Color.White;
-            borderedPanel2.BorderColor = Color.FromArgb(113, 113, 122);
-            borderedPanel2.BorderRadius = 5;
-            borderedPanel2.BorderSize = 2;
-            borderedPanel2.Controls.Add(pictureBox2);
-            borderedPanel2.Controls.Add(TxtEmail);
-            borderedPanel2.Location = new Point(6, 153);
-            borderedPanel2.Name = "borderedPanel2";
-            borderedPanel2.Padding = new Padding(3);
-            borderedPanel2.Size = new Size(336, 32);
-            borderedPanel2.TabIndex = 28;
-            // 
-            // pictureBox2
-            // 
-            pictureBox2.Image = Properties.Resources.email;
-            pictureBox2.Location = new Point(3, 3);
-            pictureBox2.Margin = new Padding(3, 2, 3, 2);
-            pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(26, 26);
-            pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox2.TabIndex = 28;
-            pictureBox2.TabStop = false;
-            // 
-            // TxtEmail
-            // 
-            TxtEmail.BorderStyle = BorderStyle.None;
-            TxtEmail.Font = new Font("Segoe UI", 12F);
-            TxtEmail.ForeColor = Color.FromArgb(64, 64, 64);
-            TxtEmail.Location = new Point(32, 3);
-            TxtEmail.Multiline = true;
-            TxtEmail.Name = "TxtEmail";
-            TxtEmail.PlaceholderText = "Email";
-            TxtEmail.Size = new Size(223, 26);
-            TxtEmail.TabIndex = 12;
             // 
             // borderedPanel1
             // 
@@ -592,9 +549,6 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox9).EndInit();
             borderedPanel5.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox5).EndInit();
-            borderedPanel2.ResumeLayout(false);
-            borderedPanel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             borderedPanel1.ResumeLayout(false);
             borderedPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -626,9 +580,6 @@
         private FontAwesome.Sharp.IconPictureBox iconPictureBox1;
         private Controls.BorderedPanel borderedPanel5;
         private PictureBox pictureBox5;
-        private Controls.BorderedPanel borderedPanel2;
-        private PictureBox pictureBox2;
-        private Controls.RoundedTextBox TxtEmail;
         private Controls.BorderedPanel borderedPanel1;
         private PictureBox pictureBox1;
         private Controls.RoundedTextBox TxtNombres;

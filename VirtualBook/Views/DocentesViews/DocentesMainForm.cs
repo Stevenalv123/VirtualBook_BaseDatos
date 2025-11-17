@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VirtualBook.Controller;
-//using VirtualBook.DTOs;
 
 namespace VirtualBook.Views.DocentesViews
 {
@@ -18,11 +17,9 @@ namespace VirtualBook.Views.DocentesViews
         private readonly ApiClient _apiClient;
         private MenuPrincipalFormcs mPf;
         private Form? activeForm = null;
-        int idUsuario = 0;
-        public DocentesMainForm(int IdUsuario)
+        public DocentesMainForm()
         {
             InitializeComponent();
-            idUsuario = IdUsuario;
             _apiClient = ApiClient.Instance;
             mPf = new MenuPrincipalFormcs(this);
             OpenForm(new MenuPrincipalFormcs(this));
@@ -72,6 +69,7 @@ namespace VirtualBook.Views.DocentesViews
         {
             try
             {
+                PcbCargandoUser.Visible = true;
                 var usuario = await _apiClient.LoginUsers.GetMyProfileAsync();
                 if (usuario != null)
                 {
@@ -91,13 +89,13 @@ namespace VirtualBook.Views.DocentesViews
                 }
                 else
                 {
-                    PcbCargandoUser.Visible = false;
+                    PcbCargandoUser.Visible = true;
                     MessageBox.Show("No se pudo cargar la información del usuario.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                PcbCargandoUser.Visible = false;
+                PcbCargandoUser.Visible = true;
                 MessageBox.Show($"Error al cargar el usuario: {ex.Message}", "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -133,7 +131,6 @@ namespace VirtualBook.Views.DocentesViews
             DialogResult result = MessageBox.Show("¿Estás seguro de que quieres cerrar sesión?", "Cerrar sesión", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                Cookies.EliminarCookie();
                 var loginForm = new LoginForm();
                 loginForm.Show();
                 this.Hide();
@@ -143,7 +140,7 @@ namespace VirtualBook.Views.DocentesViews
         private void BtnVerLibros_Click(object sender, EventArgs e)
         {
             if (IsFormOpen(typeof(DocentesViews))) return;
-            OpenForm(new DocentesViews(idUsuario, this));
+            OpenForm(new DocentesViews(this));
         }
 
         private void MostraMenuPrincipalForms_Click(object sender, EventArgs e)
@@ -155,7 +152,7 @@ namespace VirtualBook.Views.DocentesViews
         private void BtnMiperfil_Click(object sender, EventArgs e)
         {
             if(IsFormOpen(typeof(ProfileForm))) return;
-            OpenForm(new ProfileForm(idUsuario));
+            OpenForm(new ProfileForm());
         }
     }
 }

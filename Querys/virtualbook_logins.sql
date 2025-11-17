@@ -241,6 +241,27 @@ BEGIN
 END
 GO
 
+--Actualizar usuario
+CREATE PROCEDURE sp_ActualizarUsuario
+    @IdUsuario INT,
+    @Nombres NVARCHAR(100),
+    @Apellidos NVARCHAR(100),
+    @FechaNacimiento DATE,
+    @Genero NVARCHAR(20),
+    @FotoPerfil NVARCHAR(MAX) = NULL -- Opcional
+AS
+BEGIN
+    UPDATE Usuario
+    SET 
+        Nombres = @Nombres,
+        Apellidos = @Apellidos,
+        FechaNacimiento = @FechaNacimiento,
+        Genero = @Genero,
+        FotoPerfil = ISNULL(@FotoPerfil, FotoPerfil) 
+    WHERE IdUsuario = @IdUsuario;
+END;
+GO
+
 grant execute on sp_ValidarUsuario to virtualbooksystemUser;
 grant execute on sp_RegistrarUsuario to virtualbooksystemUser;
 grant execute on sp_ObtenerUsuarioPorCorreo to virtualbooksystemUser;
@@ -253,4 +274,5 @@ GRANT EXECUTE ON sp_ObtenerAutores TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_ObtenerCategorias TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_ObtenerFormatos TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_ObtenerIdiomas TO virtualbooksystemUser;
+GRANT EXECUTE ON sp_ActualizarUsuario TO virtualbooksystemUser;
 go;
