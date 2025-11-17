@@ -49,6 +49,26 @@ namespace VirtualBook.Models.Repository
                 throw new Exception($"{errorData}");
             }
         }
+        public async Task<List<UsuarioDto>> GetUsuariosAsync()
+        {
+            try
+            {
+
+                var response = await _httpClient.GetAsync("Usuarios");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var usuarios = await response.Content.ReadFromJsonAsync<List<UsuarioDto>>();
+                    return usuarios ?? new List<UsuarioDto>();
+                }
+                return new List<UsuarioDto>();
+            }
+            catch (Exception)
+            {
+              
+                return new List<UsuarioDto>();
+            }
+        }
 
         public async Task<LoginResponse> GetMyProfileAsync()
         {

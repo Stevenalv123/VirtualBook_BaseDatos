@@ -11,5 +11,6 @@ namespace VirtualBook.Models.Repository.Interfaces
         Task<List<RolDTO>> GetRolesAsync();
         Task<bool> VerificarCorreoExiste(string correo);
         Task<bool> RegistrarUsuario(RegisterRequest _registerRequest);
+        Task<List<UsuarioDto>> GetUsuariosAsync();
     }
 }
