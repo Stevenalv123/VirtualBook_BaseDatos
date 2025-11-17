@@ -204,7 +204,7 @@
             cborol.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             cborol.ForeColor = Color.FromArgb(64, 64, 64);
             cborol.FormattingEnabled = true;
-            cborol.Items.AddRange(new object[] { "Estudiante", "Docente", "Admin" });
+            cborol.Items.AddRange(new object[] { "Estudiante", "Docente" });
             cborol.Location = new Point(37, 8);
             cborol.Margin = new Padding(3, 2, 3, 2);
             cborol.Name = "cborol";
@@ -364,7 +364,7 @@
             TxtApellidosUsuarios.Location = new Point(32, 4);
             TxtApellidosUsuarios.Multiline = true;
             TxtApellidosUsuarios.Name = "TxtApellidosUsuarios";
-            TxtApellidosUsuarios.PlaceholderText = "Apellido";
+            TxtApellidosUsuarios.PlaceholderText = "Apellidos";
             TxtApellidosUsuarios.Size = new Size(246, 26);
             TxtApellidosUsuarios.TabIndex = 8;
             // 
@@ -400,7 +400,7 @@
             TxtNombreUsuario.Location = new Point(32, 4);
             TxtNombreUsuario.Multiline = true;
             TxtNombreUsuario.Name = "TxtNombreUsuario";
-            TxtNombreUsuario.PlaceholderText = "Nombre de Usuario";
+            TxtNombreUsuario.PlaceholderText = "Nombres";
             TxtNombreUsuario.Size = new Size(246, 26);
             TxtNombreUsuario.TabIndex = 8;
             // 

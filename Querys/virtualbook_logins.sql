@@ -94,6 +94,30 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE sp_ObtenerRoles
+AS
+BEGIN
+	SET NOCOUNT ON;
+	Select IdRol, NombreRol FROM Rol
+END;
+GO
+
+CREATE PROCEDURE sp_VerificarCorreoExiste
+	@CorreoVerificar NVARCHAR(100)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	IF EXISTS (Select 1 from Usuario where Correo_Electronico = @CorreoVerificar)
+	BEGIN
+        SELECT CAST(1 AS BIT) AS Existe;
+    END
+    ELSE
+    BEGIN
+        SELECT CAST(0 AS BIT) AS Existe;
+    END
+END;
+GO
+
 CREATE PROCEDURE sp_InsertarLibro
     @Titulo VARCHAR(100),
     @IdPublicador INT,
@@ -221,6 +245,8 @@ grant execute on sp_ValidarUsuario to virtualbooksystemUser;
 grant execute on sp_RegistrarUsuario to virtualbooksystemUser;
 grant execute on sp_ObtenerUsuarioPorCorreo to virtualbooksystemUser;
 GRANT EXECUTE ON sp_ObtenerIdUsuarioPorCorreo TO virtualbooksystemUser;
+GRANT EXECUTE ON sp_ObtenerRoles TO virtualbooksystemUser;
+GRANT EXECUTE ON sp_VerificarCorreoExiste TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_InsertarLibro TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_ObtenerLibros TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_ObtenerAutores TO virtualbooksystemUser;

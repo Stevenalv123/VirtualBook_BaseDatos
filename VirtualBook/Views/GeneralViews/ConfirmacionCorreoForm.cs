@@ -3,13 +3,16 @@
     public partial class ConfirmacionCorreoForm : Form
     {
         private string _codigo;
+        private string _correo;
+        private string _contrasena;
         private RegisterForm _registerForm;
-        public ConfirmacionCorreoForm(string codigo, RegisterForm registerForm)
+        public ConfirmacionCorreoForm(string codigo, string correo, string contrasena)
         {
             InitializeComponent();
             _codigo = codigo;
-            _registerForm = registerForm;
-            LblCorreo.Text = _registerForm._Correo.Trim();
+            _correo = correo;
+            _contrasena = contrasena;
+            LblCorreo.Text = _correo;
             LblCorreo.Location = new Point(((this.Width - LblCorreo.Width) / 2), 200);
         }
         private void textBox6_KeyUp(object sender, KeyEventArgs e)
@@ -28,7 +31,6 @@
 
         private void lblReenviarCorreo_Click(object sender, EventArgs e)
         {
-            //lógica para reenviar el correo
             _registerForm.EnviarCodigo();
             LblCodigoEstatus.Visible = true;
             LblCodigoEstatus.Text = "Código reenviado. Por favor, revisa tu correo electrónico.";
@@ -49,7 +51,7 @@
             if (codigo == _codigo)
             {
                 this.Hide();
-                var userInformationform = new UserInformationForm(_registerForm);
+                var userInformationform = new UserInformationForm(_correo, _contrasena);
                 userInformationform.Show();
             }
             else

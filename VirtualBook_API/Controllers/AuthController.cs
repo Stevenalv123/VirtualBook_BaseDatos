@@ -64,7 +64,7 @@ namespace VirtualBook_API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromForm] DTO.RegisterRequest registerRequest)
+        public async Task<IActionResult> Register([FromForm] RegisterRequest registerRequest)
         {
             string? fotoPerfilPath = null;
 
@@ -212,6 +212,73 @@ namespace VirtualBook_API.Controllers
                 };
             }
             return usuario;
+        }
+
+        [HttpGet("Roles")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetRoles()
+        {
+            var listaRoles = new List<RolDTO>();
+
+            try
+            {
+                await using var connection = _dbContext.GetConnection();
+                var command = new SqlCommand(Procedimientos.SP_ObtenerRoles, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                await connection.OpenAsync();
+                var reader = await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                {
+                    listaRoles.Add(new RolDTO
+                    {
+                        IdRol = (int)reader["IdRol"],
+                        NombreRol = reader["NombreRol"].ToString() ?? ""
+                    });
+                }
+
+                return Ok(listaRoles);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error al obtener roles: " + ex.Message);
+            }
+        }
+
+        [HttpGet("existe")]
+        [AllowAnonymous] 
+        public async Task<IActionResult> VerificarCorreo([FromQuery] string correo)
+        {
+            bool existe = false;
+
+            await using var connection = _dbContext.GetConnection();
+            var command = new SqlCommand(Procedimientos.SP_VerificarCorreoExiste, connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            command.Parameters.AddWithValue("@CorreoVerificar", correo);
+
+            await connection.OpenAsync();
+
+            var result = await command.ExecuteScalarAsync();
+
+            if (result != null && result != DBNull.Value)
+            {
+                existe = (bool)result;
+            }
+
+            if (existe)
+            {
+                return Ok(true); 
+            }
+            else
+            {
+                return NotFound(false); 
+            }
         }
     }
 }

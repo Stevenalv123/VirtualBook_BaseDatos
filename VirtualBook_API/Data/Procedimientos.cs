@@ -8,6 +8,8 @@
         public const string SP_ObtenerLibros = "sp_ObtenerLibros";
         public const string SP_InsertarLibro = "sp_InsertarLibro";
         public const string SP_ObtenerIdUsuarioPorCorreo = "sp_ObtenerIdUsuarioPorCorreo";
+        public const string SP_ObtenerRoles = "sp_ObtenerRoles";
+        public const string SP_VerificarCorreoExiste = "sp_VerificarCorreoExiste";
         public const string SP_ObtenerAutores = "sp_ObtenerAutores";
         public const string SP_ObtenerCategorias = "sp_ObtenerCategorias";
         public const string SP_ObtenerFormatos = "sp_ObtenerFormatos";

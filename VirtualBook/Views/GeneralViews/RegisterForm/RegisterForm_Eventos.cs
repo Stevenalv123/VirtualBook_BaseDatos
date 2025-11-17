@@ -1,6 +1,8 @@
 using System.Net.Http.Json;
 using System.Printing;
 using System.Text.RegularExpressions;
+using VirtualBook.Controller;
+using VirtualBook_API.DTO;
 //using VirtualBook.DTOs;
 
 namespace VirtualBook.Views
@@ -97,58 +99,71 @@ namespace VirtualBook.Views
         }
         private async void Continuar()
         {
-            if (string.IsNullOrEmpty(TxtContraseña.Text)||string.IsNullOrEmpty(TxtCorreo.Text)||string.IsNullOrEmpty(TxtConfirmarContraseña.Text))
+            if (string.IsNullOrEmpty(TxtContraseña.Text) || string.IsNullOrEmpty(TxtCorreo.Text) || string.IsNullOrEmpty(TxtConfirmarContraseña.Text))
             {
                 MessageBox.Show("Por favor, complete todos los campos.");
                 return;
             }
+
             if (!EsCorreoValido(TxtCorreo.Text))
             {
                 MessageBox.Show("Por favor, ingrese un correo electrónico válido.");
                 return;
-
             }
+
             if (TxtContraseña.Text != TxtConfirmarContraseña.Text)
             {
                 MessageBox.Show("Las contraseñas no coinciden.");
                 return;
             }
 
-            string contraseña = TxtContraseña.Text;
-            string correo = TxtCorreo.Text;
+            this.Cursor = Cursors.WaitCursor;
+            BtnContinuar.Enabled = false;
 
-            var existe = await VerificarCorreoExistente(correo);
-            if (existe)
+            try
             {
-                MessageBox.Show("Este correo electrónico ya está registrado. Por favor, usa uno diferente.", "Correo duplicado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                string correo = TxtCorreo.Text.Trim();
+
+                var existe = await _apiClient.LoginUsers.VerificarCorreoExiste(correo);
+                if (existe)
+                {
+                    MessageBox.Show("Este correo electrónico ya está registrado. Por favor, usa uno diferente.", "Correo duplicado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                _Contraseña = TxtContraseña.Text;
+                _Correo = correo;
+
+                bool correoEnviado = await EnviarCodigo();
+
+                if (correoEnviado)
+                {
+                    this.Hide();
+
+                    var confirmarCorreo = new ConfirmacionCorreoForm(codigo, _Correo, _Contraseña);
+
+                    confirmarCorreo.FormClosed += (s, args) =>
+                    {
+                        this.Show();
+                        this.Cursor = Cursors.Default;
+                        BtnContinuar.Enabled = true;
+                    };
+
+                    confirmarCorreo.Show();
+                }
             }
-
-            _Contraseña = contraseña;
-            _Correo = correo;
-
-            EnviarCodigo();
-            this.Hide();  // Oculta RegisterForm
-            var confirmarCorreo = new ConfirmacionCorreoForm(codigo, this);
-            confirmarCorreo.FormClosed += (s, e) => this.Show(); //
-            confirmarCorreo.Show();
-        }
-
-        private async Task<bool> VerificarCorreoExistente(string correo)
-        {
-            var response = await cliente.GetAsync($"https://localhost:7014/api/Usuarios/existe?correo={correo}");
-
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            catch (Exception ex)
             {
-                return true;
+                MessageBox.Show("Ocurrió un error inesperado: " + ex.Message);
             }
-            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            finally
             {
-                return false;
+                if (this.Visible)
+                {
+                    this.Cursor = Cursors.Default;
+                    BtnContinuar.Enabled = true;
+                }
             }
-
-            MessageBox.Show("Error al verificar el correo. Intenta nuevamente más tarde.");
-            return true;
         }
 
         public bool EsCorreoValido(string correo)
@@ -165,55 +180,69 @@ namespace VirtualBook.Views
             return _Contraseña;
         }
 
-        public async void EnviarCodigo()
+        public async Task<bool> EnviarCodigo()
         {
-            codigo = GenerarCodigo();
-            var emailReceptor=TxtCorreo.Text.Trim();
-            var tema = "Código de Verificación";
-            var cuerpo = $@"
-                        <html>
-                          <body style='font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 30px;'>
-                            <div style='max-width: 600px; margin: auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);'>
-                              <h2 style='text-align: center; color: #2c3e50;'>¡Bienvenido a VirtualBook!</h2>
-                              <p>Hola,</p>
-                              <p>Estamos encantados de que hayas decidido unirte a nuestra comunidad de lectores, estudiantes y autores. VirtualBook es una plataforma educativa digital donde puedes compartir y descubrir libros, seguir a tus autores favoritos, y disfrutar de una experiencia de lectura personalizada.</p>
-                              <p>Para completar tu registro, necesitamos que confirmes tu dirección de correo electrónico. Por favor, ingresa el siguiente código en el formulario de verificación:</p>
+            try
+            {
+                codigo = GenerarCodigo();
 
-                              <div style='text-align: center; margin: 40px 0;'>
-                                <span style='font-size: 36px; font-weight: bold; color: #2980b9;'>{codigo}</span>
-                              </div>
+                var emailReceptor = TxtCorreo.Text.Trim();
+                var tema = "Código de Verificación - VirtualBook";
 
-                              <p>Este código es válido por un tiempo limitado. Si no fuiste tú quien inició este registro, puedes ignorar este mensaje y no se tomará ninguna acción.</p>
+                var cuerpo = $@"
+                    <html>
+                      <body style='font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 30px;'>
+                        <div style='max-width: 600px; margin: auto; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);'>
+                          <h2 style='text-align: center; color: #2c3e50;'>¡Bienvenido a VirtualBook!</h2>
+                          <p>Hola,</p>
+                          <p>Estamos encantados de que hayas decidido unirte a nuestra comunidad de lectores, estudiantes y autores. VirtualBook es una plataforma educativa digital donde puedes compartir y descubrir libros, seguir a tus autores favoritos, y disfrutar de una experiencia de lectura personalizada.</p>
+                          <p>Para completar tu registro, necesitamos que confirmes tu dirección de correo electrónico. Por favor, ingresa el siguiente código en el formulario de verificación:</p>
 
-                              <p>Gracias por confiar en nosotros. Si tienes alguna pregunta o necesitas ayuda, no dudes en contactarnos.</p>
+                          <div style='text-align: center; margin: 40px 0;'>
+                            <span style='font-size: 36px; font-weight: bold; color: #2980b9;'>{codigo}</span>
+                          </div>
 
-                              <br/>
+                          <p>Este código es válido por un tiempo limitado. Si no fuiste tú quien inició este registro, puedes ignorar este mensaje y no se tomará ninguna acción.</p>
 
-                              <p>Saludos cordiales,</p>
-                              <p><strong>Equipo de VirtualBook</strong></p>
+                          <p>Gracias por confiar en nosotros. Si tienes alguna pregunta o necesitas ayuda, no dudes en contactarnos.</p>
 
-                              <hr style='margin-top: 40px; border: none; border-top: 1px solid #ccc;'/>
-                              <p style='font-size: 12px; color: gray; text-align: center;'>
-                                Este mensaje fue enviado automáticamente por VirtualBook. Por favor, no respondas a este correo.
-                              </p>
-                            </div>
-                          </body>
-                        </html>";
+                          <br/>
 
+                          <p>Saludos cordiales,</p>
+                          <p><strong>Equipo de VirtualBook</strong></p>
 
-            //var email = new CreateEmailDTO
-            //{
-            //    EmailReceptor = emailReceptor,
-            //    Tema = tema,
-            //    Cuerpo = cuerpo
-            //};
+                          <hr style='margin-top: 40px; border: none; border-top: 1px solid #ccc;'/>
+                          <p style='font-size: 12px; color: gray; text-align: center;'>
+                            Este mensaje fue enviado automáticamente por VirtualBook. Por favor, no respondas a este correo.
+                          </p>
+                        </div>
+                      </body>
+                    </html>";
 
+                var email = new CreateEmailRequest
+                {
+                    EmailReceptor = emailReceptor,
+                    Tema = tema,
+                    Cuerpo = cuerpo
+                };
 
-            //var response=await cliente.PostAsJsonAsync("https://localhost:7014/api/Emails", email);
-            //if (!response.IsSuccessStatusCode)
-            //{
-            //    MessageBox.Show("Error al enviar el código. Por favor, inténtalo de nuevo.");
-            //}
+                bool enviado = await ApiClient.Instance.LoginUsers.EnviarCorreo(emailReceptor, tema, cuerpo);
+
+                if (enviado)
+                {
+                    return true;
+                }
+                else
+                {
+                    MessageBox.Show("El servidor indicó que no se pudo enviar el correo.");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al intentar enviar el correo: " + ex.Message);
+                return false;
+            }
         }
 
         private string GenerarCodigo()

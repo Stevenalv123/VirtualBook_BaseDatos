@@ -1,12 +1,15 @@
-﻿namespace VirtualBook.Views
+﻿using VirtualBook.Controller;
+
+namespace VirtualBook.Views
 {
     public partial class RegisterForm : Form
     {
         bool visible = false;
-        private HttpClient cliente=new();
+        private readonly ApiClient _apiClient;
         public RegisterForm()
         {
             InitializeComponent();
+            _apiClient = ApiClient.Instance;
         }
     }
 }

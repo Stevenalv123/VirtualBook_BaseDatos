@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System.Net.Http.Json;
 using System.Text;
 using VirtualBook.Models.DTO;
 using VirtualBook.Models.Repository.Interfaces;
+using VirtualBook_API.DTO;
 
 namespace VirtualBook.Models.Repository
 {
@@ -67,6 +69,85 @@ namespace VirtualBook.Models.Repository
 
             var errorData = await response.Content.ReadAsStringAsync();
             throw new Exception($"Error al obtener perfil: {errorData}");
+        }
+
+        public async Task<bool> EnviarCorreo(string correo, string titulo, string cuerpo)
+        {
+            var emailRequest = new CreateEmailRequest
+            {
+                EmailReceptor = correo,
+                Tema = titulo,
+                Cuerpo = cuerpo
+            };
+            var content = new StringContent(JsonConvert.SerializeObject(emailRequest),
+                Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync("Email/send", content);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                var errorData = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Error del servidor: {response.StatusCode} - {errorData}");
+            }
+        }
+
+        public async Task<List<RolDTO>> GetRolesAsync()
+        {
+            return await _httpClient.GetFromJsonAsync<List<RolDTO>>("Auth/Roles") ?? new List<RolDTO>();
+        }
+
+        public async Task<bool> VerificarCorreoExiste(string correo)
+        {
+            var response = await _httpClient.GetAsync($"Auth/existe?correo={correo}");
+            if (response.IsSuccessStatusCode)
+            {
+                var responseData = await response.Content.ReadAsStringAsync();
+                bool exists = JsonConvert.DeserializeObject<bool>(responseData);
+                return exists;
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return false;
+            }
+            else
+            {
+                var errorData = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Error del servidor: {response.StatusCode} - {errorData}");
+            }
+        }
+
+        public async Task<bool> RegistrarUsuario(RegisterRequest _registerRequest)
+        {
+            using var form = new MultipartFormDataContent();
+            try
+            {
+                form.Add(new StringContent(_registerRequest.Nombres), "Nombres");
+                form.Add(new StringContent(_registerRequest.Apellidos.ToString()), "Apellidos");
+                form.Add(new StringContent(_registerRequest.Correo_Electronico.ToString()), "Correo_Electronico");
+                form.Add(new StringContent(_registerRequest.Contrasena.ToString()), "Contrasena");
+                form.Add(new StringContent(_registerRequest.IdRol.ToString()), "IdRol");
+                form.Add(new StringContent(_registerRequest.FechaNacimiento.ToString()), "FechaNacimiento");
+                form.Add(new StringContent(_registerRequest.Genero.ToString()), "Genero");
+
+                if (!string.IsNullOrEmpty(_registerRequest.FotoPerfil) && File.Exists(_registerRequest.FotoPerfil))
+                {
+                    var fileStream = File.OpenRead(_registerRequest.FotoPerfil);
+                    var streamContent = new StreamContent(fileStream);
+                    streamContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
+                    form.Add(streamContent, "FotoPerfil", Path.GetFileName(_registerRequest.FotoPerfil));
+                }
+
+                var response = await _httpClient.PostAsync("Auth/register", form);
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                //throw new Exception($"Error al registrar usuario: {ex.Message}");
+                return false;
+            }
         }
     }
 }
