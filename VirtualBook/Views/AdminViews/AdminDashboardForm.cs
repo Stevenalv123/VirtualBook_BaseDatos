@@ -1,6 +1,12 @@
-﻿using Newtonsoft.Json;
-using System.Net.Http.Json;
-using VirtualBook.Views.AdminViews;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using VirtualBook.Controller;
+using VirtualBook.Models.DTO;
 using VirtualBook.Views.UploadBookForm;
 
 namespace VirtualBook.Views
@@ -11,58 +17,126 @@ namespace VirtualBook.Views
         private Form ActiveForm;
         int _idUsuario = 0;
         IMainForm mf;
-        string descargasUrl = "https://localhost:7014/api/Descargas";
-        HttpClient cliente = new HttpClient();
+        private readonly ApiClient _apiClient;
+        private List<LibroDto> _listaLibrosCompleta; // Lista en memoria para búsquedas y cálculos
+
         public AdminDashboardForm(IMainForm _mf, int idUsuario)
         {
             InitializeComponent();
             mf = _mf;
             _idUsuario = idUsuario;
-            CargarDescargas();
+            _apiClient = ApiClient.Instance;
+            _listaLibrosCompleta = new List<LibroDto>();
         }
 
-        private void borderedPanel2_Paint(object sender, PaintEventArgs e)
+        private async void AdminDashboardForm_Load(object sender, EventArgs e)
         {
-
+            await CargarDatosDashboard();
         }
 
-        private async void CargarLibros()
+        private async Task CargarDatosDashboard()
         {
-            string totalLibrosURL = "https://localhost:7014/api/Libroes/totalLibros";
-            string LibrosURL = "https://localhost:7014/api/Libroes/dataLibro";
-            string TotalUsuariosURL = "https://localhost:7014/api/Usuarios/total";
+            this.Cursor = Cursors.WaitCursor;
+            try
+            {
+      
+                var libros = await _apiClient.Libros.GetLibrosAsync();
 
-            //using (HttpClient client = new HttpClient())
-            //{
-            //    try
-            //    {
-            //        var response = await client.GetAsync(LibrosURL);
-            //        var TotalLibros = await client.GetAsync(totalLibrosURL);
-            //        var Usuarios = await client.GetAsync(TotalUsuariosURL);
+                if (libros != null)
+                {
+                    _listaLibrosCompleta = libros;
 
-            //        if (response.IsSuccessStatusCode)
-            //        {
-            //            //var usuarios = await response.Content.ReadFromJsonAsync<List<DTOs.ReadLibroDTO>>();
-            //            var json = await response.Content.ReadAsStringAsync();
-            //            var list = JsonConvert.DeserializeObject<List<DTOs.ReadDataLibroDTO>>(json);
-            //            int total = Convert.ToInt32(await TotalLibros.Content.ReadAsStringAsync());
-            //            int totalUsuarios = Convert.ToInt32(await Usuarios.Content.ReadAsStringAsync());
+   
+                    dgvShowBooks.DataSource = _listaLibrosCompleta;
+                    PersonalizarColumnas();
 
-            //            lblTotalLibros.Text = total.ToString();
-            //            lblTotalUsuarios.Text = totalUsuarios.ToString();
-            //            dgvShowBooks.DataSource = list;
-            //        }
-            //        else
-            //        {
-            //            MessageBox.Show(Text = $"Error al cargar los Libros: {response.ReasonPhrase}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show($"Error al cargar los libros: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    }
-            //    ;
-            //}
+        
+
+
+                    lblTotalLibros.Text = _listaLibrosCompleta.Count.ToString();
+
+                    // Total de Descargas (Suma de las descargas de todos los libros)
+                    int totalDescargas = _listaLibrosCompleta.Sum(l => l.Descargas);
+                    lblDescargas.Text = totalDescargas.ToString();
+
+       
+                    lblTotalUsuarios.Text = "---";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar los datos del dashboard: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void PersonalizarColumnas()
+        {
+            if (dgvShowBooks.Columns.Count == 0) return;
+
+           
+            OcultarColumna("IdLibro");
+            OcultarColumna("Portada");
+            OcultarColumna("Descripcion");
+            OcultarColumna("FechaPublicacion");
+
+          
+            RenombrarColumna("NumeroPaginas", "Páginas");
+            RenombrarColumna("NombreCategoria", "Categoría");
+            RenombrarColumna("NombreFormato", "Formato");
+            RenombrarColumna("NombreIdioma", "Idioma");
+            RenombrarColumna("Publicador", "Publicado Por");
+
+          
+            dgvShowBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvShowBooks.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvShowBooks.ReadOnly = true;
+        }
+
+        private void OcultarColumna(string nombreColumna)
+        {
+            if (dgvShowBooks.Columns.Contains(nombreColumna))
+                dgvShowBooks.Columns[nombreColumna].Visible = false;
+        }
+
+        private void RenombrarColumna(string nombreColumna, string nuevoTexto)
+        {
+            if (dgvShowBooks.Columns.Contains(nombreColumna))
+                dgvShowBooks.Columns[nombreColumna].HeaderText = nuevoTexto;
+        }
+
+        private void BucarLibros_Click(object sender, EventArgs e)
+        {
+            FiltrarLibros(TxtBucarLibros.Text);
+        }
+
+        private void TxtBucarLibros_TextChanged(object sender, EventArgs e)
+        {
+            FiltrarLibros(TxtBucarLibros.Text);
+        }
+
+        private void FiltrarLibros(string filtro)
+        {
+            if (_listaLibrosCompleta == null || !_listaLibrosCompleta.Any()) return;
+
+            if (string.IsNullOrWhiteSpace(filtro))
+            {
+                dgvShowBooks.DataSource = _listaLibrosCompleta;
+            }
+            else
+            {
+                var listaFiltrada = _listaLibrosCompleta.Where(l =>
+                    (l.Titulo != null && l.Titulo.Contains(filtro, StringComparison.OrdinalIgnoreCase)) ||
+                    (l.Autores != null && l.Autores.Contains(filtro, StringComparison.OrdinalIgnoreCase)) ||
+                    (l.NombreCategoria != null && l.NombreCategoria.Contains(filtro, StringComparison.OrdinalIgnoreCase))
+                ).ToList();
+
+                dgvShowBooks.DataSource = listaFiltrada;
+            }
+            PersonalizarColumnas(); 
         }
 
         private void BtnAgregarNuevoLibro_Click(object sender, EventArgs e)
@@ -70,6 +144,7 @@ namespace VirtualBook.Views
             mf.OpenForm(new UploadBookForm.UploadBookForm(_idUsuario, mf));
         }
 
+       
         private void OpenForm(Form ChildForm)
         {
             if (ActiveForm != null) ActiveForm.Close();
@@ -78,80 +153,13 @@ namespace VirtualBook.Views
             ChildForm.FormBorderStyle = FormBorderStyle.None;
             ChildForm.Dock = DockStyle.Fill;
             TemaManager.AplicarTema(ChildForm, TemaManager.ModoOscuroActivo);
-            PanelCentral.Controls.Add(ChildForm);
-            PanelCentral.Tag = ChildForm;
-            ChildForm.BringToFront();
-            ChildForm.Show();
-        }
-
-        private bool IsFormOpen(Type formType)
-        {
-            foreach (Form form in Application.OpenForms)
+            if (PanelCentral != null)
             {
-                if (form.GetType() == formType)
-                {
-                    return true;
-                }
+                PanelCentral.Controls.Add(ChildForm);
+                PanelCentral.Tag = ChildForm;
+                ChildForm.BringToFront();
+                ChildForm.Show();
             }
-            return false;
         }
-
-        private void AdminDashboardForm_Load(object sender, EventArgs e)
-        {
-            CargarLibros();
-        }
-
-        private async void BucarLibros_Click(object sender, EventArgs e)
-        {
-            string filtro = TxtBucarLibros.Text;
-            string api = $"https://localhost:7014/api/Libroes/buscar?Busqueda={filtro}";
-
-
-            //using (HttpClient client = new HttpClient())
-            //{
-            //    try
-            //    {
-            //        var response = await client.GetAsync(api);
-
-
-            //        if (response.IsSuccessStatusCode)
-            //        {
-            //            var libros = await response.Content.ReadFromJsonAsync<List<DTOs.ReadDataLibroDTO>>();
-
-            //            dgvShowBooks.DataSource = libros;
-
-            //        }
-            //        else
-            //        {
-            //            MessageBox.Show($"Error al cargar los libros: {response.ReasonPhrase}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show($"Error al cargar los libros: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    }
-            //}
-        }
-
-        //private List<ReadDescargaDTO> todasLasDescargas = new List<ReadDescargaDTO>();
-
-        private async Task CargarDescargas()
-        {
-            //try
-            //{
-            //    todasLasDescargas = await cliente.GetFromJsonAsync<List<ReadDescargaDTO>>(descargasUrl);
-            //    ActualizarContadorDescargas(todasLasDescargas.Count);
-            //    lblDescargas.Text = todasLasDescargas.Count.ToString();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Error cargando descargas: " + ex.Message);
-            //}
-        }
-        private void ActualizarContadorDescargas(int total)
-        {
-            lblDescargas.Text = total.ToString();
-        }
-
     }
 }

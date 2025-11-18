@@ -14,6 +14,5 @@
         public const string SP_ObtenerCategorias = "sp_ObtenerCategorias";
         public const string SP_ObtenerFormatos = "sp_ObtenerFormatos";
         public const string SP_ObtenerIdiomas = "sp_ObtenerIdiomas";
-        public const string SP_ActualizarUsuario = "sp_ActualizarUsuario";
     }
 }
