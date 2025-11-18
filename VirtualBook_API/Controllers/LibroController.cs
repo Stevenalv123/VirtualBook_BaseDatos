@@ -83,6 +83,94 @@ namespace VirtualBook_API.Controllers
                 return StatusCode(500, $"Error interno del servidor: {ex.Message}");
             }
         }
+        // ... imports y clase ...
+
+        // POST: api/Libro/favorito
+        [HttpPost("favorito")]
+        [Authorize]
+        public async Task<IActionResult> AgregarFavorito([FromQuery] int idLibro)
+        {
+            try
+            {
+                var idUsuario = await GetIdUsuarioActualAsync();
+                if (idUsuario == null) return Unauthorized();
+
+                await using var connection = _dbContext.GetConnection();
+                var command = new SqlCommand(Procedimientos.SP_AgregarFavorito, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                command.Parameters.AddWithValue("@IdLibro", idLibro);
+
+                await connection.OpenAsync();
+                await command.ExecuteNonQueryAsync();
+
+                return Ok("Agregado a favoritos.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        // DELETE: api/Libro/favorito
+        [HttpDelete("favorito")]
+        [Authorize]
+        public async Task<IActionResult> EliminarFavorito([FromQuery] int idLibro)
+        {
+            try
+            {
+                var idUsuario = await GetIdUsuarioActualAsync();
+                if (idUsuario == null) return Unauthorized();
+
+                await using var connection = _dbContext.GetConnection();
+                var command = new SqlCommand(Procedimientos.SP_EliminarFavorito, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                command.Parameters.AddWithValue("@IdLibro", idLibro);
+
+                await connection.OpenAsync();
+                await command.ExecuteNonQueryAsync();
+
+                return Ok("Eliminado de favoritos.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        // GET: api/Libro/favorito/check
+        [HttpGet("favorito/check")]
+        [Authorize]
+        public async Task<IActionResult> VerificarFavorito([FromQuery] int idLibro)
+        {
+            try
+            {
+                var idUsuario = await GetIdUsuarioActualAsync();
+                if (idUsuario == null) return Unauthorized();
+
+                await using var connection = _dbContext.GetConnection();
+                var command = new SqlCommand(Procedimientos.SP_VerificarFavorito, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                command.Parameters.AddWithValue("@IdLibro", idLibro);
+
+                await connection.OpenAsync();
+                var result = await command.ExecuteScalarAsync(); // Devuelve true/false
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
         [HttpPost("upload")]
         [Authorize(Roles = "Administrador,Docente")]
