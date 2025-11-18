@@ -12,5 +12,6 @@ namespace VirtualBook.Models.Repository.Interfaces
         Task<bool> VerificarCorreoExiste(string correo);
         Task<bool> RegistrarUsuario(RegisterRequest _registerRequest);
         Task<List<UsuarioDto>> GetUsuariosAsync();
+        Task<bool> CambiarEstadoUsuarioAsync(int idUsuario, bool nuevoEstado);
     }
 }

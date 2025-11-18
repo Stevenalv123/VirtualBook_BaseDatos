@@ -39,28 +39,28 @@
             lblDescargas = new Label();
             label9 = new Label();
             toolTip1 = new ToolTip(components);
-            borderedPanel1 = new Controls.BorderedPanel();
+            borderedPanel1 = new VirtualBook.Controls.BorderedPanel();
             dgvShowBooks = new DataGridView();
-            borderedPanel2 = new Controls.BorderedPanel();
+            borderedPanel2 = new VirtualBook.Controls.BorderedPanel();
             btnBuscarLibros = new FontAwesome.Sharp.IconPictureBox();
             TxtBucarLibros = new TextBox();
-            btnNuevoLibro = new Controls.RJButton();
+            btnNuevoLibro = new VirtualBook.Controls.RJButton();
             label2 = new Label();
-            borderedPanel3 = new Controls.BorderedPanel();
-            borderedPanel4 = new Controls.BorderedPanel();
-            borderedPanel5 = new Controls.BorderedPanel();
-            roundedPictureBox4 = new Controls.RoundedPictureBox();
-            roundedPictureBox5 = new Controls.RoundedPictureBox();
-            roundedPictureBox6 = new Controls.RoundedPictureBox();
+            borderedPanel3 = new VirtualBook.Controls.BorderedPanel();
+            roundedPictureBox4 = new VirtualBook.Controls.RoundedPictureBox();
+            borderedPanel4 = new VirtualBook.Controls.BorderedPanel();
+            roundedPictureBox5 = new VirtualBook.Controls.RoundedPictureBox();
+            borderedPanel5 = new VirtualBook.Controls.BorderedPanel();
+            roundedPictureBox6 = new VirtualBook.Controls.RoundedPictureBox();
             borderedPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvShowBooks).BeginInit();
             borderedPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)btnBuscarLibros).BeginInit();
             borderedPanel3.SuspendLayout();
-            borderedPanel4.SuspendLayout();
-            borderedPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)roundedPictureBox4).BeginInit();
+            borderedPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)roundedPictureBox5).BeginInit();
+            borderedPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)roundedPictureBox6).BeginInit();
             SuspendLayout();
             // 
@@ -270,6 +270,19 @@
             borderedPanel3.Size = new Size(276, 100);
             borderedPanel3.TabIndex = 38;
             // 
+            // roundedPictureBox4
+            // 
+            roundedPictureBox4.BackColor = Color.Transparent;
+            roundedPictureBox4.BorderColor = Color.Gray;
+            roundedPictureBox4.BorderSize = 0;
+            roundedPictureBox4.Image = Properties.Resources.Imagen_de_WhatsApp_2025_06_05_a_las_20_00_25_fdf2ca21;
+            roundedPictureBox4.Location = new Point(189, 19);
+            roundedPictureBox4.Name = "roundedPictureBox4";
+            roundedPictureBox4.Size = new Size(53, 49);
+            roundedPictureBox4.SizeMode = PictureBoxSizeMode.Zoom;
+            roundedPictureBox4.TabIndex = 33;
+            roundedPictureBox4.TabStop = false;
+            // 
             // borderedPanel4
             // 
             borderedPanel4.Anchor = AnchorStyles.Top;
@@ -285,6 +298,19 @@
             borderedPanel4.Size = new Size(276, 100);
             borderedPanel4.TabIndex = 39;
             // 
+            // roundedPictureBox5
+            // 
+            roundedPictureBox5.BackColor = Color.Transparent;
+            roundedPictureBox5.BorderColor = Color.Gray;
+            roundedPictureBox5.BorderSize = 0;
+            roundedPictureBox5.Image = Properties.Resources.Imagen_de_WhatsApp_2025_06_05_a_las_20_01_46_ce0776e2;
+            roundedPictureBox5.Location = new Point(191, 19);
+            roundedPictureBox5.Name = "roundedPictureBox5";
+            roundedPictureBox5.Size = new Size(53, 49);
+            roundedPictureBox5.SizeMode = PictureBoxSizeMode.Zoom;
+            roundedPictureBox5.TabIndex = 35;
+            roundedPictureBox5.TabStop = false;
+            // 
             // borderedPanel5
             // 
             borderedPanel5.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -299,32 +325,6 @@
             borderedPanel5.Name = "borderedPanel5";
             borderedPanel5.Size = new Size(276, 100);
             borderedPanel5.TabIndex = 40;
-            // 
-            // roundedPictureBox4
-            // 
-            roundedPictureBox4.BackColor = Color.Transparent;
-            roundedPictureBox4.BorderColor = Color.Gray;
-            roundedPictureBox4.BorderSize = 0;
-            roundedPictureBox4.Image = Properties.Resources.Imagen_de_WhatsApp_2025_06_05_a_las_20_00_25_fdf2ca21;
-            roundedPictureBox4.Location = new Point(189, 19);
-            roundedPictureBox4.Name = "roundedPictureBox4";
-            roundedPictureBox4.Size = new Size(53, 49);
-            roundedPictureBox4.SizeMode = PictureBoxSizeMode.Zoom;
-            roundedPictureBox4.TabIndex = 33;
-            roundedPictureBox4.TabStop = false;
-            // 
-            // roundedPictureBox5
-            // 
-            roundedPictureBox5.BackColor = Color.Transparent;
-            roundedPictureBox5.BorderColor = Color.Gray;
-            roundedPictureBox5.BorderSize = 0;
-            roundedPictureBox5.Image = Properties.Resources.Imagen_de_WhatsApp_2025_06_05_a_las_20_01_46_ce0776e2;
-            roundedPictureBox5.Location = new Point(191, 19);
-            roundedPictureBox5.Name = "roundedPictureBox5";
-            roundedPictureBox5.Size = new Size(53, 49);
-            roundedPictureBox5.SizeMode = PictureBoxSizeMode.Zoom;
-            roundedPictureBox5.TabIndex = 35;
-            roundedPictureBox5.TabStop = false;
             // 
             // roundedPictureBox6
             // 
@@ -363,12 +363,12 @@
             ((System.ComponentModel.ISupportInitialize)btnBuscarLibros).EndInit();
             borderedPanel3.ResumeLayout(false);
             borderedPanel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)roundedPictureBox4).EndInit();
             borderedPanel4.ResumeLayout(false);
             borderedPanel4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)roundedPictureBox5).EndInit();
             borderedPanel5.ResumeLayout(false);
             borderedPanel5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)roundedPictureBox4).EndInit();
-            ((System.ComponentModel.ISupportInitialize)roundedPictureBox5).EndInit();
             ((System.ComponentModel.ISupportInitialize)roundedPictureBox6).EndInit();
             ResumeLayout(false);
         }

@@ -8,5 +8,6 @@
         public string Correo_Electronico { get; set; }
         public string NombreRol { get; set; }
         public string? FotoPerfil { get; set; }
+        public bool Estado { get; set; }
     }
 }

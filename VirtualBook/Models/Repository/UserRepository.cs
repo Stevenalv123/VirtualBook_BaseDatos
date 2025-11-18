@@ -69,6 +69,20 @@ namespace VirtualBook.Models.Repository
                 return new List<UsuarioDto>();
             }
         }
+    
+        public async Task<bool> CambiarEstadoUsuarioAsync(int idUsuario, bool nuevoEstado)
+        {
+            try
+            {
+
+                var response = await _httpClient.PutAsync($"Usuarios/estado?idUsuario={idUsuario}&nuevoEstado={nuevoEstado}", null);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
         public async Task<LoginResponse> GetMyProfileAsync()
         {
