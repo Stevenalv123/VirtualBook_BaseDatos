@@ -399,5 +399,38 @@ namespace VirtualBook_API.Controllers
                 return StatusCode(500, $"Error al procesar la descarga: {ex.Message}");
             }
         }
+        [HttpGet("favoritos")]
+        [Authorize]
+        public async Task<IActionResult> GetFavoritos()
+        {
+            try
+            {
+                var idUsuario = await GetIdUsuarioActualAsync();
+                if (idUsuario == null) return Unauthorized();
+
+                var libros = new List<LibroDto>();
+                await using var connection = _dbContext.GetConnection();
+                var command = new SqlCommand(Procedimientos.SP_ObtenerFavoritosPorUsuario, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.AddWithValue("@IdUsuario", idUsuario);
+
+                await connection.OpenAsync();
+                var reader = await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                {
+                
+                    libros.Add(MapReaderToLibroDto(reader));
+                }
+
+                return Ok(libros);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno: {ex.Message}");
+            }
+        }
     }
 }  

@@ -113,5 +113,10 @@ namespace VirtualBook.Models.Repository
                 throw new Exception("No se pudo descargar el archivo.");
             }
         }
+        public async Task<List<LibroDto>> GetFavoritosAsync()
+        {  
+             //llamamos al endponin
+            return await _httpClient.GetFromJsonAsync<List<LibroDto>>("Libro/favoritos") ?? new List<LibroDto>();
+        }
     }
 }

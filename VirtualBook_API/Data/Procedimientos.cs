@@ -21,6 +21,9 @@
         public const string SP_AgregarFavorito = "sp_AgregarFavorito";
         public const string SP_EliminarFavorito = "sp_EliminarFavorito";
         public const string SP_VerificarFavorito = "sp_VerificarFavorito";
+        public const string SP_ObtenerFavoritosPorUsuario = "sp_ObtenerFavoritosPorUsuario";
+        public const string SP_Actualizar_Descargas = "sp_Actualizar_Descargas";
+
 
     }
 }
