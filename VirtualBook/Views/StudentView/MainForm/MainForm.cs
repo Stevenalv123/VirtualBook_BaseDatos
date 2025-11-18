@@ -112,7 +112,7 @@ namespace VirtualBook.Views
 
         private void MostrarInformacionPerfilForm()
         {
-            //OpenForm(new ProfileForm(_apiClient)); 
+            OpenForm(new ProfileForm()); 
         }
 
         private void MostrarMenuPrincipal()
@@ -139,6 +139,7 @@ namespace VirtualBook.Views
         {
             try
             {
+                PcbCargandoUser.Visible = true;
                 var usuario = await _apiClient.LoginUsers.GetMyProfileAsync();
                 if (usuario != null)
                 {
@@ -164,7 +165,7 @@ namespace VirtualBook.Views
             }
             catch (Exception ex)
             {
-                PcbCargandoUser.Visible = false;
+                PcbCargandoUser.Visible = true;
                 MessageBox.Show($"Error al cargar el usuario: {ex.Message}", "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

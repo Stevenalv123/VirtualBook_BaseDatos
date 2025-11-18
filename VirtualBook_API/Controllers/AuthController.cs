@@ -280,5 +280,56 @@ namespace VirtualBook_API.Controllers
                 return NotFound(false); 
             }
         }
+
+        [Authorize]
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateProfile([FromForm] UpdateProfileRequest request)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst("IdUsuario")?.Value
+                                  ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+                if (string.IsNullOrEmpty(userIdClaim)) return Unauthorized();
+                int idUsuario = int.Parse(userIdClaim);
+
+                string? fotoPerfilPath = null;
+
+                if (request.FotoPerfil != null && request.FotoPerfil.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(_env.WebRootPath, "Uploads", "ProfilePictures");
+                    if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
+
+                    var extension = Path.GetExtension(request.FotoPerfil.FileName);
+                    var uniqueFileName = $"{Guid.NewGuid()}{extension}";
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    await using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await request.FotoPerfil.CopyToAsync(stream);
+                    }
+                    fotoPerfilPath = $"/Uploads/ProfilePictures/{uniqueFileName}";
+                }
+
+                await using var connection = _dbContext.GetConnection();
+                var command = new SqlCommand(Procedimientos.SP_ActualizarUsuario, connection) { CommandType = CommandType.StoredProcedure };
+
+                command.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                command.Parameters.AddWithValue("@Nombres", request.Nombres);
+                command.Parameters.AddWithValue("@Apellidos", request.Apellidos);
+                command.Parameters.AddWithValue("@FechaNacimiento", request.FechaNacimiento);
+                command.Parameters.AddWithValue("@Genero", request.Genero);
+                command.Parameters.AddWithValue("@FotoPerfil", (object)fotoPerfilPath ?? DBNull.Value);
+
+                await connection.OpenAsync();
+                await command.ExecuteNonQueryAsync();
+
+                return Ok("Perfil actualizado correctamente.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error al actualizar: " + ex.Message);
+            }
+        }
     }
 }

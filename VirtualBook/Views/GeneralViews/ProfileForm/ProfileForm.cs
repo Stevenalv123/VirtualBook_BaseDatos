@@ -1,59 +1,71 @@
 ﻿using System.Net.Http.Json;
-//using VirtualBook_WebAPI.DTOs;
 using System.Text.RegularExpressions;
+using VirtualBook.Controller;
+using VirtualBook.Models.DTO;
 
 namespace VirtualBook.Views
 {
     public partial class ProfileForm : Form
     {
-        int idUsuario = 0;
-        private string baseUrl = "https://localhost:7014/api/Usuarios";
-        private HttpClient cliente = new();
-        private MainForm mainForm;
-        private DocentesViews.DocentesMainForm docentesMainForm;
-
-        public ProfileForm(int IdUsuario)
+        private readonly ApiClient apiClient;
+        private string? rutaImagenSeleccionada = null;
+        public ProfileForm()
         {
             InitializeComponent();
-            this.idUsuario = IdUsuario;
-            CargarDataUsuario();
-            mainForm = new MainForm();
-            docentesMainForm = new DocentesViews.DocentesMainForm(idUsuario);
+            
+            apiClient = ApiClient.Instance;
         }
 
-        private void ProfileForm_Load(object sender, EventArgs e)
+        private async void ProfileForm_Load(object sender, EventArgs e)
         {
-
+            await CargarDataUsuario();
         }
 
         private async void BtnGuardar_Click_1(object sender, EventArgs e)
         {
-            //var editUser = new EditUsuarioDTO
-            //{
-            //    IdUsuario = idUsuario,
-            //    Nombres = TxtNombres.Text,
-            //    Apellidos = TxtApellidos.Text,
-            //    CorreoElectronico = TxtEmail.Text,
-            //    FechaNacimiento = dtmfechanacimiento.Value,
-            //    Genero = CmbGenero.SelectedItem?.ToString()
-            //};
-           
+            if (string.IsNullOrWhiteSpace(TxtNombres.Text) || string.IsNullOrWhiteSpace(TxtApellidos.Text))
+            {
+                MessageBox.Show("El nombre y apellido son obligatorios.");
+                return;
+            }
 
-            //using (HttpClient client = new HttpClient())
-            //{
+            BtnGuardar.Enabled = false;
 
-            //    var response = await client.PutAsJsonAsync($"{baseUrl}/{idUsuario}", editUser);
+            try
+            {
+                var updateData = new UpdateUserDTO
+                {
+                    Nombres = TxtNombres.Text.Trim(),
+                    Apellidos = TxtApellidos.Text.Trim(),
+                    FechaNacimiento = dtmfechanacimiento.Value,
+                    Genero = CmbGenero.SelectedItem?.ToString() ?? "",
+                    RutaNuevaFoto = rutaImagenSeleccionada
+                };
 
-            //    if (response.IsSuccessStatusCode)
-            //    {
-            //        MessageBox.Show("Usuario Actualizado Correctamente");
-            //        CargarDataUsuario();
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("Error al actualizar el usuario: " + response.ReasonPhrase);
-            //    }
-            //}
+                bool exito = await apiClient.LoginUsers.UpdateProfileAsync(updateData);
+
+                if (exito)
+                {
+                    MessageBox.Show("Perfil actualizado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    await CargarDataUsuario();
+
+                    rutaImagenSeleccionada = null;
+                    PanelLateral.Visible = false;
+                }
+                else
+                {
+                    MessageBox.Show("No se pudo actualizar el perfil. Intenta más tarde.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error de conexión: " + ex.Message);
+            }
+            finally
+            {
+                BtnGuardar.Enabled = true;
+            }
         }
     }
 }

@@ -58,7 +58,7 @@ namespace VirtualBook
                         adminForm.Show();
                         break;
                     case 2:
-                        var docenForm = new DocentesMainForm(loginResponse.IdUsuario);
+                        var docenForm = new DocentesMainForm();
                         docenForm.Show();
                         break;
                     case 3:

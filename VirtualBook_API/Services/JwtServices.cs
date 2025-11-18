@@ -24,6 +24,7 @@ namespace VirtualBook_API.Services
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, usuario.Correo_Electronico),
+                new Claim("IdUsuario", usuario.IdUsuario.ToString()),
                 new Claim(ClaimTypes.Role, usuario.NombreRol)
             };
 
