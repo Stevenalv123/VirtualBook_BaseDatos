@@ -26,8 +26,8 @@ namespace VirtualBook.Views.DocentesViews
 
         private void BtnUploadNewBook_Click(object sender, EventArgs e)
         {
-            //var uploadBookForm = new VirtualBook.Views.UploadBookForm.UploadBookForm(mf);
-            //mf.OpenForm(uploadBookForm);
+            var uploadBookForm = new VirtualBook.Views.UploadBookForm.UploadBookForm(mf);
+            mf.OpenForm(uploadBookForm);
         }
 
         private async void CargarLibros()

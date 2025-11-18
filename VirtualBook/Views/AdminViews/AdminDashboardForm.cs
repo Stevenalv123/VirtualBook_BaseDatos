@@ -37,29 +37,23 @@ namespace VirtualBook.Views
             this.Cursor = Cursors.WaitCursor;
             try
             {
-                // --- TAREA 1: CARGAR LIBROS (Grid y Contadores) ---
                 var libros = await _apiClient.Libros.GetLibrosAsync();
 
                 if (libros != null)
                 {
                     _listaLibrosCompleta = libros;
 
-                    // Llenar el Grid
                     dgvShowBooks.DataSource = _listaLibrosCompleta;
                     PersonalizarColumnas();
 
-                    // Actualizar estadísticas de libros
                     lblTotalLibros.Text = _listaLibrosCompleta.Count.ToString();
                     lblDescargas.Text = _listaLibrosCompleta.Sum(l => l.Descargas).ToString();
                 }
 
-                // --- TAREA 2: CARGAR USUARIOS (Nuevo) ---
-                // Reutilizamos el método del repositorio que creamos en el paso anterior
                 var usuarios = await _apiClient.LoginUsers.GetUsuariosAsync();
 
                 if (usuarios != null)
                 {
-                    // Simplemente contamos los elementos de la lista
                     lblTotalUsuarios.Text = usuarios.Count.ToString();
                 }
                 else
