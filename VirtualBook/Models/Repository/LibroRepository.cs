@@ -79,5 +79,25 @@ namespace VirtualBook.Models.Repository
                 return false;
             }
         }
+
+        public async Task<LibroDetalleDTO?> GetLibroDetalleAsync(int idLibro)
+        {
+            try
+            {
+                // Llama al nuevo endpoint: api/Libro/{id}
+                var response = await _httpClient.GetAsync($"Libro/{idLibro}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var libro = await response.Content.ReadFromJsonAsync<LibroDetalleDTO>();
+                    return libro;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }
