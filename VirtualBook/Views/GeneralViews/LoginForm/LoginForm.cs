@@ -101,10 +101,14 @@ namespace VirtualBook
 
             try
             {
+                this.Cursor = Cursors.WaitCursor;
+                BtnContinuar.Enabled = false;
                 await LoginAsync();
             }
             catch (Exception ex)
             {
+                this.Cursor = Cursors.Default;
+                BtnContinuar.Enabled = true;
                 MessageBox.Show($"Error: {ex.Message}", "Error de Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
