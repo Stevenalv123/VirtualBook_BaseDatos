@@ -12,5 +12,8 @@ namespace VirtualBook.Models.Repository.Interfaces
         Task<List<LibroDto>> GetLibrosAsync();
         Task<bool> SubirLibroAsync(LibroUploadModel model);
         Task<LibroDetalleDTO?> GetLibroDetalleAsync(int idLibro);
+        Task<bool> AgregarFavoritoAsync(int idLibro);
+        Task<bool> EliminarFavoritoAsync(int idLibro);
+        Task<bool> VerificarFavoritoAsync(int idLibro);
     }
 }

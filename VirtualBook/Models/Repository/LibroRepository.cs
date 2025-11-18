@@ -99,5 +99,32 @@ namespace VirtualBook.Models.Repository
                 return null;
             }
         }
+
+        public async Task<bool> AgregarFavoritoAsync(int idLibro)
+        {
+            var response = await _httpClient.PostAsync($"Libro/favorito?idLibro={idLibro}", null);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> EliminarFavoritoAsync(int idLibro)
+        {
+            var response = await _httpClient.DeleteAsync($"Libro/favorito?idLibro={idLibro}");
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> VerificarFavoritoAsync(int idLibro)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"Libro/favorito/check?idLibro={idLibro}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    return bool.Parse(result);
+                }
+                return false;
+            }
+            catch { return false; }
+        }
     }
 }

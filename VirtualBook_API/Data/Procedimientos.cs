@@ -18,6 +18,9 @@
         public const string SP_ActualizarUsuario = "sp_ActualizarUsuario";
         public const string SP_CambiarEstadoUsuario = "sp_CambiarEstadoUsuario";
         public const string SP_ObtenerDetallesLibro = "sp_ObtenerDetallesLibro";
+        public const string SP_AgregarFavorito = "sp_AgregarFavorito";
+        public const string SP_EliminarFavorito = "sp_EliminarFavorito";
+        public const string SP_VerificarFavorito = "sp_VerificarFavorito";
 
     }
 }
