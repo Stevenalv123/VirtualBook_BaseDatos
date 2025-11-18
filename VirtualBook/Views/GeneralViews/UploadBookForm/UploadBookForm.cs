@@ -19,11 +19,10 @@ namespace VirtualBook.Views.UploadBookForm
         private string? archivoPdf { get; set; }
         IMainForm _mf;
 
-        public UploadBookForm(int idUsuario, IMainForm mf)
+        public UploadBookForm(IMainForm mf)
         {
             InitializeComponent();
 
-            _idUsuario = idUsuario;
             _mf = mf;
             _apiClient = ApiClient.Instance;
 
@@ -140,18 +139,6 @@ namespace VirtualBook.Views.UploadBookForm
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            int rol = Cookies.GetRol();
-
-            if (rol == 1)
-            {
-                var menu = new AdminDashboardForm(_mf, _idUsuario);
-                _mf.OpenForm(menu);
-            }
-            else
-            {
-                var menu = new DocentesViews.DocentesViews(_mf);
-                _mf.OpenForm(menu);
-            }
         }
 
         private async Task CargarDatosFormulario()

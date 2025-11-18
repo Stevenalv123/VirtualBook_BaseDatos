@@ -14,14 +14,12 @@ namespace VirtualBook.Views
 {
     public partial class AdminFormUsers : Form
     {
-        private int _idUsuario;
         private readonly ApiClient _apiClient;
         private List<UsuarioDto> _listaUsuariosCompleta;
 
-        public AdminFormUsers(int idUsuario)
+        public AdminFormUsers()
         {
             InitializeComponent();
-            _idUsuario = idUsuario;
             _apiClient = ApiClient.Instance;
             _listaUsuariosCompleta = new List<UsuarioDto>();
 

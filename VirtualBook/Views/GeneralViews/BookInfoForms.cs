@@ -1,7 +1,4 @@
-﻿using System.Net.Http.Json;
-using VirtualBook.Controller;
-//using VirtualBook.DTOs;
-//using VirtualBook_WebAPI.Models;
+﻿using VirtualBook.Controller;
 
 namespace VirtualBook.Views
 {
@@ -12,9 +9,8 @@ namespace VirtualBook.Views
         private readonly IMainForm _mf;
         private readonly ApiClient _apiClient;
 
-        // Datos del libro
         private int _idPublicador;
-        private string? _rutaPdfRelativa; // La RUTA que viene de la API
+        private string? _rutaPdfRelativa;
 
         public BookInfoForms(int id, IMainForm mf)
         {
@@ -27,8 +23,6 @@ namespace VirtualBook.Views
             // Estilos
             BtnLeer.BackColor = Color.FromArgb(45, 154, 134);
             BtnSeguir.BackColor = Color.FromArgb(45, 154, 134);
-
-            // Llama al método de carga (fíjate en el `_ =`)
             _ = CargarInfoLibro();
         }
 
@@ -54,6 +48,7 @@ namespace VirtualBook.Views
                 LblDescripcion.Text = libro.Descripcion;
                 LblFormato.Text = libro.NombreFormato;
                 LblIdioma.Text = libro.NombreIdioma;
+                LblDescargas.Text = libro.Descargas.ToString() + " Descargas";
                 LblNumeroPaginas.Text = libro.NumeroPaginas.HasValue ? libro.NumeroPaginas.Value.ToString() + " Paginas" : "N/A";
                 LblAñoPublicacion.Text = libro.FechaPublicacion.ToString("yyyy");
 
@@ -93,68 +88,72 @@ namespace VirtualBook.Views
                 PcbCargando.Visible = false;
             }
         }
-        private void BtnLeer_Click(object sender, EventArgs e)
+        private async void BtnLeer_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(_rutaPdfRelativa))
             {
-                MessageBox.Show("El archivo PDF no está disponible.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Este libro no tiene un archivo PDF asociado.", "Aviso");
                 return;
             }
 
+            PcbCargando.Visible = true;
+            BtnLeer.Enabled = false;
+
             try
             {
-                // Esta es la URL completa al archivo en el servidor
-                string urlPdf = _apiClient.RootUrl + _rutaPdfRelativa.TrimStart('/');
-
-                var visor = new PdfVisorForm(urlPdf);
+                byte[] pdfBytes = await _apiClient.Libros.DescargarArchivoLibroAsync(_idlibro);
+                string tempPath = Path.Combine(Path.GetTempPath(), $"Lectura_{_idlibro}.pdf");
+                await File.WriteAllBytesAsync(tempPath, pdfBytes);
+                var visor = new PdfVisorForm(tempPath);
                 visor.Show();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al abrir el visor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"No se pudo abrir el libro: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                BtnLeer.Enabled = true;
+                PcbCargando.Visible = false;
             }
         }
 
         private async void BtnDescargar_Click(object sender, EventArgs e)
         {
-            /*if (_archivoPdf == null || _archivoPdf.Length == 0)
+            if (string.IsNullOrEmpty(_rutaPdfRelativa))
             {
-                MessageBox.Show("El archivo PDF no está disponible.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Este libro no tiene archivo disponible para descargar.");
                 return;
             }
-
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
                 saveFileDialog.Title = "Guardar libro como...";
-                saveFileDialog.FileName = LblTitulo.Text + ".pdf"; // Usa el título del libro
+                // Limpiamos el título de caracteres inválidos para nombre de archivo
+                string nombreLimpio = string.Join("_", LblTitulo.Text.Split(Path.GetInvalidFileNameChars()));
+                saveFileDialog.FileName = $"{nombreLimpio}.pdf";
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     try
                     {
-                        //File.WriteAllBytes(saveFileDialog.FileName, _archivoPdf);
-                        //MessageBox.Show("Libro descargado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        //var response = await client.PostAsJsonAsync($"{baseUrl}Descargas", new CreateDescargaDTO
-                        //{
-                        //    Usuario = Cookies.GetId(),
-                        //    Libro = idlibro,
-                        //    FechaDescarga = DateTime.Now
-                        //});
-                        //if (!response.IsSuccessStatusCode)
-                        //{
-                        //    string error = await response.Content.ReadAsStringAsync();
-                        //    MessageBox.Show($"Error al registrar la descarga: {error}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        //}
+                        this.Cursor = Cursors.WaitCursor;
+                        byte[] pdfBytes = await _apiClient.Libros.DescargarArchivoLibroAsync(_idlibro);
+
+                        await File.WriteAllBytesAsync(saveFileDialog.FileName, pdfBytes);
+
+                        MessageBox.Show("Libro descargado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Error al guardar el archivo: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"Error al descargar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        this.Cursor = Cursors.Default;
                     }
                 }
-
-                
-            }*/
+            }
         }
 
         private void BtnRegresar_Click(object sender, EventArgs e)

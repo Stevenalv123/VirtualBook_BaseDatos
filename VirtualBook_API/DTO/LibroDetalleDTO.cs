@@ -14,6 +14,7 @@
         public string? NombreIdioma { get; set; }
         public string? PublicadorNombre { get; set; }
         public string? PublicadorFotoPerfil { get; set; }
+        public int Descargas { get; set; }
         public int PublicadorId { get; set; }
         public string? Autores { get; set; }
     }

@@ -12,5 +12,6 @@ namespace VirtualBook.Models.Repository.Interfaces
         Task<List<LibroDto>> GetLibrosAsync();
         Task<bool> SubirLibroAsync(LibroUploadModel model);
         Task<LibroDetalleDTO?> GetLibroDetalleAsync(int idLibro);
+        Task<byte[]> DescargarArchivoLibroAsync(int idLibro);
     }
 }

@@ -146,7 +146,7 @@ namespace VirtualBook.Views
             switch (idRol)
             {
                 case 1:
-                    var adminForm = new AdministradorMainForm(1);
+                    var adminForm = new AdministradorMainForm();
                     adminForm.Show();
                     break;
                 case 2:

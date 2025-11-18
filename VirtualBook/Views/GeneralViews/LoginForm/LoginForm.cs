@@ -49,12 +49,15 @@ namespace VirtualBook
             {
                 _apiClient.SetAuthToken(loginResponse.Token);
 
+                Properties.Settings.Default.UserToken = loginResponse.Token;
+                Properties.Settings.Default.Save();
+
                 this.Hide();
 
                 switch (loginResponse.IdRol)
                 {
                     case 1:
-                        var adminForm = new AdministradorMainForm(loginResponse.IdUsuario);
+                        var adminForm = new AdministradorMainForm();
                         adminForm.Show();
                         break;
                     case 2:

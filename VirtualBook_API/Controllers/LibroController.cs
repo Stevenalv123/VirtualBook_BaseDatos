@@ -222,6 +222,7 @@ namespace VirtualBook_API.Controllers
                 NombreFormato = reader["NombreFormato"] == DBNull.Value ? null : reader["NombreFormato"].ToString(),
                 NombreIdioma = reader["NombreIdioma"] == DBNull.Value ? null : reader["NombreIdioma"].ToString(),
                 PublicadorNombre = reader["PublicadorNombre"] == DBNull.Value ? null : reader["PublicadorNombre"].ToString(),
+                Descargas = (int)reader["Descargas"],
                 PublicadorFotoPerfil = reader["PublicadorFotoPerfil"] == DBNull.Value ? null : reader["PublicadorFotoPerfil"].ToString(),
                 Autores = reader["Autores"] == DBNull.Value ? null : reader["Autores"].ToString()
             };
@@ -245,6 +246,70 @@ namespace VirtualBook_API.Controllers
                 Publicador = reader["Publicador"] == DBNull.Value ? null : reader["Publicador"].ToString(),
                 Autores = reader["Autores"] == DBNull.Value ? null : reader["Autores"].ToString()
             };
+        }
+
+        [HttpGet("download/{id}")]
+        [Authorize] 
+        public async Task<IActionResult> DownloadPdf(int id)
+        {
+            string? rutaRelativa = null;
+            string? tituloArchivo = "libro";
+
+            try
+            {
+                await using var connection = _dbContext.GetConnection();
+                await connection.OpenAsync();
+
+                var command = new SqlCommand(Procedimientos.SP_ObtenerDetallesLibro, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.AddWithValue("@IdLibro", id);
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        rutaRelativa = reader["ArchivoPDF"] == DBNull.Value ? null : reader["ArchivoPDF"].ToString();
+                        tituloArchivo = reader["Titulo"] == DBNull.Value ? "libro" : reader["Titulo"].ToString();
+                    }
+                    else
+                    {
+                        return NotFound("El libro no existe en la base de datos.");
+                    }
+                }
+
+                if (string.IsNullOrEmpty(rutaRelativa))
+                {
+                    return NotFound("Este libro no tiene un archivo PDF asignado en la base de datos.");
+                }
+
+                var filePath = Path.Combine(_env.WebRootPath, rutaRelativa.TrimStart('/', '\\'));
+
+                if (!System.IO.File.Exists(filePath))
+                {
+                    return NotFound($"Error: El archivo físico no se encuentra en la ruta: {filePath}");
+                }
+
+                var updateCmd = new SqlCommand(Procedimientos.SP_Actualizar_Descargas, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                updateCmd.Parameters.AddWithValue("@IdLibro", id);
+
+                await updateCmd.ExecuteNonQueryAsync();
+
+                var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+
+                string nombreDescarga = string.Join("_", tituloArchivo.Split(Path.GetInvalidFileNameChars())) + ".pdf";
+
+                return File(bytes, "application/pdf", nombreDescarga);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error al procesar la descarga: {ex.Message}");
+            }
         }
     }
 }  

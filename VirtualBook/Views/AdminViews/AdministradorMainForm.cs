@@ -7,13 +7,11 @@ namespace VirtualBook.Views.AdminViews
     public partial class AdministradorMainForm : Form, IMainForm
     {
         private Form? ActiveForm;
-        private int _idUsuario;
         private readonly ApiClient _apiClient;
 
-        public AdministradorMainForm(int idusuario)
+        public AdministradorMainForm()
         {
             InitializeComponent();
-            _idUsuario = idusuario;
             _apiClient = ApiClient.Instance;
             CargarUsuario();
             MostrarBookInfoForms();
@@ -48,13 +46,13 @@ namespace VirtualBook.Views.AdminViews
         private void MostrarBookInfoForms()
         {
             if (IsFormOpen(typeof(AdminDashboardForm))) return;
-            OpenForm(new AdminDashboardForm(this, _idUsuario));
+            OpenForm(new AdminDashboardForm(this));
         }
 
         private void BtnVerUsuarios_Click(object sender, EventArgs e)
         {
             if (IsFormOpen(typeof(AdminFormUsers))) return;
-            OpenForm(new AdminFormUsers(_idUsuario));
+            OpenForm(new AdminFormUsers());
 
         }
 
@@ -128,7 +126,6 @@ namespace VirtualBook.Views.AdminViews
             DialogResult result = MessageBox.Show("¿Estás seguro de que quieres cerrar sesión?", "Cerrar sesión", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                Cookies.EliminarCookie();
                 var loginForm = new LoginForm();
                 loginForm.Show();
                 this.Hide();

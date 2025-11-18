@@ -99,5 +99,19 @@ namespace VirtualBook.Models.Repository
                 return null;
             }
         }
+
+        public async Task<byte[]> DescargarArchivoLibroAsync(int idLibro)
+        {
+            var response = await _httpClient.GetAsync($"Libro/download/{idLibro}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadAsByteArrayAsync();
+            }
+            else
+            {
+                throw new Exception("No se pudo descargar el archivo.");
+            }
+        }
     }
 }

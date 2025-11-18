@@ -18,6 +18,6 @@
         public const string SP_ActualizarUsuario = "sp_ActualizarUsuario";
         public const string SP_CambiarEstadoUsuario = "sp_CambiarEstadoUsuario";
         public const string SP_ObtenerDetallesLibro = "sp_ObtenerDetallesLibro";
-
+        public const string SP_Actualizar_Descargas = "sp_Actualizar_Descargas";
     }
 }

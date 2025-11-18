@@ -29,26 +29,26 @@ namespace VirtualBook.Views
 
         private async void GetFavoritos()
         {
-            var response = await cliente.GetAsync($"{baseUrl}{Cookies.GetId()}");
-            response.EnsureSuccessStatusCode();
-            if (response.IsSuccessStatusCode)
-            {
-                var json=await response.Content.ReadAsStringAsync();
-                //var favoritos=JsonConvert.DeserializeObject<List<ReadVistaPreviaLibro>>(json);
-                //if (favoritos != null && favoritos.Count > 0)
-                //{
-                //    foreach (var libro in favoritos)
-                //    {
-                //        var card = new LibroCard(libro, mainform);
-                //        flpLibros.Controls.Add(card);
-                //    }
-                //}
-            }
-            else
-            {
-                var errorMessage = await response.Content.ReadAsStringAsync();
-                MessageBox.Show($"Error al cargar los libros favoritos. {errorMessage}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //var response = await cliente.GetAsync($"{baseUrl}{Cookies.GetId()}");
+            //response.EnsureSuccessStatusCode();
+            //if (response.IsSuccessStatusCode)
+            //{
+            //    var json=await response.Content.ReadAsStringAsync();
+            //    //var favoritos=JsonConvert.DeserializeObject<List<ReadVistaPreviaLibro>>(json);
+            //    //if (favoritos != null && favoritos.Count > 0)
+            //    //{
+            //    //    foreach (var libro in favoritos)
+            //    //    {
+            //    //        var card = new LibroCard(libro, mainform);
+            //    //        flpLibros.Controls.Add(card);
+            //    //    }
+            //    //}
+            //}
+            //else
+            //{
+            //    var errorMessage = await response.Content.ReadAsStringAsync();
+            //    MessageBox.Show($"Error al cargar los libros favoritos. {errorMessage}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         } 
     }
 }

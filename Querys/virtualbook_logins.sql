@@ -262,6 +262,20 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE sp_Actualizar_Descargas
+	@IdLibro INT
+AS
+BEGIN
+	UPDATE Libro
+	SET
+		Descargas = Descargas + 1
+	WHERE IdLibro = @IdLibro
+END;
+GO
+
+select * from Libro
+
+
 grant execute on sp_ValidarUsuario to virtualbooksystemUser;
 grant execute on sp_RegistrarUsuario to virtualbooksystemUser;
 grant execute on sp_ObtenerUsuarioPorCorreo to virtualbooksystemUser;
@@ -275,4 +289,5 @@ GRANT EXECUTE ON sp_ObtenerCategorias TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_ObtenerFormatos TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_ObtenerIdiomas TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_ActualizarUsuario TO virtualbooksystemUser;
+GRANT EXECUTE ON sp_Actualizar_Descargas TO virtualbooksystemUser;
 go;

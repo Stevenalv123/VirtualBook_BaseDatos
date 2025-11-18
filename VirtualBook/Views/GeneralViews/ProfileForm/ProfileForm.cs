@@ -1,6 +1,4 @@
-﻿using System.Net.Http.Json;
-using System.Text.RegularExpressions;
-using VirtualBook.Controller;
+﻿using VirtualBook.Controller;
 using VirtualBook.Models.DTO;
 
 namespace VirtualBook.Views
@@ -12,7 +10,6 @@ namespace VirtualBook.Views
         public ProfileForm()
         {
             InitializeComponent();
-            
             apiClient = ApiClient.Instance;
         }
 

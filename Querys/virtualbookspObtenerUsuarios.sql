@@ -92,3 +92,6 @@ GO
 GRANT EXECUTE ON OBJECT::dbo.sp_CambiarEstadoUsuario TO virtualbooksystemUser;
 GO
 
+select * from Libro
+
+update Libro set Descargas = 3 where IdLibro = 104

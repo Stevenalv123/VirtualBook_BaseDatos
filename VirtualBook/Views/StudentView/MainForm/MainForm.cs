@@ -112,7 +112,7 @@ namespace VirtualBook.Views
 
         private void MostrarInformacionPerfilForm()
         {
-            OpenForm(new ProfileForm()); 
+            OpenForm(new ProfileForm());
         }
 
         private void MostrarMenuPrincipal()
