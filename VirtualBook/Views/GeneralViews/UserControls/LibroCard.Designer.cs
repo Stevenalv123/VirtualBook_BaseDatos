@@ -53,7 +53,7 @@
             BtnDetalles.TabIndex = 8;
             BtnDetalles.Text = "Detalles  >";
             BtnDetalles.UseVisualStyleBackColor = true;
-            //BtnDetalles.Click += BtnDetalles_Click;
+            BtnDetalles.Click += BtnDetalles_Click;
             // 
             // LblCategoria
             // 

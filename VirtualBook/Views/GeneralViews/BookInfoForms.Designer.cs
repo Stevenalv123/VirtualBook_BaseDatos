@@ -32,7 +32,6 @@
             BtnRegresar = new FontAwesome.Sharp.IconButton();
             panel1 = new Panel();
             panel2 = new Panel();
-            PcbCargando = new PictureBox();
             PcbFotoPerfilPublicador = new VirtualBook.Controls.RoundedPictureBox();
             BtnSeguir = new VirtualBook.Controls.RJButton();
             LblNumeroPaginas = new Label();
@@ -58,12 +57,13 @@
             BtnAgregarFavoritos = new FontAwesome.Sharp.Material.MaterialButton();
             BtnLeer = new Button();
             PcbPortada = new PictureBox();
+            PcbCargando = new PictureBox();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)PcbCargando).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PcbFotoPerfilPublicador).BeginInit();
             ((System.ComponentModel.ISupportInitialize)iconPictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PcbPortada).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)PcbCargando).BeginInit();
             SuspendLayout();
             // 
             // BtnRegresar
@@ -128,16 +128,6 @@
             panel2.Padding = new Padding(50);
             panel2.Size = new Size(1094, 521);
             panel2.TabIndex = 2;
-            // 
-            // PcbCargando
-            // 
-            PcbCargando.Image = Properties.Resources.cargandoLibro;
-            PcbCargando.Location = new Point(23, 18);
-            PcbCargando.Name = "PcbCargando";
-            PcbCargando.Size = new Size(1042, 484);
-            PcbCargando.SizeMode = PictureBoxSizeMode.CenterImage;
-            PcbCargando.TabIndex = 25;
-            PcbCargando.TabStop = false;
             // 
             // PcbFotoPerfilPublicador
             // 
@@ -451,6 +441,16 @@
             PcbPortada.TabIndex = 0;
             PcbPortada.TabStop = false;
             // 
+            // PcbCargando
+            // 
+            PcbCargando.Image = Properties.Resources.cargandoLibro;
+            PcbCargando.Location = new Point(23, 18);
+            PcbCargando.Name = "PcbCargando";
+            PcbCargando.Size = new Size(1042, 484);
+            PcbCargando.SizeMode = PictureBoxSizeMode.CenterImage;
+            PcbCargando.TabIndex = 25;
+            PcbCargando.TabStop = false;
+            // 
             // BookInfoForms
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -466,10 +466,10 @@
             panel1.ResumeLayout(false);
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)PcbCargando).EndInit();
             ((System.ComponentModel.ISupportInitialize)PcbFotoPerfilPublicador).EndInit();
             ((System.ComponentModel.ISupportInitialize)iconPictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)PcbPortada).EndInit();
+            ((System.ComponentModel.ISupportInitialize)PcbCargando).EndInit();
             ResumeLayout(false);
         }
 

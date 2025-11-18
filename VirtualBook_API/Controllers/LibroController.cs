@@ -52,6 +52,38 @@ namespace VirtualBook_API.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        [Authorize] // Proteger el endpoint
+        public async Task<IActionResult> GetLibroDetalle(int id)
+        {
+            try
+            {
+                await using var connection = _dbContext.GetConnection();
+                var command = new SqlCommand(Procedimientos.SP_ObtenerDetallesLibro, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.AddWithValue("@IdLibro", id);
+
+                await connection.OpenAsync();
+                var reader = await command.ExecuteReaderAsync();
+
+                if (await reader.ReadAsync())
+                {
+                    var libro = MapReaderToLibroDetalleDto(reader);
+                    return Ok(libro);
+                }
+                else
+                {
+                    return NotFound("Libro no encontrado.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
         [HttpPost("upload")]
         [Authorize(Roles = "Administrador,Docente")]
         public async Task<IActionResult> SubirLibro([FromForm] LibroUploadRequest request)
@@ -172,6 +204,27 @@ namespace VirtualBook_API.Controllers
             }
 
             return null; // El usuario del token no existe en la DB
+        }
+        private LibroDetalleDTO MapReaderToLibroDetalleDto(SqlDataReader reader)
+        {
+            return new LibroDetalleDTO
+            {
+                IdLibro = (int)reader["IdLibro"],
+                PublicadorId = (int)reader["PublicadorId"],
+                FechaPublicacion = (DateTime)reader["FechaPublicacion"],
+
+                Titulo = reader["Titulo"] == DBNull.Value ? null : reader["Titulo"].ToString(),
+                Portada = reader["Portada"] == DBNull.Value ? null : reader["Portada"].ToString(),
+                ArchivoPDF = reader["ArchivoPDF"] == DBNull.Value ? null : reader["ArchivoPDF"].ToString(),
+                Descripcion = reader["Descripcion"] == DBNull.Value ? null : reader["Descripcion"].ToString(),
+                NumeroPaginas = reader["NumeroPaginas"] == DBNull.Value ? null : (int?)reader["NumeroPaginas"],
+                NombreCategoria = reader["NombreCategoria"] == DBNull.Value ? null : reader["NombreCategoria"].ToString(),
+                NombreFormato = reader["NombreFormato"] == DBNull.Value ? null : reader["NombreFormato"].ToString(),
+                NombreIdioma = reader["NombreIdioma"] == DBNull.Value ? null : reader["NombreIdioma"].ToString(),
+                PublicadorNombre = reader["PublicadorNombre"] == DBNull.Value ? null : reader["PublicadorNombre"].ToString(),
+                PublicadorFotoPerfil = reader["PublicadorFotoPerfil"] == DBNull.Value ? null : reader["PublicadorFotoPerfil"].ToString(),
+                Autores = reader["Autores"] == DBNull.Value ? null : reader["Autores"].ToString()
+            };
         }
 
         private LibroDto MapReaderToLibroDto(SqlDataReader reader)

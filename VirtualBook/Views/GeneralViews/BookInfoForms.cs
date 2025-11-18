@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using VirtualBook.Controller;
 //using VirtualBook.DTOs;
 //using VirtualBook_WebAPI.Models;
 
@@ -6,95 +7,117 @@ namespace VirtualBook.Views
 {
     public partial class BookInfoForms : Form
     {
-        int idlibro;
-        string baseUrl = "https://localhost:7014/api/";
-        int _idPublicador;
-        string? _rutaPdf;
-        byte[] _archivoPdf;
-        HttpClient client = new();
-        IMainForm _mf;
+        // Campos de clase
+        private readonly int _idlibro;
+        private readonly IMainForm _mf;
+        private readonly ApiClient _apiClient;
+
+        // Datos del libro
+        private int _idPublicador;
+        private string? _rutaPdfRelativa; // La RUTA que viene de la API
+
         public BookInfoForms(int id, IMainForm mf)
         {
             InitializeComponent();
-            idlibro = id;
-            CargarInfoLibro();
+
+            _idlibro = id;
             _mf = mf;
+            _apiClient = ApiClient.Instance;
+
+            // Estilos
             BtnLeer.BackColor = Color.FromArgb(45, 154, 134);
             BtnSeguir.BackColor = Color.FromArgb(45, 154, 134);
+
+            // Llama al método de carga (fíjate en el `_ =`)
+            _ = CargarInfoLibro();
         }
 
-        private async void CargarInfoLibro()
+        private async Task CargarInfoLibro()
         {
-            //try
-            //{
-            //    var libro = await client.GetFromJsonAsync<ReadLibroDTO>($"{baseUrl}Libroes/{idlibro}");
-            //    if (libro == null)
-            //    {
-            //        MessageBox.Show("Libro no encontrado");
-            //        return;
-            //    }
-            //    if (libro != null)
-            //    {
-            //        LblTitulo.Text = libro.Titulo;
-            //        LblAutor.Text = libro.Autor;
-            //        LblCategoria.Text = libro.Categoria;
-            //        LblPublicadoPor.Text = libro.Publicador;
-            //        _idPublicador = libro.PublicadorId; // Asigna el ID del publicador para usarlo al seguir
-            //        LblDescripcion.Text = libro.Descripcion;
-            //        LblFormato.Text = libro.Formato;
-            //        LblIdioma.Text = libro.Idioma;
-            //        LblNumeroPaginas.Text = libro.NumeroPaginas.HasValue ? libro.NumeroPaginas.Value.ToString() + " Paginas" : "N/A";
-            //        LblAñoPublicacion.Text = libro.FechaPublicacion.ToString("yyyy");
-            //        VerificarSiSigue();
-            //        PcbFotoPerfilPublicador.Image = null; // Limpia la imagen antes de cargar una nueva
-            //        PcbFotoPerfilPublicador.Image = libro.FotoPublicador != null && libro.FotoPublicador.Length > 0
-            //            ? Image.FromStream(new MemoryStream(libro.FotoPublicador))
-            //            : Properties.Resources.avatar; // Usa una imagen por defecto si no hay foto
-            //        if (libro.Portada != null && libro.Portada.Length > 0)
-            //        {
-            //            using (var ms = new MemoryStream(libro.Portada))
-            //            {
-            //                PcbPortada.Image = Image.FromStream(ms);
-            //                PcbPortada.SizeMode = PictureBoxSizeMode.Zoom;
-            //            }
-            //        }
-            //        else
-            //        {
-            //            PcbPortada.Image = null;
-            //        }
+            try
+            {
+                // Llama al repositorio
+                var libro = await _apiClient.Libros.GetLibroDetalleAsync(_idlibro);
 
-            //        if (libro.ArchivoPdf != null && libro.ArchivoPdf.Length > 0)
-            //        {
-            //            string rutaTemporal = Path.Combine(Path.GetTempPath(), $"libro_{idlibro}.pdf");
-            //            File.WriteAllBytes(rutaTemporal, libro.ArchivoPdf);
-            //            _rutaPdf = rutaTemporal; // Guarda la ruta para usarla al leer
-            //            _archivoPdf = libro.ArchivoPdf; // Guarda el archivo PDF en memoria
-            //        }
-            //        PcbCargando.Visible = false; // Oculta el icono de carga una vez que la información se ha cargado
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Error al cargar la información del libro: {ex.Message}");
-            //}
+                if (libro == null)
+                {
+                    MessageBox.Show("Libro no encontrado o error al cargar.");
+                    PcbCargando.Visible = false;
+                    return;
+                }
+
+                LblTitulo.Text = libro.Titulo;
+                LblAutor.Text = libro.Autores;
+                LblCategoria.Text = libro.NombreCategoria;
+                LblPublicadoPor.Text = libro.PublicadorNombre;
+                _idPublicador = libro.PublicadorId;
+                LblDescripcion.Text = libro.Descripcion;
+                LblFormato.Text = libro.NombreFormato;
+                LblIdioma.Text = libro.NombreIdioma;
+                LblNumeroPaginas.Text = libro.NumeroPaginas.HasValue ? libro.NumeroPaginas.Value.ToString() + " Paginas" : "N/A";
+                LblAñoPublicacion.Text = libro.FechaPublicacion.ToString("yyyy");
+
+                // Guardar la ruta del PDF
+                _rutaPdfRelativa = libro.ArchivoPDF;
+
+                // Cargar la foto del publicador
+                if (!string.IsNullOrEmpty(libro.PublicadorFotoPerfil))
+                {
+                    PcbFotoPerfilPublicador.LoadAsync(_apiClient.RootUrl + libro.PublicadorFotoPerfil.TrimStart('/'));
+                }
+                else
+                {
+                    PcbFotoPerfilPublicador.Image = Properties.Resources.avatar;
+                }
+
+                // 5. Cargar la portada del libro
+                if (!string.IsNullOrEmpty(libro.Portada))
+                {
+                    PcbPortada.LoadAsync(_apiClient.RootUrl + libro.Portada.TrimStart('/'));
+                    PcbPortada.SizeMode = PictureBoxSizeMode.Zoom;
+                }
+                else
+                {
+                    PcbPortada.Image = Properties.Resources.placeholder;
+                }
+
+                // (Lógica futura)
+                // VerificarSiSigue(); 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar la información del libro: {ex.Message}");
+            }
+            finally
+            {
+                PcbCargando.Visible = false;
+            }
         }
-
         private void BtnLeer_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(_rutaPdf) && File.Exists(_rutaPdf))
-            {
-                var visor = new PdfVisorForm(_rutaPdf);
-                visor.Show();
-            }
-            else
+            if (string.IsNullOrEmpty(_rutaPdfRelativa))
             {
                 MessageBox.Show("El archivo PDF no está disponible.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
+            {
+                // Esta es la URL completa al archivo en el servidor
+                string urlPdf = _apiClient.RootUrl + _rutaPdfRelativa.TrimStart('/');
+
+                var visor = new PdfVisorForm(urlPdf);
+                visor.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al abrir el visor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private async void BtnDescargar_Click(object sender, EventArgs e)
         {
-            if (_archivoPdf == null || _archivoPdf.Length == 0)
+            /*if (_archivoPdf == null || _archivoPdf.Length == 0)
             {
                 MessageBox.Show("El archivo PDF no está disponible.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -131,7 +154,7 @@ namespace VirtualBook.Views
                 }
 
                 
-            }
+            }*/
         }
 
         private void BtnRegresar_Click(object sender, EventArgs e)
@@ -142,7 +165,7 @@ namespace VirtualBook.Views
 
         private async void VerificarSiSigue()
         {
-            var response = await client.GetAsync($"{baseUrl}Seguimientoes/Existe?seguidor={Cookies.GetId()}&seguido={_idPublicador}");
+            /*var response = await client.GetAsync($"{baseUrl}Seguimientoes/Existe?seguidor={Cookies.GetId()}&seguido={_idPublicador}");
             if (response.IsSuccessStatusCode)
             {
                 bool yaSigue = bool.Parse(await response.Content.ReadAsStringAsync());
@@ -157,7 +180,7 @@ namespace VirtualBook.Views
             {
                 var error = response.Content.ReadAsStringAsync().Result;
                 MessageBox.Show($"Error al verificar seguimiento: {error}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            }*/
         }
 
         private async void BtnSeguir_Click(object sender, EventArgs e)

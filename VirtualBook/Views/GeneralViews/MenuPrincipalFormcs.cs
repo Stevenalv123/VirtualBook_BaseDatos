@@ -116,12 +116,7 @@ namespace VirtualBook.Views
                             tarjeta.UrlPortada = _apiRootUrl + libro.Portada;
                         }
 
-                        // MAEEEEE este evento hay que descomentarlo para abrir el Form BookInfoForms
-                        tarjeta.Click += (s, e) => AbrirDetallesLibro(libro.IdLibro);
-                        foreach (Control c in tarjeta.Controls)
-                        {
-                            c.Click += (s, e) => AbrirDetallesLibro(libro.IdLibro);
-                        }
+                        tarjeta.DetallesClick += (s, e) => AbrirDetallesLibro(libro.IdLibro);
 
                         flpLibros.Controls.Add(tarjeta);
                     }

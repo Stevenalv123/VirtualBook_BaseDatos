@@ -41,7 +41,9 @@ namespace VirtualBook_API.Controllers
                         Apellidos = reader["Apellidos"].ToString(),
                         Correo_Electronico = reader["Correo_Electronico"].ToString(),
                         NombreRol = reader["NombreRol"].ToString(),
-                        FotoPerfil = reader["FotoPerfil"] == DBNull.Value ? null : reader["FotoPerfil"].ToString()
+                        FotoPerfil = reader["FotoPerfil"] == DBNull.Value ? null : reader["FotoPerfil"].ToString(),
+                        // Manejo seguro de la columna Estado
+                        Estado = reader["Estado"] != DBNull.Value && (bool)reader["Estado"]
                     });
                 }
 
@@ -50,6 +52,31 @@ namespace VirtualBook_API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, "Error interno: " + ex.Message);
+            }
+        }
+
+        // NUEVO ENDPOINT: Cambiar Estado
+        [HttpPut("estado")]
+        public async Task<IActionResult> CambiarEstado([FromQuery] int idUsuario, [FromQuery] bool nuevoEstado)
+        {
+            try
+            {
+                await using var connection = _dbContext.GetConnection();
+                var command = new SqlCommand(Procedimientos.SP_CambiarEstadoUsuario, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                command.Parameters.AddWithValue("@NuevoEstado", nuevoEstado);
+
+                await connection.OpenAsync();
+                await command.ExecuteNonQueryAsync();
+
+                return Ok(new { message = "Estado actualizado correctamente" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error al cambiar estado: " + ex.Message);
             }
         }
     }
