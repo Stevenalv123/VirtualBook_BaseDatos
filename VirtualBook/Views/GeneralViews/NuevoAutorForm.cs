@@ -8,63 +8,69 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VirtualBook.Controller;
+using VirtualBook.Models.DTO;
 
 namespace VirtualBook.Views.GeneralViews
 {
     public partial class NuevoAutorForm : Form
     {
-        string baseUrl = "https://localhost:7014/api/Autores/";
-        HttpClient client = new HttpClient();
+        private readonly ApiClient _apiClient;
+        public int NuevoAutorId { get; private set; } = 0;
         public NuevoAutorForm()
         {
             InitializeComponent();
+            _apiClient = ApiClient.Instance;
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
         }
 
         private async void BtnGuardar_Click(object sender, EventArgs e)
         {
-            string nombreAutor = TxtNombreAutor.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(nombreAutor))
+            if (string.IsNullOrWhiteSpace(TxtNombre.Text))
             {
-                MessageBox.Show("Por favor, ingrese un nombre de autor.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("El nombre es obligatorio.");
                 return;
             }
 
+            var nuevoAutor = new AutorRequestDTO
+            {
+                NombreAutor = TxtNombre.Text,
+                Biografia = TxtBio.Text,
+                Nacionalidad = TxtNacionalidad.Text,
+                FechaNacimiento = DtpFecha.Value
+            };
+
+            BtnGuardar.Enabled = false;
+
             try
             {
-                var response = await client.GetAsync(baseUrl + "Existe?nombre=" + nombreAutor);
-                response.EnsureSuccessStatusCode();
+                int id = await _apiClient.Data.CrearAutorAsync(nuevoAutor);
 
-                bool yaExiste = bool.Parse(await response.Content.ReadAsStringAsync());
-
-                if (yaExiste)
+                if (id > 0)
                 {
-                    MessageBox.Show("El autor ya existe en la base de datos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                var nuevoAutor = new { NombreAutor = nombreAutor };
-                var guardarResponse = await client.PostAsJsonAsync(baseUrl, nuevoAutor);
-
-                if (guardarResponse.IsSuccessStatusCode)
-                {
-                    MessageBox.Show("Autor guardado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    NuevoAutorId = id;
+                    this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
                 else
                 {
-                    string errorMessage = await guardarResponse.Content.ReadAsStringAsync();
-                    MessageBox.Show($"Error al guardar el autor: {errorMessage}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error al crear autor.");
+                    BtnGuardar.Enabled = true;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error: " + ex.Message);
+                BtnGuardar.Enabled = true;
             }
         }
 
         private void BtnCerrar_Click(object sender, EventArgs e)
         {
+            this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
     }

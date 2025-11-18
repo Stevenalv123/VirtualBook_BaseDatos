@@ -145,6 +145,7 @@ namespace VirtualBook.Views.UploadBookForm
         {
             try
             {
+                await RecargarAutores();
                 var autores = await _apiClient.Data.GetAutoresAsync();
 
                 CmbAutor.DataSource = autores;
@@ -175,7 +176,6 @@ namespace VirtualBook.Views.UploadBookForm
 
         private async void BtnAgregarLibro_Click(object sender, EventArgs e)
         {
-            // --- 1. Validaciones de Campos ---
             if (string.IsNullOrEmpty(TxtTitulo.Text))
             {
                 MessageBox.Show("El título es obligatorio.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -235,6 +235,40 @@ namespace VirtualBook.Views.UploadBookForm
             {
                 //PcbCargando.Visible = false;
                 MessageBox.Show($"Error fatal al conectar con la API: {ex.Message}", "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async void BtnAgregarAutor_Click(object sender, EventArgs e)
+        {
+            using (var formAutor = new NuevoAutorForm())
+            {
+                var resultado = formAutor.ShowDialog();
+
+                if (resultado == DialogResult.OK)
+                {
+                    int idNuevoAutor = formAutor.NuevoAutorId;
+
+                    await RecargarAutores(idNuevoAutor);
+                }
+            }
+        }
+        private async Task RecargarAutores(int idSeleccionar = 0)
+        {
+            try
+            {
+                var autores = await _apiClient.Data.GetAutoresAsync();
+                CmbAutor.DataSource = autores;
+                CmbAutor.DisplayMember = "Nombre";
+                CmbAutor.ValueMember = "Id";
+
+                if (idSeleccionar > 0)
+                {
+                    CmbAutor.SelectedValue = idSeleccionar;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al actualizar autores: " + ex.Message);
             }
         }
     }

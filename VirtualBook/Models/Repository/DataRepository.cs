@@ -37,5 +37,25 @@ namespace VirtualBook.Models.Repository
         {
             return await _httpClient.GetFromJsonAsync<List<DataDto>>("Data/Idiomas") ?? new List<DataDto>();
         }
+
+        public class AutorResponse { public int idAutor { get; set; } }
+
+        public async Task<int> CrearAutorAsync(AutorRequestDTO autor)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("Data/Autor", autor);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<AutorResponse>();
+                    return result?.idAutor ?? 0;
+                }
+                return 0;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
     }
 }

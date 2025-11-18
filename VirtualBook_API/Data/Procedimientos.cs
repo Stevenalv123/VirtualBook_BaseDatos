@@ -23,6 +23,7 @@
         public const string SP_VerificarFavorito = "sp_VerificarFavorito";
         public const string SP_ObtenerFavoritosPorUsuario = "sp_ObtenerFavoritosPorUsuario";
         public const string SP_Actualizar_Descargas = "sp_Actualizar_Descargas";
+        public const string SP_RegistrarAutor = "sp_RegistrarAutor";
 
 
     }

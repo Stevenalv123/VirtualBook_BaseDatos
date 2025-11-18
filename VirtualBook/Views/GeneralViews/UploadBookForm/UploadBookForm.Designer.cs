@@ -46,6 +46,7 @@
             label13 = new Label();
             label12 = new Label();
             borderedPanel7 = new VirtualBook.Controls.BorderedPanel();
+            CmbAutor = new ComboBox();
             label10 = new Label();
             borderedPanel6 = new VirtualBook.Controls.BorderedPanel();
             TxtDescripcion = new TextBox();
@@ -62,7 +63,6 @@
             LblStatus = new Label();
             btnAddCover = new VirtualBook.Controls.RJButton();
             label1 = new Label();
-            CmbAutor = new ComboBox();
             panel1.SuspendLayout();
             BtnAñadirAutor.SuspendLayout();
             borderedPanel13.SuspendLayout();
@@ -137,6 +137,7 @@
             BtnAgregarAutor.Text = "+";
             BtnAgregarAutor.TextColor = Color.White;
             BtnAgregarAutor.UseVisualStyleBackColor = false;
+            BtnAgregarAutor.Click += BtnAgregarAutor_Click;
             // 
             // borderedPanel13
             // 
@@ -314,6 +315,17 @@
             borderedPanel7.Name = "borderedPanel7";
             borderedPanel7.Size = new Size(226, 34);
             borderedPanel7.TabIndex = 14;
+            // 
+            // CmbAutor
+            // 
+            CmbAutor.BackColor = Color.White;
+            CmbAutor.FlatStyle = FlatStyle.Flat;
+            CmbAutor.ForeColor = Color.FromArgb(64, 64, 64);
+            CmbAutor.FormattingEnabled = true;
+            CmbAutor.Location = new Point(7, 5);
+            CmbAutor.Name = "CmbAutor";
+            CmbAutor.Size = new Size(211, 23);
+            CmbAutor.TabIndex = 5;
             // 
             // label10
             // 
@@ -512,17 +524,6 @@
             label1.Size = new Size(48, 15);
             label1.TabIndex = 1;
             label1.Text = "Portada";
-            // 
-            // CmbAutor
-            // 
-            CmbAutor.BackColor = Color.White;
-            CmbAutor.FlatStyle = FlatStyle.Flat;
-            CmbAutor.ForeColor = Color.FromArgb(64, 64, 64);
-            CmbAutor.FormattingEnabled = true;
-            CmbAutor.Location = new Point(7, 5);
-            CmbAutor.Name = "CmbAutor";
-            CmbAutor.Size = new Size(211, 23);
-            CmbAutor.TabIndex = 5;
             // 
             // UploadBookForm
             // 
