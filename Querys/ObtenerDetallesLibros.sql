@@ -18,6 +18,7 @@ BEGIN
         c.NombreCategoria,
         f.NombreFormato,
         i.NombreIdioma,
+		l.Descargas,
         -- Datos del Publicador
         p.Nombres + ' ' + p.Apellidos AS PublicadorNombre,
         p.FotoPerfil AS PublicadorFotoPerfil, -- Ruta de la foto
@@ -40,3 +41,4 @@ GO
 
 GRANT EXECUTE ON sp_ObtenerDetallesLibro TO virtualbooksystemUser;
 GO
+

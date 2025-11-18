@@ -1,19 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-//using VirtualBook.DTOs;
-using VirtualBook.UserControls;
-
-namespace VirtualBook.Views
+﻿namespace VirtualBook.Views
 {
     public partial class FavoritosForm : Form
     {
@@ -24,23 +9,23 @@ namespace VirtualBook.Views
         {
             InitializeComponent();
             mainform = mf;
-            GetFavoritos();
+            /*GetFavoritos();*/
         }
 
-        private async void GetFavoritos()
-        {
-            var response = await cliente.GetAsync($"{baseUrl}{Cookies.GetId()}");
-            response.EnsureSuccessStatusCode();
-            if (response.IsSuccessStatusCode)
-            {
-                var json=await response.Content.ReadAsStringAsync();
+        //private async void GetFavoritos()
+        //{
+        //    var response = await cliente.GetAsync($"{baseUrl}{Cookies.GetId()}");
+        //    response.EnsureSuccessStatusCode();
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        var json=await response.Content.ReadAsStringAsync();
           
-            }
-            else
-            {
-                var errorMessage = await response.Content.ReadAsStringAsync();
-                MessageBox.Show($"Error al cargar los libros favoritos. {errorMessage}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        } 
+        //    }
+        //    else
+        //    {
+        //        var errorMessage = await response.Content.ReadAsStringAsync();
+        //        MessageBox.Show($"Error al cargar los libros favoritos. {errorMessage}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //} 
     }
 }
