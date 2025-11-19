@@ -2,8 +2,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using VirtualBook_API.Data;
-using VirtualBook_API.DTO;
 using VirtualBook_API.Models;
 
 namespace VirtualBook_API.Services
