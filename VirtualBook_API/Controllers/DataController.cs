@@ -47,6 +47,35 @@ namespace VirtualBook_API.Controllers
             return Ok(await GetData(Procedimientos.SP_ObtenerIdiomas, "IdIdioma", "NombreIdioma"));
         }
 
+        [HttpPost("Autor")]
+        public async Task<IActionResult> CrearAutor([FromBody] AutorRequestDTO request)
+        {
+            try
+            {
+                await using var connection = _dbContext.GetConnection();
+                var command = new SqlCommand(Procedimientos.SP_RegistrarAutor, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                command.Parameters.AddWithValue("@NombreAutor", request.NombreAutor);
+                command.Parameters.AddWithValue("@Biografia", (object)request.Biografia ?? DBNull.Value);
+                command.Parameters.AddWithValue("@FechaNacimiento", (object)request.FechaNacimiento ?? DBNull.Value);
+                command.Parameters.AddWithValue("@Nacionalidad", (object)request.Nacionalidad ?? DBNull.Value);
+
+                await connection.OpenAsync();
+
+                var result = await command.ExecuteScalarAsync();
+                int nuevoId = Convert.ToInt32(result);
+
+                return Ok(new { message = "Autor creado", idAutor = nuevoId });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+        }
+
         // Método para leer los datos
         private async Task<List<DataDto>> GetData(string spName, string idColumn, string nombreColumn)
         {

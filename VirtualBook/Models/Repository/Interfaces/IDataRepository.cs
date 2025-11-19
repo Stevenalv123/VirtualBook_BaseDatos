@@ -13,5 +13,6 @@ namespace VirtualBook.Models.Repository.Interfaces
         Task<List<DataDto>> GetCategoriasAsync();
         Task<List<DataDto>> GetFormatosAsync();
         Task<List<DataDto>> GetIdiomasAsync();
+        Task<int> CrearAutorAsync(AutorRequestDTO autor);
     }
 }
