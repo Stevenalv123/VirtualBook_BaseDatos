@@ -27,6 +27,9 @@
         public const string SP_PublicarReseña = "sp_PublicarReseña";
         public const string SP_ObtenerResenasPorLibro = "sp_ObtenerResenasPorLibro";
 
+        public const string SP_RegistrarAutor = "sp_RegistrarAutor";
+        public const string SP_ObtenerLibrosPorUsuario = "sp_ObtenerLibrosPorUsuario";
+
 
     }
 }

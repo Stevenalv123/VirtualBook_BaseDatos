@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO; // Added for File access
+using System.Net.Http; // Added for MultipartFormDataContent
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
 using VirtualBook.Models.DTO;
 using VirtualBook.Models.Repository.Interfaces;
@@ -80,13 +80,10 @@ namespace VirtualBook.Models.Repository
             }
         }
 
-    
-
         public async Task<LibroDetalleDTO?> GetLibroDetalleAsync(int idLibro)
         {
             try
             {
-                // Llama al nuevo endpoint: api/Libro/{id}
                 var response = await _httpClient.GetAsync($"Libro/{idLibro}");
 
                 if (response.IsSuccessStatusCode)
@@ -155,9 +152,9 @@ namespace VirtualBook.Models.Repository
             }
             catch { return false; }
         }
+
         public async Task<List<LibroDto>> GetFavoritosAsync()
-        {  
-             //llamamos al endponin
+        {
             return await _httpClient.GetFromJsonAsync<List<LibroDto>>("Libro/favoritos") ?? new List<LibroDto>();
         }
 
@@ -169,32 +166,49 @@ namespace VirtualBook.Models.Repository
                 Comentario = comentario
             };
 
-            // Asegúrate de usar PostAsJsonAsync (requiere System.Net.Http.Json)
             var response = await _httpClient.PostAsJsonAsync("Libro/reseña", request);
             return response.IsSuccessStatusCode;
         }
 
         public async Task<List<ResenaDTO>> GetReseñasPorLibroAsync(int idLibro)
         {
-            // QUITA EL TRY-CATCH TEMPORALMENTE O HAZ ESTO:
             try
             {
                 var response = await _httpClient.GetAsync($"Libro/resenas/{idLibro}");
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    // Esto te dirá si es error 401, 404 o 500 en un MessageBox si lo llamas desde el Form
-                    throw new Exception($"Error API: {response.StatusCode} - {response.ReasonPhrase}");
+                    // Log the error or handle it as needed
+                    // throw new Exception($"Error API: {response.StatusCode} - {response.ReasonPhrase}");
+                    return new List<ResenaDTO>();
                 }
 
                 return await response.Content.ReadFromJsonAsync<List<ResenaDTO>>() ?? new List<ResenaDTO>();
             }
             catch (Exception ex)
             {
-                // Si estás depurando, pon un punto de interrupción aquí o lanza la excepción
-                // throw; 
-                MessageBox.Show(ex.Message); // Agrega System.Windows.Forms para ver esto
+                // MessageBox.Show(ex.Message); // Requires System.Windows.Forms reference if used here
                 return new List<ResenaDTO>();
+            }
+        }
+
+        // --- IMPLEMENTACIÓN FALTANTE ---
+        public async Task<List<LibroDto>> GetMisLibrosAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("Libro/mis-libros");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var libros = await response.Content.ReadFromJsonAsync<List<LibroDto>>();
+                    return libros ?? new List<LibroDto>();
+                }
+                return new List<LibroDto>();
+            }
+            catch
+            {
+                return new List<LibroDto>();
             }
         }
     }
