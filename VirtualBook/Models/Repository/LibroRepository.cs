@@ -80,6 +80,8 @@ namespace VirtualBook.Models.Repository
             }
         }
 
+    
+
         public async Task<LibroDetalleDTO?> GetLibroDetalleAsync(int idLibro)
         {
             try
@@ -113,10 +115,87 @@ namespace VirtualBook.Models.Repository
                 throw new Exception("No se pudo descargar el archivo.");
             }
         }
+
+        public async Task<List<ReporteDescargaDto>> GetReporteDescargasAsync()
+        {
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<List<ReporteDescargaDto>>("Libro/reporte-descargas")
+                       ?? new List<ReporteDescargaDto>();
+            }
+            catch
+            {
+                return new List<ReporteDescargaDto>();
+            }
+        }
+
+        public async Task<bool> AgregarFavoritoAsync(int idLibro)
+        {
+            var response = await _httpClient.PostAsync($"Libro/favorito?idLibro={idLibro}", null);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> EliminarFavoritoAsync(int idLibro)
+        {
+            var response = await _httpClient.DeleteAsync($"Libro/favorito?idLibro={idLibro}");
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> VerificarFavoritoAsync(int idLibro)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"Libro/favorito/check?idLibro={idLibro}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    return bool.Parse(result);
+                }
+                return false;
+            }
+            catch { return false; }
+        }
         public async Task<List<LibroDto>> GetFavoritosAsync()
         {  
              //llamamos al endponin
             return await _httpClient.GetFromJsonAsync<List<LibroDto>>("Libro/favoritos") ?? new List<LibroDto>();
+        }
+
+        public async Task<bool> PublicarReseñaAsync(int idLibro, string comentario)
+        {
+            var request = new ReseñaUploadRequest
+            {
+                IdLibro = idLibro,
+                Comentario = comentario
+            };
+
+            // Asegúrate de usar PostAsJsonAsync (requiere System.Net.Http.Json)
+            var response = await _httpClient.PostAsJsonAsync("Libro/reseña", request);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<List<ResenaDTO>> GetReseñasPorLibroAsync(int idLibro)
+        {
+            // QUITA EL TRY-CATCH TEMPORALMENTE O HAZ ESTO:
+            try
+            {
+                var response = await _httpClient.GetAsync($"Libro/resenas/{idLibro}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    // Esto te dirá si es error 401, 404 o 500 en un MessageBox si lo llamas desde el Form
+                    throw new Exception($"Error API: {response.StatusCode} - {response.ReasonPhrase}");
+                }
+
+                return await response.Content.ReadFromJsonAsync<List<ResenaDTO>>() ?? new List<ResenaDTO>();
+            }
+            catch (Exception ex)
+            {
+                // Si estás depurando, pon un punto de interrupción aquí o lanza la excepción
+                // throw; 
+                MessageBox.Show(ex.Message); // Agrega System.Windows.Forms para ver esto
+                return new List<ResenaDTO>();
+            }
         }
     }
 }

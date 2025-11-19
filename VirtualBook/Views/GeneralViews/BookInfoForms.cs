@@ -1,16 +1,28 @@
-﻿using VirtualBook.Controller;
+﻿using FontAwesome.Sharp;
+using FontAwesome.Sharp.Material;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using VirtualBook.Controller;
+using VirtualBook.Models.DTO;
+using VirtualBook.Views.GeneralViews.UserControls; // Importante para ver ReseñasCard
 
 namespace VirtualBook.Views
 {
     public partial class BookInfoForms : Form
     {
-        // Campos de clase
         private readonly int _idlibro;
         private readonly IMainForm _mf;
         private readonly ApiClient _apiClient;
 
+        // Datos del libro actual
         private int _idPublicador;
         private string? _rutaPdfRelativa;
+
+        // Estado local
+        private bool _esFavorito = false;
 
         public BookInfoForms(int id, IMainForm mf)
         {
@@ -20,23 +32,43 @@ namespace VirtualBook.Views
             _mf = mf;
             _apiClient = ApiClient.Instance;
 
-            // Estilos
+            ConfigurarEstilos();
+
+            _ = CargarInfoLibro();
+            _ = CargarResenas();
+        }
+
+        private void ConfigurarEstilos()
+        {
             BtnLeer.BackColor = Color.FromArgb(45, 154, 134);
             BtnSeguir.BackColor = Color.FromArgb(45, 154, 134);
-            _ = CargarInfoLibro();
+            btnEnviarResena.BackColor = Color.FromArgb(45, 154, 134); 
+            BtnAgregarFavoritos.BackColor = Color.White;
+            BtnAgregarFavoritos.ForeColor = Color.Black;
+            BtnAgregarFavoritos.FlatStyle = FlatStyle.Flat;
+            BtnAgregarFavoritos.FlatAppearance.BorderSize = 0;
+
+
+            flpReseñas.AutoScroll = true;
+            flpReseñas.WrapContents = false;
+            flpReseñas.FlowDirection = FlowDirection.TopDown;
         }
+
+  
 
         private async Task CargarInfoLibro()
         {
+            PcbCargando.Visible = true;
+            PcbCargando.BringToFront();
+
             try
             {
-                // Llama al repositorio
                 var libro = await _apiClient.Libros.GetLibroDetalleAsync(_idlibro);
 
                 if (libro == null)
                 {
-                    MessageBox.Show("Libro no encontrado o error al cargar.");
-                    PcbCargando.Visible = false;
+                    MessageBox.Show("Libro no encontrado.");
+                    this.Close();
                     return;
                 }
 
@@ -48,197 +80,210 @@ namespace VirtualBook.Views
                 LblDescripcion.Text = libro.Descripcion;
                 LblFormato.Text = libro.NombreFormato;
                 LblIdioma.Text = libro.NombreIdioma;
-                LblDescargas.Text = libro.Descargas.ToString() + " Descargas";
-                LblNumeroPaginas.Text = libro.NumeroPaginas.HasValue ? libro.NumeroPaginas.Value.ToString() + " Paginas" : "N/A";
+                LblDescargas.Text = libro.Descargas + " Descargas";
+                LblNumeroPaginas.Text = libro.NumeroPaginas + " Páginas";
                 LblAñoPublicacion.Text = libro.FechaPublicacion.ToString("yyyy");
-
-                // Guardar la ruta del PDF
                 _rutaPdfRelativa = libro.ArchivoPDF;
 
-                // Cargar la foto del publicador
                 if (!string.IsNullOrEmpty(libro.PublicadorFotoPerfil))
-                {
                     PcbFotoPerfilPublicador.LoadAsync(_apiClient.RootUrl + libro.PublicadorFotoPerfil.TrimStart('/'));
-                }
                 else
-                {
                     PcbFotoPerfilPublicador.Image = Properties.Resources.avatar;
-                }
 
-                // 5. Cargar la portada del libro
                 if (!string.IsNullOrEmpty(libro.Portada))
                 {
                     PcbPortada.LoadAsync(_apiClient.RootUrl + libro.Portada.TrimStart('/'));
                     PcbPortada.SizeMode = PictureBoxSizeMode.Zoom;
                 }
                 else
-                {
                     PcbPortada.Image = Properties.Resources.placeholder;
-                }
 
-                // (Lógica futura)
-                // VerificarSiSigue(); 
+                await ActualizarEstadoFavorito();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar la información del libro: {ex.Message}");
+                MessageBox.Show($"Error al cargar: {ex.Message}");
             }
             finally
             {
                 PcbCargando.Visible = false;
             }
         }
-        private async void BtnLeer_Click(object sender, EventArgs e)
+
+
+        private async Task CargarResenas()
         {
-            if (string.IsNullOrEmpty(_rutaPdfRelativa))
-            {
-                MessageBox.Show("Este libro no tiene un archivo PDF asociado.", "Aviso");
-                return;
-            }
-
-            PcbCargando.Visible = true;
-            BtnLeer.Enabled = false;
-
             try
             {
-                byte[] pdfBytes = await _apiClient.Libros.DescargarArchivoLibroAsync(_idlibro);
-                string tempPath = Path.Combine(Path.GetTempPath(), $"Lectura_{_idlibro}.pdf");
-                await File.WriteAllBytesAsync(tempPath, pdfBytes);
-                var visor = new PdfVisorForm(tempPath);
-                visor.Show();
+                flpReseñas.Controls.Clear();
+
+                // Llama a la API
+                var resenas = await _apiClient.Libros.GetReseñasPorLibroAsync(_idlibro);
+
+                // Verifica si trajo datos
+                if (resenas != null && resenas.Count > 0)
+                {
+                    foreach (var r in resenas)
+                    {
+                        var card = new ReseñasCard();
+                        string urlFoto = string.IsNullOrEmpty(r.FotoPerfil) ? null :
+                                         _apiClient.RootUrl + r.FotoPerfil.TrimStart('/');
+
+                        // Asegúrate que este método exista en ReseñasCard.cs (Ver Paso 2)
+                        card.ConfigurarDatos(r.NombreUsuario, r.Comentario, urlFoto);
+
+                        card.Width = flpReseñas.Width - 25;
+                        card.Margin = new Padding(0, 0, 0, 10);
+                        flpReseñas.Controls.Add(card);
+                    }
+                }
+                else
+                {
+                    // ESTO ES IMPORTANTE: Si entra aquí, es que no hay reseñas en la BD
+                    Label lbl = new Label();
+                    lbl.Text = "No hay reseñas para este libro aún.";
+                    lbl.AutoSize = true;
+                    lbl.ForeColor = Color.Gray;
+                    lbl.Font = new Font("Segoe UI", 12, FontStyle.Italic); // Fuente más grande para verla
+                    lbl.Margin = new Padding(20);
+                    flpReseñas.Controls.Add(lbl);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"No se pudo abrir el libro: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // AQUI ESTÁ LA CLAVE: Muestra el error para saber qué pasa
+                MessageBox.Show($"Error cargando reseñas: {ex.Message}", "Debug", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private async void btnEnviarResena_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtReseña.Text))
+            {
+                MessageBox.Show("Escribe un comentario primero.");
+                return;
+            }
+
+            btnEnviarResena.Enabled = false;
+            txtReseña.Enabled = false;
+
+            try
+            {
+                bool exito = await _apiClient.Libros.PublicarReseñaAsync(_idlibro, txtReseña.Text.Trim());
+
+                if (exito)
+                {
+                    MessageBox.Show("Reseña publicada correctamente.");
+                    txtReseña.Text = "";
+              
+                    await CargarResenas();
+                }
+                else
+                {
+                    MessageBox.Show("No se pudo publicar la reseña.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
             }
             finally
             {
-                BtnLeer.Enabled = true;
-                PcbCargando.Visible = false;
+                btnEnviarResena.Enabled = true;
+                txtReseña.Enabled = true;
             }
+        }
+
+
+        private async Task ActualizarEstadoFavorito()
+        {
+            try
+            {
+                _esFavorito = await _apiClient.Libros.VerificarFavoritoAsync(_idlibro);
+                ActualizarBotonUI();
+            }
+            catch { }
+        }
+
+        private void ActualizarBotonUI()
+        {
+            if (_esFavorito)
+            {
+                BtnAgregarFavoritos.Text = "Quitar de Favoritos";
+                BtnAgregarFavoritos.IconChar = MaterialIcons.Heart;
+                BtnAgregarFavoritos.IconColor = Color.Crimson;
+            }
+            else
+            {
+                BtnAgregarFavoritos.Text = "Agregar a Favoritos";
+                BtnAgregarFavoritos.IconChar = MaterialIcons.HeartOutline;
+                BtnAgregarFavoritos.IconColor = Color.Black;
+            }
+        }
+
+        private async void BtnAgregarFavoritos_Click(object sender, EventArgs e)
+        {
+            BtnAgregarFavoritos.Enabled = false;
+            try
+            {
+                bool exito = false;
+                if (_esFavorito)
+                {
+                    exito = await _apiClient.Libros.EliminarFavoritoAsync(_idlibro);
+                    if (exito) { _esFavorito = false; MessageBox.Show("Eliminado de favoritos."); }
+                }
+                else
+                {
+                    exito = await _apiClient.Libros.AgregarFavoritoAsync(_idlibro);
+                    if (exito) { _esFavorito = true; MessageBox.Show("Agregado a favoritos."); }
+                }
+                if (exito) ActualizarBotonUI();
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            finally { BtnAgregarFavoritos.Enabled = true; }
+        }
+
+
+        private async void BtnLeer_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(_rutaPdfRelativa)) return;
+            try
+            {
+                byte[] pdfBytes = await _apiClient.Libros.DescargarArchivoLibroAsync(_idlibro);
+                string tempPath = Path.Combine(Path.GetTempPath(), $"Lectura_{_idlibro}_{DateTime.Now.Ticks}.pdf");
+                await File.WriteAllBytesAsync(tempPath, pdfBytes);
+                new PdfVisorForm(tempPath).Show();
+            }
+            catch (Exception ex) { MessageBox.Show($"Error: {ex.Message}"); }
         }
 
         private async void BtnDescargar_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(_rutaPdfRelativa))
-            {
-                MessageBox.Show("Este libro no tiene archivo disponible para descargar.");
-                return;
-            }
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
-            {
-                saveFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
-                saveFileDialog.Title = "Guardar libro como...";
-                // Limpiamos el título de caracteres inválidos para nombre de archivo
-                string nombreLimpio = string.Join("_", LblTitulo.Text.Split(Path.GetInvalidFileNameChars()));
-                saveFileDialog.FileName = $"{nombreLimpio}.pdf";
+            if (string.IsNullOrEmpty(_rutaPdfRelativa)) return;
 
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "PDF Files|*.pdf";
+                sfd.FileName = $"{LblTitulo.Text}.pdf";
+                if (sfd.ShowDialog() == DialogResult.OK)
                 {
                     try
                     {
-                        this.Cursor = Cursors.WaitCursor;
                         byte[] pdfBytes = await _apiClient.Libros.DescargarArchivoLibroAsync(_idlibro);
-
-                        await File.WriteAllBytesAsync(saveFileDialog.FileName, pdfBytes);
-
-                        MessageBox.Show("Libro descargado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        await File.WriteAllBytesAsync(sfd.FileName, pdfBytes);
+                        MessageBox.Show("Descargado correctamente.");
                     }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Error al descargar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    finally
-                    {
-                        this.Cursor = Cursors.Default;
-                    }
+                    catch (Exception ex) { MessageBox.Show(ex.Message); }
                 }
             }
         }
 
         private void BtnRegresar_Click(object sender, EventArgs e)
         {
-            var menu = new MenuPrincipalFormcs(_mf);
-            _mf.OpenForm(menu);
+            _mf.OpenForm(new MenuPrincipalFormcs(_mf));
         }
 
-        private async void VerificarSiSigue()
-        {
-            /*var response = await client.GetAsync($"{baseUrl}Seguimientoes/Existe?seguidor={Cookies.GetId()}&seguido={_idPublicador}");
-            if (response.IsSuccessStatusCode)
-            {
-                bool yaSigue = bool.Parse(await response.Content.ReadAsStringAsync());
-                if (yaSigue)
-                {
-                    BtnSeguir.BackColor = Color.LightGray;
-                    BtnSeguir.Text = "Siguiendo";
-                    BtnSeguir.Enabled = false;
-                }
-            }
-            else
-            {
-                var error = response.Content.ReadAsStringAsync().Result;
-                MessageBox.Show($"Error al verificar seguimiento: {error}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }*/
-        }
-
-        private async void BtnSeguir_Click(object sender, EventArgs e)
-        {
-            //var seguimiento = new CreateSeguimientoDTO
-            //{
-            //    IdSeguidor = Cookies.GetId(), // O como tengas el ID guardado
-            //    IdSeguido = _idPublicador
-            //};
-
-            //try
-            //{
-            //    var response = await client.PostAsJsonAsync($"{baseUrl}Seguimientoes", seguimiento);
-
-            //    if (response.IsSuccessStatusCode)
-            //    {
-            //        BtnSeguir.BackColor = Color.LightGray; // Cambia el color del botón para indicar que se ha seguido
-            //        BtnSeguir.Text = "Siguiendo"; // Cambia el texto del botón
-            //        BtnSeguir.Enabled = false; // Deshabilita el botón para evitar seguir varias veces
-            //    }
-            //    else
-            //    {
-            //        string error = await response.Content.ReadAsStringAsync();
-            //        MessageBox.Show($"Error al seguir: {error}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Error de conexión: {ex.Message}");
-            //}
-        }
-
-        private void BtnAgregarFavoritos_Click(object sender, EventArgs e)
-        {
-            //var favorito = new CreateFavoritoDTO
-            //{
-            //    IdUsuario = Cookies.GetId(),
-            //    IdLibro = idlibro
-            //};
-
-            //try
-            //{
-            //    var response = client.PostAsJsonAsync($"{baseUrl}Favoritos", favorito).Result;
-            //    if (response.IsSuccessStatusCode)
-            //    {
-            //        BtnAgregarFavoritos.Text = "Quitar de favoritos";
-            //        BtnAgregarFavoritos.IconChar = (FontAwesome.Sharp.MaterialIcons)FontAwesome.Sharp.IconChar.HeartBroken; // Cambia el icono para indicar que ahora es un favorito
-            //        BtnAgregarFavoritos.Enabled = false; // Deshabilita el botón para evitar agregar varias veces
-            //    }
-            //    else
-            //    {
-            //        string error = response.Content.ReadAsStringAsync().Result;
-            //        MessageBox.Show($"Error al agregar a favoritos: {error}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Error de conexión: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
-        }
+        private void BtnSeguir_Click(object sender, EventArgs e) { }
     }
 }

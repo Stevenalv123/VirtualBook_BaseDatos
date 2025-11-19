@@ -432,5 +432,111 @@ namespace VirtualBook_API.Controllers
                 return StatusCode(500, $"Error interno: {ex.Message}");
             }
         }
+
+        [HttpGet("reporte-descargas")]
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> GetReporteDescargas()
+        {
+            var reporte = new List<ReporteDescargaDto>();
+            try
+            {
+                await using var connection = _dbContext.GetConnection();
+                var command = new SqlCommand(Procedimientos.SP_ObtenerReporteDescargas, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                await connection.OpenAsync();
+                var reader = await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                {
+                    reporte.Add(new ReporteDescargaDto
+                    {
+                        IdLibro = (int)reader["IdLibro"],
+                        Titulo = reader["Titulo"].ToString(),
+                        Categoria = reader["Categoria"].ToString(),
+                        Autores = reader["Autores"] == DBNull.Value ? "Sin Autor" : reader["Autores"].ToString(),
+                        TotalDescargas = (int)reader["TotalDescargas"],
+                        FechaPublicacion = (DateTime)reader["FechaPublicacion"]
+                    });
+                }
+                return Ok(reporte);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("reseña")]
+        [Authorize]
+        public async Task<IActionResult> PublicarReseña([FromBody] ReseñaUploadRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Comentario))
+                return BadRequest("El comentario no puede estar vacío.");
+
+            try
+            {
+                var idUsuario = await GetIdUsuarioActualAsync();
+                if (idUsuario == null) return Unauthorized("Usuario no identificado.");
+
+                await using var connection = _dbContext.GetConnection();
+                var command = new SqlCommand(Procedimientos.SP_PublicarReseña, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                command.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                command.Parameters.AddWithValue("@IdLibro", request.IdLibro);
+                command.Parameters.AddWithValue("@Comentario", request.Comentario);
+
+                await connection.OpenAsync();
+                await command.ExecuteNonQueryAsync();
+
+                return Ok(new { message = "Reseña publicada correctamente." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error al publicar reseña: {ex.Message}");
+            }
+        }
+
+        [HttpGet("resenas/{idLibro}")]
+        [Authorize]
+        public async Task<IActionResult> GetResenas(int idLibro)
+        {
+            var lista = new List<ResenaDTO>();
+            try
+            {
+                await using var connection = _dbContext.GetConnection();
+                var command = new SqlCommand(Procedimientos.SP_ObtenerResenasPorLibro, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.AddWithValue("@IdLibro", idLibro);
+
+                await connection.OpenAsync();
+                var reader = await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                {
+                    lista.Add(new ResenaDTO
+                    {
+                        NombreUsuario = reader["NombreUsuario"].ToString(),
+                        // Manejo seguro de nulos para la foto
+                        FotoPerfil = reader["FotoPerfil"] == DBNull.Value ? null : reader["FotoPerfil"].ToString(),
+                        Comentario = reader["Comentario"].ToString(),
+                        // IMPORTANTE: Aquí usamos "FechaReseña" con ñ porque así lo devuelve el SP
+                        FechaReseña = (DateTime)reader["FechaReseña"]
+                    });
+                }
+                return Ok(lista);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno: {ex.Message}");
+            }
+        }
     }
 }  
