@@ -118,5 +118,25 @@ namespace VirtualBook.Models.Repository
              //llamamos al endponin
             return await _httpClient.GetFromJsonAsync<List<LibroDto>>("Libro/favoritos") ?? new List<LibroDto>();
         }
+
+        public async Task<List<LibroDto>> GetMisLibrosAsync()
+        {
+            try
+            {
+                // Llama al endpoint nuevo
+                var response = await _httpClient.GetAsync("Libro/mis-libros");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var libros = await response.Content.ReadFromJsonAsync<List<LibroDto>>();
+                    return libros ?? new List<LibroDto>();
+                }
+                return new List<LibroDto>();
+            }
+            catch
+            {
+                return new List<LibroDto>();
+            }
+        }
     }
 }

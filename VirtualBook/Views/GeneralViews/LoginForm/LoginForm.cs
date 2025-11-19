@@ -57,11 +57,11 @@ namespace VirtualBook
                 switch (loginResponse.IdRol)
                 {
                     case 1:
-                        var adminForm = new AdministradorMainForm();
+                        var adminForm = new AdministradorMainForm(loginResponse.IdUsuario);
                         adminForm.Show();
                         break;
                     case 2:
-                        var docenForm = new DocentesMainForm();
+                        var docenForm = new DocentesMainForm(loginResponse.IdUsuario);
                         docenForm.Show();
                         break;
                     case 3:

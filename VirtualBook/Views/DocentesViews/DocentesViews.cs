@@ -8,48 +8,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VirtualBook.Controller;
+using VirtualBook.Models.DTO;
 //using VirtualBook.DTOs;
 
 namespace VirtualBook.Views.DocentesViews
 {
     public partial class DocentesViews : Form
     {
+        private readonly IMainForm _mf;
+        private readonly ApiClient _apiClient;
+        private int _idDocente;
         IMainForm mf;
-        string baseUrl = "https://localhost:7014/api/Libroes";
-        HttpClient cliente = new();
-        public DocentesViews(IMainForm _mf)
+        public DocentesViews(IMainForm _mf, int idDocente)
         {
             InitializeComponent();
-            mf = _mf;
-            CargarLibros();
+            _mf = mf;
+            _idDocente = idDocente;
+            _apiClient = ApiClient.Instance;
+
+            ConfigurarGrid();
+
+            _ = CargarMisLibros();
         }
 
         private void BtnUploadNewBook_Click(object sender, EventArgs e)
         {
-            var uploadBookForm = new VirtualBook.Views.UploadBookForm.UploadBookForm(mf);
-            mf.OpenForm(uploadBookForm);
-        }
-
-        private async void CargarLibros()
-        {
-            //var response=await cliente.GetAsync($"{baseUrl}/usuario/{_idDocente}");
-            //response.EnsureSuccessStatusCode();
-            //if(response.IsSuccessStatusCode)
-            //{
-            //    var json = await response.Content.ReadAsStringAsync();
-            //    var libros=JsonConvert.DeserializeObject<List<ReadDataLibroDTO>>(json);
-            //    if (libros != null && libros.Count > 0)
-            //    {
-            //        DgvLibros.DataSource = null;
-            //        DgvLibros.DataSource = libros;
-            //        LblTotalBooks.Text = $"{libros.Count} libros";
-            //        await CargarCantidadSeguidores(_idDocente);
-            //    }
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Error al cargar los libros.");
-            //}
+            var uploadBookForm = new VirtualBook.Views.UploadBookForm.UploadBookForm(_idDocente, _mf);
+            _mf.OpenForm(uploadBookForm);
         }
 
         private async Task CargarCantidadSeguidores(int idUsuario)
@@ -74,6 +60,28 @@ namespace VirtualBook.Views.DocentesViews
                     MessageBox.Show($"Error al obtener seguidores: {ex.Message}");
                 }
             }
+        }
+        private async Task CargarMisLibros()
+        {
+            try
+            {
+                List<LibroDto> libros = await _apiClient.Libros.GetMisLibrosAsync();
+
+                DgvLibros.DataSource = libros;
+
+                LblTotalBooks.Text = $"{libros.Count} libros";
+
+                // 4. Cargar seguidores (Opcional: esto debería ir en un repositorio también)
+                // _ = CargarCantidadSeguidores(); 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar libros: {ex.Message}");
+            }
+        }
+        private void ConfigurarGrid()
+        {
+            DgvLibros.AutoGenerateColumns = true;
         }
     }
 }

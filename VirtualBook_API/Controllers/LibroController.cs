@@ -143,6 +143,42 @@ namespace VirtualBook_API.Controllers
             }
         }
 
+        [HttpGet("mis-libros")]
+        [Authorize] // Requiere token
+        public async Task<IActionResult> GetMisLibros()
+        {
+            try
+            {
+                // 1. Obtenemos el ID del usuario desde el Token usando el método helper que ya creamos antes
+                var idUsuario = await GetIdUsuarioActualAsync();
+
+                if (idUsuario == null) return Unauthorized();
+
+                var libros = new List<LibroDto>();
+
+                await using var connection = _dbContext.GetConnection();
+                var command = new SqlCommand(Procedimientos.SP_ObtenerLibrosPorUsuario, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.AddWithValue("@IdPublicador", idUsuario);
+
+                await connection.OpenAsync();
+                var reader = await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                {
+                    libros.Add(MapReaderToLibroDto(reader));
+                }
+
+                return Ok(libros);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
+        }
+
         // GET: api/Libro/favorito/check
         [HttpGet("favorito/check")]
         [Authorize]

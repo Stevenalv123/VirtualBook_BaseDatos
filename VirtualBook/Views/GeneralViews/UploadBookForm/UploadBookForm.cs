@@ -2,8 +2,6 @@
 using VirtualBook.Controller;
 using VirtualBook.Models.DTO;
 
-
-//using VirtualBook.DTOs;
 using VirtualBook.Views.GeneralViews;
 
 namespace VirtualBook.Views.UploadBookForm
@@ -19,7 +17,7 @@ namespace VirtualBook.Views.UploadBookForm
         private string? archivoPdf { get; set; }
         IMainForm _mf;
 
-        public UploadBookForm(IMainForm mf)
+        public UploadBookForm(int idUsuario, IMainForm mf)
         {
             InitializeComponent();
 

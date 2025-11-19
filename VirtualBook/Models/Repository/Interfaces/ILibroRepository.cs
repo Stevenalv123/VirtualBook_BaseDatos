@@ -14,5 +14,6 @@ namespace VirtualBook.Models.Repository.Interfaces
         Task<LibroDetalleDTO?> GetLibroDetalleAsync(int idLibro);
         Task<byte[]> DescargarArchivoLibroAsync(int idLibro);
         Task<List<LibroDto>> GetFavoritosAsync();
+        Task<List<LibroDto>> GetMisLibrosAsync();
     }
 }

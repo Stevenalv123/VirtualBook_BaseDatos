@@ -14,13 +14,15 @@ namespace VirtualBook.Views.DocentesViews
 {
     public partial class DocentesMainForm : Form, IMainForm
     {
+        private int _idUsuarioLogueado;
         private readonly ApiClient _apiClient;
         private MenuPrincipalFormcs mPf;
         private Form? activeForm = null;
-        public DocentesMainForm()
+        public DocentesMainForm(int IdUsuario)
         {
             InitializeComponent();
             _apiClient = ApiClient.Instance;
+            _idUsuarioLogueado = IdUsuario;
             mPf = new MenuPrincipalFormcs(this);
             OpenForm(new MenuPrincipalFormcs(this));
             CargarUsuario();
@@ -139,8 +141,9 @@ namespace VirtualBook.Views.DocentesViews
 
         private void BtnVerLibros_Click(object sender, EventArgs e)
         {
+            // Pasamos el ID al crear la vista
             if (IsFormOpen(typeof(DocentesViews))) return;
-            OpenForm(new DocentesViews(this));
+            OpenForm(new DocentesViews(this, _idUsuarioLogueado));
         }
 
         private void MostraMenuPrincipalForms_Click(object sender, EventArgs e)
