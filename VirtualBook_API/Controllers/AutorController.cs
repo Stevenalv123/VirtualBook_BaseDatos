@@ -16,24 +16,24 @@ namespace VirtualBook_API.Controllers
             _dbContext= dbContext;
         }
 
-        [HttpPost]
-        [Authorize(Roles = "Administrador, Docente")]
-        public async Task<IActionResult> AgregarAutores(AutorDTO autor)
-        {
-            try
-            {
-                await using var connection = _dbContext.GetConnection();
-                var command = new SqlCommand(Procedimientos.SP_CrearAutor, connection)
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
-                await command.ExecuteNonQueryAsync();
+        //[HttpPost]
+        //[Authorize(Roles = "Administrador, Docente")]
+        //public async Task<IActionResult> AgregarAutores(AutorDTO autor)
+        //{
+        //    try
+        //    {
+        //        await using var connection = _dbContext.GetConnection();
+        //        var command = new SqlCommand(Procedimientos.SP_CrearAutor, connection)
+        //        {
+        //            CommandType = CommandType.StoredProcedure
+        //        };
+        //        await command.ExecuteNonQueryAsync();
 
-            }
-            catch (Exception ex)
-            {
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-            }
-        }
+        //    }
+        //}
     }
 }
