@@ -141,12 +141,6 @@ namespace VirtualBook.Views.AdminViews
             }
         }
 
-        private void BtnVerReportesDescargas_Click(object sender, EventArgs e)
-        {
-            if (IsFormOpen(typeof(AdminDescargasForm))) return;
-            OpenForm(new AdminDescargasForm());
-        }
-
         private void BtnCambiarTema_Click(object sender, EventArgs e)
         {
             CambiarTema();

@@ -31,15 +31,14 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdministradorMainForm));
             panel1 = new Panel();
             panel7 = new Panel();
+            PcbCargandoUser = new PictureBox();
             PcbPerfilFoto = new VirtualBook.Controls.RoundedPictureBox();
             LblCorreo = new Label();
             LblNombre = new Label();
             panel10 = new Panel();
-            PcbCargandoUser = new PictureBox();
             PanelConfiguracion = new Panel();
             BtnCerrarSesion = new FontAwesome.Sharp.IconButton();
             BtnConfiguracion = new FontAwesome.Sharp.IconButton();
-            BtnVerReportesDescargas = new FontAwesome.Sharp.IconButton();
             BtnVerUsuarios = new FontAwesome.Sharp.IconButton();
             BtnMostrarMainForm = new FontAwesome.Sharp.IconButton();
             panel5 = new Panel();
@@ -53,9 +52,9 @@
             PanelCentral = new Panel();
             panel1.SuspendLayout();
             panel7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)PcbCargandoUser).BeginInit();
             ((System.ComponentModel.ISupportInitialize)PcbPerfilFoto).BeginInit();
             panel10.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)PcbCargandoUser).BeginInit();
             PanelConfiguracion.SuspendLayout();
             panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -88,6 +87,16 @@
             panel7.Size = new Size(289, 73);
             panel7.TabIndex = 3;
             panel7.Tag = "NoCambiarTema";
+            // 
+            // PcbCargandoUser
+            // 
+            PcbCargandoUser.Image = Properties.Resources.skeletonAnimation;
+            PcbCargandoUser.Location = new Point(0, -3);
+            PcbCargandoUser.Name = "PcbCargandoUser";
+            PcbCargandoUser.Size = new Size(283, 73);
+            PcbCargandoUser.SizeMode = PictureBoxSizeMode.StretchImage;
+            PcbCargandoUser.TabIndex = 7;
+            PcbCargandoUser.TabStop = false;
             // 
             // PcbPerfilFoto
             // 
@@ -126,7 +135,6 @@
             // 
             panel10.Controls.Add(PanelConfiguracion);
             panel10.Controls.Add(BtnConfiguracion);
-            panel10.Controls.Add(BtnVerReportesDescargas);
             panel10.Controls.Add(BtnVerUsuarios);
             panel10.Controls.Add(BtnMostrarMainForm);
             panel10.Dock = DockStyle.Top;
@@ -137,21 +145,11 @@
             panel10.TabIndex = 2;
             panel10.Tag = "NoCambiarTema";
             // 
-            // PcbCargandoUser
-            // 
-            PcbCargandoUser.Image = Properties.Resources.skeletonAnimation;
-            PcbCargandoUser.Location = new Point(0, -3);
-            PcbCargandoUser.Name = "PcbCargandoUser";
-            PcbCargandoUser.Size = new Size(283, 73);
-            PcbCargandoUser.SizeMode = PictureBoxSizeMode.StretchImage;
-            PcbCargandoUser.TabIndex = 7;
-            PcbCargandoUser.TabStop = false;
-            // 
             // PanelConfiguracion
             // 
             PanelConfiguracion.Controls.Add(BtnCerrarSesion);
             PanelConfiguracion.Dock = DockStyle.Top;
-            PanelConfiguracion.Location = new Point(10, 200);
+            PanelConfiguracion.Location = new Point(10, 150);
             PanelConfiguracion.Name = "PanelConfiguracion";
             PanelConfiguracion.Padding = new Padding(10, 0, 10, 0);
             PanelConfiguracion.Size = new Size(269, 123);
@@ -192,7 +190,7 @@
             BtnConfiguracion.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtnConfiguracion.IconSize = 32;
             BtnConfiguracion.ImageAlign = ContentAlignment.MiddleLeft;
-            BtnConfiguracion.Location = new Point(10, 150);
+            BtnConfiguracion.Location = new Point(10, 100);
             BtnConfiguracion.Margin = new Padding(3, 2, 3, 2);
             BtnConfiguracion.Name = "BtnConfiguracion";
             BtnConfiguracion.Padding = new Padding(20, 0, 32, 0);
@@ -201,28 +199,6 @@
             BtnConfiguracion.Text = "Configuración";
             BtnConfiguracion.UseVisualStyleBackColor = true;
             BtnConfiguracion.Click += BtnConfiguracion_Click;
-            // 
-            // BtnVerReportesDescargas
-            // 
-            BtnVerReportesDescargas.Dock = DockStyle.Top;
-            BtnVerReportesDescargas.FlatAppearance.BorderSize = 0;
-            BtnVerReportesDescargas.FlatStyle = FlatStyle.Flat;
-            BtnVerReportesDescargas.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
-            BtnVerReportesDescargas.ForeColor = Color.White;
-            BtnVerReportesDescargas.IconChar = FontAwesome.Sharp.IconChar.Download;
-            BtnVerReportesDescargas.IconColor = Color.White;
-            BtnVerReportesDescargas.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            BtnVerReportesDescargas.IconSize = 32;
-            BtnVerReportesDescargas.ImageAlign = ContentAlignment.MiddleLeft;
-            BtnVerReportesDescargas.Location = new Point(10, 100);
-            BtnVerReportesDescargas.Name = "BtnVerReportesDescargas";
-            BtnVerReportesDescargas.Padding = new Padding(20, 0, 30, 0);
-            BtnVerReportesDescargas.Size = new Size(269, 50);
-            BtnVerReportesDescargas.TabIndex = 3;
-            BtnVerReportesDescargas.Text = "Reportes de descargas";
-            BtnVerReportesDescargas.TextAlign = ContentAlignment.MiddleRight;
-            BtnVerReportesDescargas.UseVisualStyleBackColor = true;
-            BtnVerReportesDescargas.Click += BtnVerReportesDescargas_Click;
             // 
             // BtnVerUsuarios
             // 
@@ -391,9 +367,9 @@
             panel1.ResumeLayout(false);
             panel7.ResumeLayout(false);
             panel7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)PcbCargandoUser).EndInit();
             ((System.ComponentModel.ISupportInitialize)PcbPerfilFoto).EndInit();
             panel10.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)PcbCargandoUser).EndInit();
             PanelConfiguracion.ResumeLayout(false);
             panel5.ResumeLayout(false);
             panel5.PerformLayout();
@@ -411,7 +387,6 @@
         private Label label1;
         private PictureBox pictureBox1;
         private Panel panel10;
-        private FontAwesome.Sharp.IconButton BtnVerReportesDescargas;
         private FontAwesome.Sharp.IconButton BtnVerUsuarios;
         private FontAwesome.Sharp.IconButton BtnMostrarMainForm;
         private Panel panel7;
