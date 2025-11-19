@@ -24,7 +24,7 @@ BEGIN
 END;
 GO
 
-GRANT EXECUTE ON OBJECT::dbo.sp_ObtenerReporteDescargas TO public;
+GRANT EXECUTE ON sp_ObtenerReporteDescargas TO virtualbooksystemUser;
 GO
 
 
@@ -47,7 +47,7 @@ BEGIN
 END;
 GO
 
-GRANT EXECUTE ON OBJECT::dbo.sp_PublicarReseña TO virtualbooksystemUser;
+GRANT EXECUTE ON sp_PublicarReseña TO virtualbooksystemUser;
 GO
 
 
@@ -79,5 +79,5 @@ END;
 GO
 
 
-GRANT EXECUTE ON OBJECT::dbo.sp_ObtenerResenasPorLibro TO virtualbooksystemUser;
+GRANT EXECUTE ON sp_ObtenerResenasPorLibro TO virtualbooksystemUser;
 GO

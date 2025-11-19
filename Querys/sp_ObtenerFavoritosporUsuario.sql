@@ -35,7 +35,7 @@ BEGIN
 END;
 GO
 
-GRANT EXECUTE ON OBJECT::dbo.sp_ObtenerFavoritosPorUsuario TO virtualbooksystemUser;
+GRANT EXECUTE ON sp_ObtenerFavoritosPorUsuario TO virtualbooksystemUser;
 GO
 
 

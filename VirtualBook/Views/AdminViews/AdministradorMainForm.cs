@@ -8,13 +8,11 @@ namespace VirtualBook.Views.AdminViews
     {
         private Form? ActiveForm;
         private readonly ApiClient _apiClient;
-        private int _idUsuario;
 
-        public AdministradorMainForm(int idUsuario)
+        public AdministradorMainForm()
         {
             InitializeComponent();
             _apiClient = ApiClient.Instance;
-            _idUsuario = idUsuario;
             CargarUsuario();
             MostrarBookInfoForms();
         }
@@ -48,7 +46,7 @@ namespace VirtualBook.Views.AdminViews
         private void MostrarBookInfoForms()
         {
             if (IsFormOpen(typeof(AdminDashboardForm))) return;
-            OpenForm(new AdminDashboardForm(this, _idUsuario));
+            OpenForm(new AdminDashboardForm(this));
         }
 
         private void BtnVerUsuarios_Click(object sender, EventArgs e)

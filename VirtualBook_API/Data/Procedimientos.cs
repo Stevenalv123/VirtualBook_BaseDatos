@@ -26,10 +26,8 @@
         public const string SP_ObtenerReporteDescargas = "sp_ObtenerReporteDescargas";
         public const string SP_PublicarReseña = "sp_PublicarReseña";
         public const string SP_ObtenerResenasPorLibro = "sp_ObtenerResenasPorLibro";
-
         public const string SP_RegistrarAutor = "sp_RegistrarAutor";
         public const string SP_ObtenerLibrosPorUsuario = "sp_ObtenerLibrosPorUsuario";
-
-
+        public const string SP_BuscarLibros = "SP_BuscarLibros";
     }
 }

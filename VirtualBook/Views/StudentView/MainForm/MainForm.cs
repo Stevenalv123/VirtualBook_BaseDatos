@@ -6,7 +6,7 @@ namespace VirtualBook.Views
     public partial class MainForm : Form, IMainForm
     {
         private ApiClient _apiClient;
-        private MenuPrincipalFormcs mPf; 
+        private MenuPrincipalFormcs mPf;
         private Form? activeForm = null;
 
         public MainForm()
@@ -74,6 +74,7 @@ namespace VirtualBook.Views
 
         private async void btnBuscarlibro_Click(object sender, EventArgs e)
         {
+
         }
 
         // Metodos
@@ -202,6 +203,41 @@ namespace VirtualBook.Views
         private void MostraMenuPrincipalForms_Click(object sender, EventArgs e)
         {
             MostrarMenuPrincipal();
+        }
+
+        private async void TxtBucarLibros_TextChanged(object sender, EventArgs e)
+        {
+            string termino = TxtBucarLibros.Text.Trim();
+
+            if (string.IsNullOrEmpty(termino))
+            {
+                MostrarMenuPrincipal();
+                await mPf.CargarLibros();
+                return;
+            }
+
+            if (!IsFormOpen(typeof(MenuPrincipalFormcs)))
+            {
+                OpenForm(mPf);
+            }
+            else
+            {
+                mPf.BringToFront();
+            }
+
+            try
+            {
+                var resultados = await _apiClient.Libros.BuscarLibrosAsync(termino);
+                mPf.MostrarLibrosEnPantalla(resultados);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error en la búsqueda: " + ex.Message);
+            }
+            finally
+            {
+                PcbCargandoUser.Visible = false;
+            }
         }
     }
 }

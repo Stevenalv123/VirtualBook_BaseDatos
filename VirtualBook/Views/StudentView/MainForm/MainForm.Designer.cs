@@ -32,7 +32,7 @@
             panel1 = new Panel();
             panel7 = new Panel();
             PcbCargandoUser = new PictureBox();
-            PcbFotoPerfil = new Controls.RoundedPictureBox();
+            PcbFotoPerfil = new VirtualBook.Controls.RoundedPictureBox();
             LblCorreo = new Label();
             LblNombre = new Label();
             panel10 = new Panel();
@@ -47,9 +47,9 @@
             pictureBox1 = new PictureBox();
             PanelTop = new Panel();
             BtnSwitchTheme = new FontAwesome.Sharp.IconButton();
-            BtnAyuda = new Controls.RJButton();
-            BtnNotificaciones = new Controls.RJButton();
-            borderedPanel1 = new Controls.BorderedPanel();
+            BtnAyuda = new VirtualBook.Controls.RJButton();
+            BtnNotificaciones = new VirtualBook.Controls.RJButton();
+            borderedPanel1 = new VirtualBook.Controls.BorderedPanel();
             TxtBucarLibros = new TextBox();
             btnBuscarlibro = new FontAwesome.Sharp.IconPictureBox();
             LblDerechosReservados = new Label();
@@ -405,6 +405,7 @@
             TxtBucarLibros.PlaceholderText = "Buscar libros, autores, o generos";
             TxtBucarLibros.Size = new Size(442, 22);
             TxtBucarLibros.TabIndex = 1;
+            TxtBucarLibros.TextChanged += TxtBucarLibros_TextChanged;
             // 
             // btnBuscarlibro
             // 

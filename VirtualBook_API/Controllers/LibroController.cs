@@ -538,6 +538,37 @@ namespace VirtualBook_API.Controllers
             }
         }
 
+        [HttpGet("buscar")]
+        [Authorize]
+        public async Task<IActionResult> BuscarLibros([FromQuery] string termino)
+        {
+            var libros = new List<LibroDto>();
+            try
+            {
+                await using var connection = _dbContext.GetConnection();
+                var command = new SqlCommand(Procedimientos.SP_BuscarLibros, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                command.Parameters.AddWithValue("@Termino", termino);
+
+                await connection.OpenAsync();
+                var reader = await command.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                {
+                    libros.Add(MapReaderToLibroDto(reader));
+                }
+
+                return Ok(libros);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error buscando libros: {ex.Message}");
+            }
+        }
+
         [HttpGet("resenas/{idLibro}")]
         [Authorize]
         public async Task<IActionResult> GetResenas(int idLibro)

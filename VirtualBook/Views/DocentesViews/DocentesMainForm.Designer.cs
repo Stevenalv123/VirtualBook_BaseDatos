@@ -471,6 +471,7 @@
             TxtBucarLibros.PlaceholderText = "Buscar libros, autores, o generos";
             TxtBucarLibros.Size = new Size(442, 22);
             TxtBucarLibros.TabIndex = 1;
+            TxtBucarLibros.TextChanged += TxtBucarLibros_TextChanged;
             // 
             // iconPictureBox1
             // 

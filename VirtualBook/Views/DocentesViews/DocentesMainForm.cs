@@ -1,28 +1,16 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using VirtualBook.Controller;
+﻿using VirtualBook.Controller;
 
 namespace VirtualBook.Views.DocentesViews
 {
     public partial class DocentesMainForm : Form, IMainForm
     {
-        private int _idUsuarioLogueado;
         private readonly ApiClient _apiClient;
         private MenuPrincipalFormcs mPf;
         private Form? activeForm = null;
-        public DocentesMainForm(int IdUsuario)
+        public DocentesMainForm()
         {
             InitializeComponent();
             _apiClient = ApiClient.Instance;
-            _idUsuarioLogueado = IdUsuario;
             mPf = new MenuPrincipalFormcs(this);
             OpenForm(new MenuPrincipalFormcs(this));
             CargarUsuario();
@@ -141,12 +129,16 @@ namespace VirtualBook.Views.DocentesViews
 
         private void BtnVerLibros_Click(object sender, EventArgs e)
         {
-            // Pasamos el ID al crear la vista
             if (IsFormOpen(typeof(DocentesViews))) return;
-            OpenForm(new DocentesViews(this, _idUsuarioLogueado));
+            OpenForm(new DocentesViews(this));
         }
 
         private void MostraMenuPrincipalForms_Click(object sender, EventArgs e)
+        {
+            MostrarMenuPrincipal();
+        }
+
+        private void MostrarMenuPrincipal()
         {
             if (IsFormOpen(typeof(MenuPrincipalFormcs))) return;
             OpenForm(new MenuPrincipalFormcs(this));
@@ -154,8 +146,43 @@ namespace VirtualBook.Views.DocentesViews
 
         private void BtnMiperfil_Click(object sender, EventArgs e)
         {
-            if(IsFormOpen(typeof(ProfileForm))) return;
+            if (IsFormOpen(typeof(ProfileForm))) return;
             OpenForm(new ProfileForm());
+        }
+
+        private async void TxtBucarLibros_TextChanged(object sender, EventArgs e)
+        {
+            string termino = TxtBucarLibros.Text.Trim();
+
+            if (string.IsNullOrEmpty(termino))
+            {
+                MostrarMenuPrincipal();
+                await mPf.CargarLibros();
+                return;
+            }
+
+            if (!IsFormOpen(typeof(MenuPrincipalFormcs)))
+            {
+                OpenForm(mPf);
+            }
+            else
+            {
+                mPf.BringToFront();
+            }
+
+            try
+            {
+                var resultados = await _apiClient.Libros.BuscarLibrosAsync(termino);
+                mPf.MostrarLibrosEnPantalla(resultados);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error en la búsqueda: " + ex.Message);
+            }
+            finally
+            {
+                PcbCargandoUser.Visible = false;
+            }
         }
     }
 }

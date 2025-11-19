@@ -36,7 +36,7 @@ END;
 GO
 
 -- Dar permisos a la API
-GRANT EXECUTE ON OBJECT::dbo.sp_AgregarFavorito TO public;
-GRANT EXECUTE ON OBJECT::dbo.sp_EliminarFavorito TO public;
-GRANT EXECUTE ON OBJECT::dbo.sp_VerificarFavorito TO public;
+GRANT EXECUTE ON sp_AgregarFavorito TO virtualbooksystemUser;
+GRANT EXECUTE ON sp_EliminarFavorito TO virtualbooksystemUser;
+GRANT EXECUTE ON sp_VerificarFavorito TO virtualbooksystemUser;
 GO

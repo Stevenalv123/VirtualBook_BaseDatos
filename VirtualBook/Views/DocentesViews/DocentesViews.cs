@@ -16,15 +16,12 @@ namespace VirtualBook.Views.DocentesViews
 {
     public partial class DocentesViews : Form
     {
-        private readonly IMainForm _mf;
+        private readonly IMainForm mf;
         private readonly ApiClient _apiClient;
-        private int _idDocente;
-        IMainForm mf;
-        public DocentesViews(IMainForm _mf, int idDocente)
+        public DocentesViews(IMainForm _mf)
         {
             InitializeComponent();
-            _mf = mf;
-            _idDocente = idDocente;
+            mf = _mf;
             _apiClient = ApiClient.Instance;
 
             ConfigurarGrid();
@@ -34,8 +31,8 @@ namespace VirtualBook.Views.DocentesViews
 
         private void BtnUploadNewBook_Click(object sender, EventArgs e)
         {
-            var uploadBookForm = new VirtualBook.Views.UploadBookForm.UploadBookForm(_idDocente, _mf);
-            _mf.OpenForm(uploadBookForm);
+            var uploadBookForm = new VirtualBook.Views.UploadBookForm.UploadBookForm(mf);
+            mf.OpenForm(uploadBookForm);
         }
 
         private async Task CargarCantidadSeguidores(int idUsuario)

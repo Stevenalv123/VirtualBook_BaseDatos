@@ -161,11 +161,11 @@ namespace VirtualBook.Views
             switch (idRol)
             {
                 case 1:
-                    var adminForm = new AdministradorMainForm(idUsuario);
+                    var adminForm = new AdministradorMainForm();
                     adminForm.Show();
                     break;
                 case 2:
-                    var docenForm = new DocentesMainForm(idUsuario);
+                    var docenForm = new DocentesMainForm();
                     docenForm.Show();
                     break;
                 case 3:

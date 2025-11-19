@@ -211,5 +211,25 @@ namespace VirtualBook.Models.Repository
                 return new List<LibroDto>();
             }
         }
+
+        public async Task<List<LibroDto>> BuscarLibrosAsync(string termino)
+        {
+            try
+            {
+                var terminoEncoded = System.Net.WebUtility.UrlEncode(termino);
+                var response = await _httpClient.GetAsync($"Libro/buscar?termino={terminoEncoded}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var libros = await response.Content.ReadFromJsonAsync<List<LibroDto>>();
+                    return libros ?? new List<LibroDto>();
+                }
+                return new List<LibroDto>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al buscar libros.", ex);
+            }
+        }
     }
 }

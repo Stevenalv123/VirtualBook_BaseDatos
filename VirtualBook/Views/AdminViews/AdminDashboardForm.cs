@@ -20,13 +20,12 @@ namespace VirtualBook.Views
         private readonly ApiClient _apiClient;
         private List<LibroDto> _listaLibrosCompleta; // Lista en memoria para búsquedas y cálculos
 
-        public AdminDashboardForm(IMainForm _mf, int idUsuario)
+        public AdminDashboardForm(IMainForm _mf)
         {
             InitializeComponent();
             mf = _mf;
             _apiClient = ApiClient.Instance;
             _listaLibrosCompleta = new List<LibroDto>();
-            _idUsuario = idUsuario;
         }
 
         private async void AdminDashboardForm_Load(object sender, EventArgs e)
@@ -141,7 +140,7 @@ namespace VirtualBook.Views
 
         private void BtnAgregarNuevoLibro_Click(object sender, EventArgs e)
         {
-            mf.OpenForm(new UploadBookForm.UploadBookForm(_idUsuario, mf));
+            mf.OpenForm(new UploadBookForm.UploadBookForm(mf));
         }
 
        

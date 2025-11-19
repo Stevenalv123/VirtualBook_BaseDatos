@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Drawing.Drawing2D;
 using VirtualBook.Controller;
+using VirtualBook.Models.DTO;
 using VirtualBook.UserControls;
 //using VirtualBook.DTOs;
 
@@ -93,39 +94,53 @@ namespace VirtualBook.Views
             boton.Region = new Region(path);
         }
 
-        public async Task CargarLibros()
+        public void MostrarLibrosEnPantalla(List<LibroDto> listaLibros)
         {
             flpLibros.Controls.Clear();
+
+            if (listaLibros == null || listaLibros.Count == 0)
+            {
+                // Opcional: Mostrar un label que diga "No hay resultados"
+                Label LblnoResults = new Label
+                {
+                    Text = "No se encontraron libros.",
+                    AutoSize = true,
+                    Font = new Font("Segoe UI", 14F, FontStyle.Regular),
+                    ForeColor = Color.Gray,
+                    Dock = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleCenter
+                };
+                return;
+            }
+
+            foreach (var libro in listaLibros)
+            {
+                var tarjeta = new LibroCard();
+                tarjeta.Titulo = libro.Titulo;
+                tarjeta.Autor = libro.Autores;
+                tarjeta.Sinopsis = libro.NombreCategoria;
+
+                if (!string.IsNullOrEmpty(libro.Portada))
+                {
+                    tarjeta.UrlPortada = _apiRootUrl + libro.Portada;
+                }
+
+                tarjeta.DetallesClick += (s, e) => AbrirDetallesLibro(libro.IdLibro);
+
+                flpLibros.Controls.Add(tarjeta);
+            }
+        }
+
+        public async Task CargarLibros()
+        {
             PcbCargando.Visible = true;
-            PcbCargando.BringToFront();
             try
             {
                 var libros = await _apiClient.Libros.GetLibrosAsync();
-
-                if (libros != null)
-                {
-                    foreach (var libro in libros)
-                    {
-                        var tarjeta = new LibroCard();
-                        tarjeta.Titulo = libro.Titulo;
-                        tarjeta.Autor = libro.Autores;
-                        tarjeta.Sinopsis = libro.NombreCategoria;
-
-                        if (!string.IsNullOrEmpty(libro.Portada))
-                        {
-                            tarjeta.UrlPortada = _apiRootUrl + libro.Portada;
-                        }
-
-                        tarjeta.DetallesClick += (s, e) => AbrirDetallesLibro(libro.IdLibro);
-
-                        flpLibros.Controls.Add(tarjeta);
-                    }
-                }
-                PcbCargando.Visible = false;
+                MostrarLibrosEnPantalla(libros);
             }
             catch (Exception ex)
             {
-                PcbCargando.Visible = false;
                 MessageBox.Show("Error al cargar libros: " + ex.Message);
             }
             finally

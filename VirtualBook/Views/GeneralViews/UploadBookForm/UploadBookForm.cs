@@ -12,12 +12,11 @@ namespace VirtualBook.Views.UploadBookForm
 
         private readonly ApiClient _apiClient;
 
-        int _idUsuario;
         private string? portada { get; set; }
         private string? archivoPdf { get; set; }
         IMainForm _mf;
 
-        public UploadBookForm(int idUsuario, IMainForm mf)
+        public UploadBookForm(IMainForm mf)
         {
             InitializeComponent();
 

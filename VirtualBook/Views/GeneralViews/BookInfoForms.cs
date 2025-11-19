@@ -1,13 +1,6 @@
 ﻿using FontAwesome.Sharp;
-using FontAwesome.Sharp.Material;
-using System;
-using System.Drawing;
-using System.IO;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using VirtualBook.Controller;
-using VirtualBook.Models.DTO;
-using VirtualBook.Views.GeneralViews.UserControls; // Importante para ver ReseñasCard
+using VirtualBook.Views.GeneralViews.UserControls;
 
 namespace VirtualBook.Views
 {
@@ -16,12 +9,8 @@ namespace VirtualBook.Views
         private readonly int _idlibro;
         private readonly IMainForm _mf;
         private readonly ApiClient _apiClient;
-
-        // Datos del libro actual
         private int _idPublicador;
         private string? _rutaPdfRelativa;
-
-        // Estado local
         private bool _esFavorito = false;
 
         public BookInfoForms(int id, IMainForm mf)
@@ -117,10 +106,8 @@ namespace VirtualBook.Views
             {
                 flpReseñas.Controls.Clear();
 
-                // Llama a la API
                 var resenas = await _apiClient.Libros.GetReseñasPorLibroAsync(_idlibro);
 
-                // Verifica si trajo datos
                 if (resenas != null && resenas.Count > 0)
                 {
                     foreach (var r in resenas)
@@ -129,7 +116,6 @@ namespace VirtualBook.Views
                         string urlFoto = string.IsNullOrEmpty(r.FotoPerfil) ? null :
                                          _apiClient.RootUrl + r.FotoPerfil.TrimStart('/');
 
-                        // Asegúrate que este método exista en ReseñasCard.cs (Ver Paso 2)
                         card.ConfigurarDatos(r.NombreUsuario, r.Comentario, urlFoto);
 
                         card.Width = flpReseñas.Width - 25;
@@ -139,19 +125,17 @@ namespace VirtualBook.Views
                 }
                 else
                 {
-                    // ESTO ES IMPORTANTE: Si entra aquí, es que no hay reseñas en la BD
                     Label lbl = new Label();
                     lbl.Text = "No hay reseñas para este libro aún.";
                     lbl.AutoSize = true;
                     lbl.ForeColor = Color.Gray;
-                    lbl.Font = new Font("Segoe UI", 12, FontStyle.Italic); // Fuente más grande para verla
+                    lbl.Font = new Font("Segoe UI", 12, FontStyle.Italic);
                     lbl.Margin = new Padding(20);
                     flpReseñas.Controls.Add(lbl);
                 }
             }
             catch (Exception ex)
             {
-                // AQUI ESTÁ LA CLAVE: Muestra el error para saber qué pasa
                 MessageBox.Show($"Error cargando reseñas: {ex.Message}", "Debug", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
