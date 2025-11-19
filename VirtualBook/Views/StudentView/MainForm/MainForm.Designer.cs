@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             panel1 = new Panel();
             panel7 = new Panel();
@@ -46,15 +47,16 @@
             label1 = new Label();
             pictureBox1 = new PictureBox();
             PanelTop = new Panel();
+            BtnNotificaciones = new FontAwesome.Sharp.IconButton();
             BtnSwitchTheme = new FontAwesome.Sharp.IconButton();
             BtnAyuda = new VirtualBook.Controls.RJButton();
-            BtnNotificaciones = new VirtualBook.Controls.RJButton();
             borderedPanel1 = new VirtualBook.Controls.BorderedPanel();
             TxtBucarLibros = new TextBox();
             btnBuscarlibro = new FontAwesome.Sharp.IconPictureBox();
             LblDerechosReservados = new Label();
             PanelBottom = new Panel();
             PanelCentral = new Panel();
+            tmrNotificaciones = new System.Windows.Forms.Timer(components);
             panel1.SuspendLayout();
             panel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)PcbCargandoUser).BeginInit();
@@ -315,15 +317,34 @@
             // PanelTop
             // 
             PanelTop.BackColor = Color.White;
+            PanelTop.Controls.Add(BtnNotificaciones);
             PanelTop.Controls.Add(BtnSwitchTheme);
             PanelTop.Controls.Add(BtnAyuda);
-            PanelTop.Controls.Add(BtnNotificaciones);
             PanelTop.Controls.Add(borderedPanel1);
             PanelTop.Dock = DockStyle.Top;
             PanelTop.Location = new Point(289, 0);
             PanelTop.Name = "PanelTop";
             PanelTop.Size = new Size(970, 74);
             PanelTop.TabIndex = 1;
+            // 
+            // BtnNotificaciones
+            // 
+            BtnNotificaciones.Anchor = AnchorStyles.Right;
+            BtnNotificaciones.FlatAppearance.BorderSize = 0;
+            BtnNotificaciones.FlatStyle = FlatStyle.Flat;
+            BtnNotificaciones.Font = new Font("Segoe UI", 12F);
+            BtnNotificaciones.IconChar = FontAwesome.Sharp.IconChar.Bell;
+            BtnNotificaciones.IconColor = Color.Black;
+            BtnNotificaciones.IconFont = FontAwesome.Sharp.IconFont.Regular;
+            BtnNotificaciones.ImageAlign = ContentAlignment.MiddleLeft;
+            BtnNotificaciones.Location = new Point(606, 12);
+            BtnNotificaciones.Name = "BtnNotificaciones";
+            BtnNotificaciones.Size = new Size(164, 49);
+            BtnNotificaciones.TabIndex = 7;
+            BtnNotificaciones.Text = "Notificaciones";
+            BtnNotificaciones.TextAlign = ContentAlignment.MiddleRight;
+            BtnNotificaciones.UseVisualStyleBackColor = true;
+            BtnNotificaciones.Click += BtnNotificaciones_Click_1;
             // 
             // BtnSwitchTheme
             // 
@@ -361,26 +382,6 @@
             BtnAyuda.Text = "Ayuda";
             BtnAyuda.TextColor = Color.Black;
             BtnAyuda.UseVisualStyleBackColor = false;
-            // 
-            // BtnNotificaciones
-            // 
-            BtnNotificaciones.Anchor = AnchorStyles.Right;
-            BtnNotificaciones.BackColor = Color.White;
-            BtnNotificaciones.BackgroundColor = Color.White;
-            BtnNotificaciones.BorderColor = Color.Black;
-            BtnNotificaciones.BorderRadius = 10;
-            BtnNotificaciones.BorderSize = 0;
-            BtnNotificaciones.FlatAppearance.BorderSize = 0;
-            BtnNotificaciones.FlatStyle = FlatStyle.Flat;
-            BtnNotificaciones.Font = new Font("Segoe UI", 12F);
-            BtnNotificaciones.ForeColor = Color.Black;
-            BtnNotificaciones.Location = new Point(620, 18);
-            BtnNotificaciones.Name = "BtnNotificaciones";
-            BtnNotificaciones.Size = new Size(150, 40);
-            BtnNotificaciones.TabIndex = 4;
-            BtnNotificaciones.Text = "Notificaciones";
-            BtnNotificaciones.TextColor = Color.Black;
-            BtnNotificaciones.UseVisualStyleBackColor = false;
             // 
             // borderedPanel1
             // 
@@ -451,6 +452,11 @@
             PanelCentral.Size = new Size(970, 670);
             PanelCentral.TabIndex = 4;
             // 
+            // tmrNotificaciones
+            // 
+            tmrNotificaciones.Enabled = true;
+            tmrNotificaciones.Interval = 5000;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -507,7 +513,6 @@
         private Panel PanelCentral;
         private Controls.RoundedPictureBox PcbFotoPerfil;
         private Controls.BorderedPanel borderedPanel1;
-        private Controls.RJButton BtnNotificaciones;
         private FontAwesome.Sharp.IconPictureBox btnBuscarlibro;
         private Controls.RJButton BtnAyuda;
         private FontAwesome.Sharp.IconButton BtnSwitchTheme;
@@ -515,5 +520,7 @@
         private FontAwesome.Sharp.IconButton BtnCerrarSesion;
         private FontAwesome.Sharp.IconButton BtnConfiguracion;
         private PictureBox PcbCargandoUser;
+        private System.Windows.Forms.Timer tmrNotificaciones;
+        private FontAwesome.Sharp.IconButton BtnNotificaciones;
     }
 }

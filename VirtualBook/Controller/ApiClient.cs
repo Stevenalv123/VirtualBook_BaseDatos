@@ -27,6 +27,7 @@ namespace VirtualBook.Controller
         public IUserRepository LoginUsers { get; }
         public ILibroRepository Libros { get; }
         public IDataRepository Data { get; }
+        public INotificacionRepository Notificaciones { get; }
 
         private ApiClient()
         {
@@ -39,6 +40,7 @@ namespace VirtualBook.Controller
             LoginUsers = new UserRepository(_httpClient);
             Libros = new LibroRepository(_httpClient);
             Data = new DataRepository(_httpClient);
+            Notificaciones = new NotificacionRepository(_httpClient);
         }
 
         internal void SetAuthToken(string token)

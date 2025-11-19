@@ -14,5 +14,7 @@ namespace VirtualBook.Models.Repository.Interfaces
         Task<List<UsuarioDto>> GetUsuariosAsync();
         Task<bool> CambiarEstadoUsuarioAsync(int idUsuario, bool nuevoEstado);
         Task<bool> UpdateProfileAsync(UpdateUserDTO updateData);
+        Task<bool> ToggleSeguirUsuarioAsync(int idUsuarioASeguir);
+        Task<bool> VerificarSiSigueAsync(int idUsuarioASeguir);
     }
 }

@@ -218,5 +218,29 @@ namespace VirtualBook.Models.Repository
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<bool> ToggleSeguirUsuarioAsync(int idUsuarioASeguir)
+        {
+            var response = await _httpClient.PostAsync($"Seguimiento/toggle?idSeguido={idUsuarioASeguir}", null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var contenido = await response.Content.ReadAsStringAsync();
+                return bool.Parse(contenido);
+            }
+            throw new Exception("Error al intentar seguir al usuario.");
+        }
+
+        public async Task<bool> VerificarSiSigueAsync(int idUsuarioASeguir)
+        {
+            var response = await _httpClient.GetAsync($"Seguimiento/verificar/{idUsuarioASeguir}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var contenido = await response.Content.ReadAsStringAsync();
+                return bool.Parse(contenido);
+            }
+            return false;
+        }
     }
 }

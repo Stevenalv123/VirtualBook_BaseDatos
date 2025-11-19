@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using VirtualBook.Controller;
+using VirtualBook.Views.GeneralViews;
 
 namespace VirtualBook.Views
 {
@@ -18,6 +19,41 @@ namespace VirtualBook.Views
             mPf = new MenuPrincipalFormcs(this);
             OpenForm(mPf);
             _ = CargarUsuario();
+            tmrNotificaciones.Tick += TmrNotificaciones_Tick;
+            tmrNotificaciones.Start();
+            _ = VerificarNotificaciones();
+        }
+
+        private async void TmrNotificaciones_Tick(object sender, EventArgs e)
+        {
+            await VerificarNotificaciones();
+        }
+
+        private async Task VerificarNotificaciones()
+        {
+            int cantidad = await ApiClient.Instance.Notificaciones.ObtenerConteoNoLeidasAsync();
+
+            ActualizarIconoCampana(cantidad);
+        }
+
+        private void ActualizarIconoCampana(int cantidad)
+        {
+            if (cantidad > 0)
+            {
+                BtnNotificaciones.IconChar = FontAwesome.Sharp.IconChar.Bell;
+
+                BtnNotificaciones.IconColor = Color.OrangeRed;
+
+                BtnNotificaciones.Text = $"   {cantidad}";
+                BtnNotificaciones.ForeColor = Color.OrangeRed;
+            }
+            else
+            {
+                BtnNotificaciones.IconChar = FontAwesome.Sharp.IconChar.Bell;
+                BtnNotificaciones.IconColor = Color.Black;
+                BtnNotificaciones.Text = "";
+                BtnNotificaciones.ForeColor = Color.Black;
+            }
         }
 
         private void BtnSwitchTheme_Click(object sender, EventArgs e)
@@ -238,6 +274,13 @@ namespace VirtualBook.Views
             {
                 PcbCargandoUser.Visible = false;
             }
+        }
+
+        private void BtnNotificaciones_Click_1(object sender, EventArgs e)
+        {
+            var formNotif = new NotificationsListForm();
+            formNotif.ShowDialog();
+            _ = VerificarNotificaciones();
         }
     }
 }

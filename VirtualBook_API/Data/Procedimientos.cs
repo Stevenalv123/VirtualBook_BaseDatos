@@ -30,5 +30,10 @@
         public const string SP_ObtenerLibrosPorUsuario = "sp_ObtenerLibrosPorUsuario";
         public const string SP_BuscarLibros = "SP_BuscarLibros";
         public const string SP_EliminarLibro = "sp_EliminarLibro";
+        public const string SP_ToggleSeguimiento = "SP_ToggleSeguimiento";
+        public const string SP_VerificarSeguimiento = "SP_VerificarSeguimiento";
+        public const string SP_ContarNotificacionesNoLeidas = "SP_ContarNotificacionesNoLeidas";
+        public const string SP_ObtenerMisNotificaciones = "SP_ObtenerMisNotificaciones";
+        public const string SP_MarcarNotificacionLeida = "SP_MarcarNotificacionLeida";
     }
 }

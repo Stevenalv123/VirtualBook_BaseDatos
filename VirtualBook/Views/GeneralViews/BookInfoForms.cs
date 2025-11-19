@@ -12,6 +12,7 @@ namespace VirtualBook.Views
         private int _idPublicador;
         private string? _rutaPdfRelativa;
         private bool _esFavorito = false;
+        private bool _esSeguidor = false;
 
         public BookInfoForms(int id, IMainForm mf)
         {
@@ -20,6 +21,7 @@ namespace VirtualBook.Views
             _idlibro = id;
             _mf = mf;
             _apiClient = ApiClient.Instance;
+            _ = VerificarEstadoSeguimiento();
 
             ConfigurarEstilos();
 
@@ -42,8 +44,6 @@ namespace VirtualBook.Views
             flpReseñas.WrapContents = false;
             flpReseñas.FlowDirection = FlowDirection.TopDown;
         }
-
-  
 
         private async Task CargarInfoLibro()
         {
@@ -140,6 +140,34 @@ namespace VirtualBook.Views
             }
         }
 
+        private async Task VerificarEstadoSeguimiento()
+        {
+            try
+            {
+                if (_idPublicador > 0)
+                {
+                    _esSeguidor = await _apiClient.LoginUsers.VerificarSiSigueAsync(_idPublicador);
+                    ActualizarBotonSeguirUI();
+                }
+            }
+            catch {  }
+        }
+
+        private void ActualizarBotonSeguirUI()
+        {
+            if (_esSeguidor)
+            {
+                BtnSeguir.Text = "Siguiendo";
+                BtnSeguir.BackColor = Color.Gray; 
+                //BtnSeguir.IconChar = FontAwesome.Sharp.IconChar.UserCheck;
+            }
+            else
+            {
+                BtnSeguir.Text = "Seguir";
+                BtnSeguir.BackColor = Color.FromArgb(45, 154, 134); 
+                //BtnSeguir.IconChar = FontAwesome.Sharp.IconChar.UserPlus;
+            }
+        }
 
         private async void btnEnviarResena_Click(object sender, EventArgs e)
         {
@@ -268,6 +296,29 @@ namespace VirtualBook.Views
             _mf.OpenForm(new MenuPrincipalFormcs(_mf));
         }
 
-        private void BtnSeguir_Click(object sender, EventArgs e) { }
+        private async void BtnSeguir_Click(object sender, EventArgs e) 
+        {
+            if (_idPublicador <= 0) return;
+
+            BtnSeguir.Enabled = false; 
+
+            try
+            {
+                _esSeguidor = await _apiClient.LoginUsers.ToggleSeguirUsuarioAsync(_idPublicador);
+
+                ActualizarBotonSeguirUI();
+
+                string mensaje = _esSeguidor ? "¡Ahora sigues a este usuario!" : "Dejaste de seguir a este usuario.";
+                MessageBox.Show(mensaje, "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ocurrió un error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                BtnSeguir.Enabled = true;
+            }
+        }
     }
 }

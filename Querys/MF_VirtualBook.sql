@@ -149,6 +149,7 @@ CREATE TABLE Notificacion (
     IdLibro INT,
     FechaNotificacion DATETIME DEFAULT GETDATE() NOT NULL,
     Leido BIT DEFAULT 0 NOT NULL,
+	Mensaje NVARCHAR(255),
     TipoNotificacion VARCHAR(50) CHECK (TipoNotificacion IN ('NuevoLibro', 'ReseñaRecibida', 'SeguidorNuevo', 'Comentario')),
 
     CONSTRAINT PK_Notificacion PRIMARY KEY (IdNotificacion),
@@ -702,6 +703,110 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE SP_ToggleSeguimiento
+    @IdSeguidor INT,
+    @IdSeguido INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    IF EXISTS (SELECT 1 FROM Seguimiento WHERE IdSeguidor = @IdSeguidor AND IdSeguido = @IdSeguido)
+    BEGIN
+        DELETE FROM Seguimiento WHERE IdSeguidor = @IdSeguidor AND IdSeguido = @IdSeguido;
+        SELECT 0 AS Resultado;
+    END
+    ELSE
+    BEGIN
+        INSERT INTO Seguimiento (IdSeguidor, IdSeguido) VALUES (@IdSeguidor, @IdSeguido);
+        SELECT 1 AS Resultado;
+    END
+END
+GO
+
+CREATE PROCEDURE SP_VerificarSeguimiento
+    @IdSeguidor INT,
+    @IdSeguido INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF EXISTS (SELECT 1 FROM Seguimiento WHERE IdSeguidor = @IdSeguidor AND IdSeguido = @IdSeguido)
+        SELECT CAST(1 AS BIT) AS EsSeguidor;
+    ELSE
+        SELECT CAST(0 AS BIT) AS EsSeguidor;
+END;
+GO
+
+CREATE TRIGGER TR_NotificarNuevoLibro
+ON Libro
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Notificacion (IdUsuario, IdLibro, TipoNotificacion, Mensaje, FechaNotificacion, Leido)
+    SELECT 
+        S.IdSeguidor,                
+        I.IdLibro,                   
+        'NuevoLibro',                
+        'El docente ' + U.Nombres + ' ha publicado: ' + I.Titulo, 
+        GETDATE(),
+        0                     
+    FROM inserted I
+    INNER JOIN Usuario U ON I.IdPublicador = U.IdUsuario
+    INNER JOIN Seguimiento S ON I.IdPublicador = S.IdSeguido
+END;
+GO
+
+CREATE TRIGGER TR_NotificarNuevoSeguidor
+ON Seguimiento
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Notificacion (IdUsuario, IdLibro, TipoNotificacion, Mensaje, FechaNotificacion, Leido)
+    SELECT 
+        I.IdSeguido,                 
+        NULL,                        
+        'SeguidorNuevo',
+        'El usuario ' + U.Nombres + ' ha comenzado a seguirte.',
+        GETDATE(),
+        0
+    FROM inserted I
+    INNER JOIN Usuario U ON I.IdSeguidor = U.IdUsuario 
+END;
+GO
+
+CREATE PROCEDURE SP_ContarNotificacionesNoLeidas
+    @IdUsuario INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT COUNT(*) FROM Notificacion 
+    WHERE IdUsuario = @IdUsuario AND Leido = 0;
+END
+GO
+
+CREATE PROCEDURE SP_ObtenerMisNotificaciones
+    @IdUsuario INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT * FROM Notificacion 
+    WHERE IdUsuario = @IdUsuario 
+    ORDER BY FechaNotificacion DESC;
+END
+GO
+
+CREATE PROCEDURE SP_MarcarNotificacionLeida
+    @IdNotificacion INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE Notificacion SET Leido = 1 WHERE IdNotificacion = @IdNotificacion;
+END
+GO
+
 grant execute on sp_ValidarUsuario to virtualbooksystemUser;
 grant execute on sp_RegistrarUsuario to virtualbooksystemUser;
 grant execute on sp_ObtenerUsuarioPorCorreo to virtualbooksystemUser;
@@ -729,3 +834,8 @@ GRANT EXECUTE ON sp_ObtenerReporteDescargas TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_PublicarReseña TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_ObtenerResenasPorLibro TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_ObtenerLibrosPorUsuario TO virtualbooksystemUser;
+GRANT EXECUTE ON SP_ToggleSeguimiento TO virtualbooksystemUser;
+GRANT EXECUTE ON SP_VerificarSeguimiento TO virtualbooksystemUser;
+GRANT EXECUTE ON SP_ContarNotificacionesNoLeidas TO virtualbooksystemUser;
+GRANT EXECUTE ON SP_ObtenerMisNotificaciones TO virtualbooksystemUser;
+GRANT EXECUTE ON SP_MarcarNotificacionLeida TO virtualbooksystemUser;
