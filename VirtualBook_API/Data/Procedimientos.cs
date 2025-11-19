@@ -29,5 +29,6 @@
         public const string SP_RegistrarAutor = "sp_RegistrarAutor";
         public const string SP_ObtenerLibrosPorUsuario = "sp_ObtenerLibrosPorUsuario";
         public const string SP_BuscarLibros = "SP_BuscarLibros";
+        public const string SP_EliminarLibro = "sp_EliminarLibro";
     }
 }

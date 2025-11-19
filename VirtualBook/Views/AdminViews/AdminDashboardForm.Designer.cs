@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             lblTotalLibros = new Label();
             label4 = new Label();
             lblTotalUsuarios = new Label();
@@ -40,6 +40,7 @@
             label9 = new Label();
             toolTip1 = new ToolTip(components);
             borderedPanel1 = new VirtualBook.Controls.BorderedPanel();
+            BtnEliminar = new VirtualBook.Controls.RJButton();
             dgvShowBooks = new DataGridView();
             borderedPanel2 = new VirtualBook.Controls.BorderedPanel();
             btnBuscarLibros = new FontAwesome.Sharp.IconPictureBox();
@@ -134,6 +135,7 @@
             borderedPanel1.BorderColor = Color.Black;
             borderedPanel1.BorderRadius = 20;
             borderedPanel1.BorderSize = 1;
+            borderedPanel1.Controls.Add(BtnEliminar);
             borderedPanel1.Controls.Add(dgvShowBooks);
             borderedPanel1.Controls.Add(borderedPanel2);
             borderedPanel1.Controls.Add(btnNuevoLibro);
@@ -143,6 +145,28 @@
             borderedPanel1.Size = new Size(930, 497);
             borderedPanel1.TabIndex = 37;
             // 
+            // BtnEliminar
+            // 
+            BtnEliminar.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            BtnEliminar.BackColor = Color.FromArgb(58, 177, 155);
+            BtnEliminar.BackgroundColor = Color.FromArgb(58, 177, 155);
+            BtnEliminar.BorderColor = Color.PaleVioletRed;
+            BtnEliminar.BorderRadius = 5;
+            BtnEliminar.BorderSize = 0;
+            BtnEliminar.Cursor = Cursors.Hand;
+            BtnEliminar.FlatAppearance.BorderSize = 0;
+            BtnEliminar.FlatStyle = FlatStyle.Flat;
+            BtnEliminar.ForeColor = Color.White;
+            BtnEliminar.Location = new Point(617, 22);
+            BtnEliminar.Name = "BtnEliminar";
+            BtnEliminar.Size = new Size(140, 30);
+            BtnEliminar.TabIndex = 48;
+            BtnEliminar.Tag = "NoCambiarTema";
+            BtnEliminar.Text = "Eliminar Libro";
+            BtnEliminar.TextColor = Color.White;
+            BtnEliminar.UseVisualStyleBackColor = false;
+            BtnEliminar.Click += BtnEliminar_Click;
+            // 
             // dgvShowBooks
             // 
             dgvShowBooks.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
@@ -150,41 +174,42 @@
             dgvShowBooks.BackgroundColor = Color.White;
             dgvShowBooks.BorderStyle = BorderStyle.None;
             dgvShowBooks.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(58, 177, 155);
-            dataGridViewCellStyle1.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle1.ForeColor = Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = Color.Gray;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dgvShowBooks.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = Color.FromArgb(58, 177, 155);
+            dataGridViewCellStyle4.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle4.ForeColor = Color.White;
+            dataGridViewCellStyle4.SelectionBackColor = Color.Gray;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dgvShowBooks.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             dgvShowBooks.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = Color.WhiteSmoke;
-            dataGridViewCellStyle2.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            dgvShowBooks.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Window;
+            dataGridViewCellStyle5.Font = new Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = Color.WhiteSmoke;
+            dataGridViewCellStyle5.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
+            dgvShowBooks.DefaultCellStyle = dataGridViewCellStyle5;
             dgvShowBooks.EnableHeadersVisualStyles = false;
             dgvShowBooks.GridColor = Color.White;
             dgvShowBooks.Location = new Point(23, 127);
             dgvShowBooks.Name = "dgvShowBooks";
             dgvShowBooks.ReadOnly = true;
             dgvShowBooks.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = Color.Gray;
-            dataGridViewCellStyle3.SelectionForeColor = Color.White;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            dgvShowBooks.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.Control;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = Color.Gray;
+            dataGridViewCellStyle6.SelectionForeColor = Color.White;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            dgvShowBooks.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             dgvShowBooks.RowHeadersVisible = false;
             dgvShowBooks.ScrollBars = ScrollBars.None;
             dgvShowBooks.Size = new Size(885, 337);
             dgvShowBooks.TabIndex = 47;
+            dgvShowBooks.SelectionChanged += dgvShowBooks_SelectionChanged;
             // 
             // borderedPanel2
             // 
@@ -399,5 +424,6 @@
         private Controls.RoundedPictureBox roundedPictureBox4;
         private Controls.RoundedPictureBox roundedPictureBox5;
         private Controls.RoundedPictureBox roundedPictureBox6;
+        private Controls.RJButton BtnEliminar;
     }
 }

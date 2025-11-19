@@ -31,6 +31,7 @@
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             panel1 = new Panel();
+            BtnEliminar = new VirtualBook.Controls.RJButton();
             PanelInfo = new Panel();
             DgvLibros = new DataGridView();
             panel2 = new Panel();
@@ -54,6 +55,7 @@
             // panel1
             // 
             panel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            panel1.Controls.Add(BtnEliminar);
             panel1.Controls.Add(PanelInfo);
             panel1.Controls.Add(panel2);
             panel1.Controls.Add(BtnUploadNewBook);
@@ -63,6 +65,32 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(954, 664);
             panel1.TabIndex = 0;
+            // 
+            // BtnEliminar
+            // 
+            BtnEliminar.Anchor = AnchorStyles.Right;
+            BtnEliminar.BackColor = Color.FromArgb(58, 177, 155);
+            BtnEliminar.BackgroundColor = Color.FromArgb(58, 177, 155);
+            BtnEliminar.BackgroundImageLayout = ImageLayout.Stretch;
+            BtnEliminar.BorderColor = Color.PaleVioletRed;
+            BtnEliminar.BorderRadius = 5;
+            BtnEliminar.BorderSize = 0;
+            BtnEliminar.Cursor = Cursors.Hand;
+            BtnEliminar.Enabled = false;
+            BtnEliminar.FlatAppearance.BorderSize = 0;
+            BtnEliminar.FlatStyle = FlatStyle.Flat;
+            BtnEliminar.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            BtnEliminar.ForeColor = Color.White;
+            BtnEliminar.ImageAlign = ContentAlignment.MiddleLeft;
+            BtnEliminar.Location = new Point(598, 212);
+            BtnEliminar.Name = "BtnEliminar";
+            BtnEliminar.Size = new Size(158, 28);
+            BtnEliminar.TabIndex = 11;
+            BtnEliminar.Tag = "NoCambiarTema";
+            BtnEliminar.Text = "Eliminar Libro";
+            BtnEliminar.TextColor = Color.White;
+            BtnEliminar.UseVisualStyleBackColor = false;
+            BtnEliminar.Click += BtnEliminar_Click;
             // 
             // PanelInfo
             // 
@@ -107,6 +135,7 @@
             DgvLibros.Name = "DgvLibros";
             DgvLibros.Size = new Size(871, 366);
             DgvLibros.TabIndex = 0;
+            DgvLibros.SelectionChanged += BtnEliminar_Click;
             // 
             // panel2
             // 
@@ -267,5 +296,6 @@
         private Panel panel2;
         private Panel PanelInfo;
         private DataGridView DgvLibros;
+        private Controls.RJButton BtnEliminar;
     }
 }

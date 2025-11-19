@@ -160,5 +160,46 @@ namespace VirtualBook.Views
                 ChildForm.Show();
             }
         }
+
+        private void dgvShowBooks_SelectionChanged(object sender, EventArgs e)
+        {
+            BtnEliminar.Enabled = dgvShowBooks.SelectedRows.Count > 0;
+        }
+
+        private async void BtnEliminar_Click(object sender, EventArgs e)
+        {
+            if (dgvShowBooks.SelectedRows.Count == 0) return;
+
+            // Obtener el libro seleccionado
+            var libro = (LibroDto)dgvShowBooks.SelectedRows[0].DataBoundItem;
+
+            var confirm = MessageBox.Show(
+                $"¿Estás seguro de eliminar '{libro.Titulo}'?\nEsta acción no se puede deshacer.",
+                "Confirmar eliminación",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (confirm == DialogResult.Yes)
+            {
+                try
+                {
+                    string resultado = await _apiClient.Libros.EliminarLibroAsync(libro.IdLibro);
+
+                    if (resultado == "OK")
+                    {
+                        MessageBox.Show("Libro eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        await CargarDatosDashboard();
+                    }
+                    else
+                    {
+                        MessageBox.Show($"No se pudo eliminar: {resultado}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error crítico: " + ex.Message);
+                }
+            }
+        }
     }
 }

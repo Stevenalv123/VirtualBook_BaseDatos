@@ -192,7 +192,6 @@ namespace VirtualBook.Models.Repository
             }
         }
 
-        // --- IMPLEMENTACIÓN FALTANTE ---
         public async Task<List<LibroDto>> GetMisLibrosAsync()
         {
             try
@@ -229,6 +228,26 @@ namespace VirtualBook.Models.Repository
             catch (Exception ex)
             {
                 throw new Exception("Error al buscar libros.", ex);
+            }
+        }
+        public async Task<string> EliminarLibroAsync(int idLibro)
+        {
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"Libro/{idLibro}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return "OK";
+                }
+                else
+                {
+                    return await response.Content.ReadAsStringAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                return $"Error de conexión: {ex.Message}";
             }
         }
     }

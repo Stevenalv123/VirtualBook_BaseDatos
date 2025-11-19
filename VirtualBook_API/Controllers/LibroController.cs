@@ -143,13 +143,78 @@ namespace VirtualBook_API.Controllers
             }
         }
 
+        // En LibroController.cs
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrador,Docente")]
+        public async Task<IActionResult> EliminarLibro(int id)
+        {
+            try
+            {
+                var idUsuario = await GetIdUsuarioActualAsync();
+                if (idUsuario == null) return Unauthorized();
+
+                var rolUsuario = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
+
+                var libro = await ObtenerInfoBasicaLibro(id);
+
+                if (libro == null) return NotFound("El libro no existe.");
+
+                bool esAdmin = rolUsuario == "Administrador";
+                bool esDueño = libro.PublicadorId == idUsuario;
+
+                if (!esAdmin && !esDueño)
+                {
+                    return StatusCode(403, "No tienes permiso para eliminar este libro. Solo puedes eliminar los libros que tú subiste.");
+                }
+
+                await using var connection = _dbContext.GetConnection();
+                var command = new SqlCommand(Procedimientos.SP_EliminarLibro, connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.AddWithValue("@IdLibro", id);
+
+                await connection.OpenAsync();
+                await command.ExecuteNonQueryAsync();
+
+                return Ok(new { message = "Libro eliminado correctamente." });
+            }
+            catch (SqlException ex)
+            {
+                return StatusCode(500, $"Error de base de datos: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno: {ex.Message}");
+            }
+        }
+
+        private async Task<LibroDetalleDTO?> ObtenerInfoBasicaLibro(int idLibro)
+        {
+            await using var connection = _dbContext.GetConnection();
+            var command = new SqlCommand(Procedimientos.SP_ObtenerDetallesLibro, connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            command.Parameters.AddWithValue("@IdLibro", idLibro);
+            await connection.OpenAsync();
+            var reader = await command.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+            {
+                return MapReaderToLibroDetalleDto(reader);
+            }
+            return null;
+        }
+
+
         [HttpGet("mis-libros")]
         [Authorize] // Requiere token
         public async Task<IActionResult> GetMisLibros()
         {
             try
             {
-                // 1. Obtenemos el ID del usuario desde el Token usando el método helper que ya creamos antes
                 var idUsuario = await GetIdUsuarioActualAsync();
 
                 if (idUsuario == null) return Unauthorized();

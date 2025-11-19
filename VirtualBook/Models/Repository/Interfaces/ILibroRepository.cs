@@ -22,5 +22,6 @@ namespace VirtualBook.Models.Repository.Interfaces
         Task<List<ResenaDTO>> GetReseñasPorLibroAsync(int idLibro);
         Task<List<LibroDto>> GetMisLibrosAsync();
         Task<List<LibroDto>> BuscarLibrosAsync(string termino);
+        Task<string> EliminarLibroAsync(int idLibro);
     }
 }
