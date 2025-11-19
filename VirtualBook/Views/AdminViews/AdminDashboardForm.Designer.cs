@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             lblTotalLibros = new Label();
             label4 = new Label();
             lblTotalUsuarios = new Label();
@@ -53,6 +53,7 @@
             roundedPictureBox5 = new VirtualBook.Controls.RoundedPictureBox();
             borderedPanel5 = new VirtualBook.Controls.BorderedPanel();
             roundedPictureBox6 = new VirtualBook.Controls.RoundedPictureBox();
+            btnExportarLibrosASC = new VirtualBook.Controls.RJButton();
             borderedPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvShowBooks).BeginInit();
             borderedPanel2.SuspendLayout();
@@ -135,6 +136,7 @@
             borderedPanel1.BorderColor = Color.Black;
             borderedPanel1.BorderRadius = 20;
             borderedPanel1.BorderSize = 1;
+            borderedPanel1.Controls.Add(btnExportarLibrosASC);
             borderedPanel1.Controls.Add(BtnEliminar);
             borderedPanel1.Controls.Add(dgvShowBooks);
             borderedPanel1.Controls.Add(borderedPanel2);
@@ -174,37 +176,37 @@
             dgvShowBooks.BackgroundColor = Color.White;
             dgvShowBooks.BorderStyle = BorderStyle.None;
             dgvShowBooks.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = Color.FromArgb(58, 177, 155);
-            dataGridViewCellStyle4.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle4.ForeColor = Color.White;
-            dataGridViewCellStyle4.SelectionBackColor = Color.Gray;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dgvShowBooks.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(58, 177, 155);
+            dataGridViewCellStyle1.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = Color.Gray;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvShowBooks.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvShowBooks.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.Window;
-            dataGridViewCellStyle5.Font = new Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = Color.WhiteSmoke;
-            dataGridViewCellStyle5.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
-            dgvShowBooks.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = Color.WhiteSmoke;
+            dataGridViewCellStyle2.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            dgvShowBooks.DefaultCellStyle = dataGridViewCellStyle2;
             dgvShowBooks.EnableHeadersVisualStyles = false;
             dgvShowBooks.GridColor = Color.White;
             dgvShowBooks.Location = new Point(23, 127);
             dgvShowBooks.Name = "dgvShowBooks";
             dgvShowBooks.ReadOnly = true;
             dgvShowBooks.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = SystemColors.Control;
-            dataGridViewCellStyle6.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = Color.Gray;
-            dataGridViewCellStyle6.SelectionForeColor = Color.White;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            dgvShowBooks.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = Color.Gray;
+            dataGridViewCellStyle3.SelectionForeColor = Color.White;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dgvShowBooks.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dgvShowBooks.RowHeadersVisible = false;
             dgvShowBooks.ScrollBars = ScrollBars.None;
             dgvShowBooks.Size = new Size(885, 337);
@@ -364,6 +366,28 @@
             roundedPictureBox6.TabIndex = 37;
             roundedPictureBox6.TabStop = false;
             // 
+            // btnExportarLibrosASC
+            // 
+            btnExportarLibrosASC.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnExportarLibrosASC.BackColor = Color.FromArgb(58, 177, 155);
+            btnExportarLibrosASC.BackgroundColor = Color.FromArgb(58, 177, 155);
+            btnExportarLibrosASC.BorderColor = Color.PaleVioletRed;
+            btnExportarLibrosASC.BorderRadius = 5;
+            btnExportarLibrosASC.BorderSize = 0;
+            btnExportarLibrosASC.Cursor = Cursors.Hand;
+            btnExportarLibrosASC.FlatAppearance.BorderSize = 0;
+            btnExportarLibrosASC.FlatStyle = FlatStyle.Flat;
+            btnExportarLibrosASC.ForeColor = Color.White;
+            btnExportarLibrosASC.Location = new Point(463, 22);
+            btnExportarLibrosASC.Name = "btnExportarLibrosASC";
+            btnExportarLibrosASC.Size = new Size(140, 30);
+            btnExportarLibrosASC.TabIndex = 49;
+            btnExportarLibrosASC.Tag = "NoCambiarTema";
+            btnExportarLibrosASC.Text = "Exportar";
+            btnExportarLibrosASC.TextColor = Color.White;
+            btnExportarLibrosASC.UseVisualStyleBackColor = false;
+            btnExportarLibrosASC.Click += btnExportarLibrosASC_Click;
+            // 
             // AdminDashboardForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -425,5 +449,6 @@
         private Controls.RoundedPictureBox roundedPictureBox5;
         private Controls.RoundedPictureBox roundedPictureBox6;
         private Controls.RJButton BtnEliminar;
+        private Controls.RJButton btnExportarLibrosASC;
     }
 }

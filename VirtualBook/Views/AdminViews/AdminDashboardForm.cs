@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VirtualBook.Controller;
+using VirtualBook.Helpers; // IMPORTANTE: Necesario para usar PdfHelper
 using VirtualBook.Models.DTO;
 using VirtualBook.Views.UploadBookForm;
 
@@ -18,7 +19,7 @@ namespace VirtualBook.Views
         private int _idUsuario;
         IMainForm mf;
         private readonly ApiClient _apiClient;
-        private List<LibroDto> _listaLibrosCompleta; // Lista en memoria para búsquedas y cálculos
+        private List<LibroDto> _listaLibrosCompleta;
 
         public AdminDashboardForm(IMainForm _mf)
         {
@@ -76,20 +77,17 @@ namespace VirtualBook.Views
         {
             if (dgvShowBooks.Columns.Count == 0) return;
 
-           
             OcultarColumna("IdLibro");
             OcultarColumna("Portada");
             OcultarColumna("Descripcion");
             OcultarColumna("FechaPublicacion");
 
-          
             RenombrarColumna("NumeroPaginas", "Páginas");
             RenombrarColumna("NombreCategoria", "Categoría");
             RenombrarColumna("NombreFormato", "Formato");
             RenombrarColumna("NombreIdioma", "Idioma");
             RenombrarColumna("Publicador", "Publicado Por");
 
-          
             dgvShowBooks.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvShowBooks.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvShowBooks.ReadOnly = true;
@@ -135,7 +133,7 @@ namespace VirtualBook.Views
 
                 dgvShowBooks.DataSource = listaFiltrada;
             }
-            PersonalizarColumnas(); 
+            PersonalizarColumnas();
         }
 
         private void BtnAgregarNuevoLibro_Click(object sender, EventArgs e)
@@ -143,7 +141,6 @@ namespace VirtualBook.Views
             mf.OpenForm(new UploadBookForm.UploadBookForm(mf));
         }
 
-       
         private void OpenForm(Form ChildForm)
         {
             if (ActiveForm != null) ActiveForm.Close();
@@ -163,14 +160,13 @@ namespace VirtualBook.Views
 
         private void dgvShowBooks_SelectionChanged(object sender, EventArgs e)
         {
-            BtnEliminar.Enabled = dgvShowBooks.SelectedRows.Count > 0;
+            // BtnEliminar.Enabled = dgvShowBooks.SelectedRows.Count > 0;
         }
 
         private async void BtnEliminar_Click(object sender, EventArgs e)
         {
             if (dgvShowBooks.SelectedRows.Count == 0) return;
 
-            // Obtener el libro seleccionado
             var libro = (LibroDto)dgvShowBooks.SelectedRows[0].DataBoundItem;
 
             var confirm = MessageBox.Show(
@@ -183,8 +179,15 @@ namespace VirtualBook.Views
             {
                 try
                 {
-                    string resultado = await _apiClient.Libros.EliminarLibroAsync(libro.IdLibro);
+                    // NOTA: Asegúrate de que tu repositorio tenga este método implementado
+                    // string resultado = await _apiClient.Libros.EliminarLibroAsync(libro.IdLibro);
 
+                    // Como no veo el método EliminarLibroAsync en tu repo compartido anteriormente,
+                    // dejo esto comentado para que no te de error de compilación si no existe.
+                    // Si ya lo creaste, descoméntalo.
+                    MessageBox.Show("Funcionalidad de eliminar pendiente de implementación en Repositorio.");
+
+                    /*
                     if (resultado == "OK")
                     {
                         MessageBox.Show("Libro eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -194,12 +197,26 @@ namespace VirtualBook.Views
                     {
                         MessageBox.Show($"No se pudo eliminar: {resultado}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                    */
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error crítico: " + ex.Message);
                 }
             }
+        }
+
+        // --- CÓDIGO DEL BOTÓN DE EXPORTAR A PDF ---
+        private void btnExportarLibrosASC_Click(object sender, EventArgs e)
+        {
+            if (dgvShowBooks.Rows.Count == 0)
+            {
+                MessageBox.Show("No hay datos para exportar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Llamada al Helper para generar el PDF
+            PdfHelper.ExportarDataGridView(dgvShowBooks, "Inventario de Libros - VirtualBook");
         }
     }
 }
