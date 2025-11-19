@@ -1,5 +1,7 @@
 ﻿using VirtualBook.Controller;
 using VirtualBook.Views;
+using VirtualBook.Views.AdminViews;
+using VirtualBook.Views.DocentesViews;
 
 namespace VirtualBook
 {
@@ -15,28 +17,49 @@ namespace VirtualBook
             if (!string.IsNullOrEmpty(tokenGuardado))
             {
                 ApiClient.Instance.SetAuthToken(tokenGuardado);
-                bool esValido = ValidarTokenApi();
 
-                if(esValido)
+                int? idRol = ObtenerRolDesdeApi();
+
+                if (idRol.HasValue)
                 {
-                    Application.Run(new MainForm());
-                    return;
+                    switch (idRol.Value)
+                    {
+                        case 1:
+                            Application.Run(new AdministradorMainForm()); 
+                            return;
+
+                        case 2: 
+                            Application.Run(new DocentesMainForm());
+                            return;
+
+                        case 3: 
+                            Application.Run(new MainForm());
+                            return;
+
+                        default:
+                            break;
+                    }
                 }
             }
 
             Application.Run(new LoginForm());
         }
 
-        private static bool ValidarTokenApi()
+        private static int? ObtenerRolDesdeApi()
         {
             try
             {
                 var perfil = ApiClient.Instance.LoginUsers.GetMyProfileAsync().GetAwaiter().GetResult();
-                return perfil != null;
+
+                if (perfil != null)
+                {
+                    return perfil.IdRol; 
+                }
+                return null;
             }
             catch
             {
-                return false;
+                return null;
             }
         }
     }

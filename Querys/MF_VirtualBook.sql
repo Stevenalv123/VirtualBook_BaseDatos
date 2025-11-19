@@ -693,4 +693,3 @@ GRANT EXECUTE ON sp_VerificarFavorito TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_ObtenerReporteDescargas TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_PublicarReseña TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_ObtenerResenasPorLibro TO virtualbooksystemUser;
-go;
