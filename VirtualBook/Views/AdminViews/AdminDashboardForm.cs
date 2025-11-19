@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VirtualBook.Controller;
-using VirtualBook.Helpers; // IMPORTANTE: Necesario para usar PdfHelper
+using VirtualBook.Helpers;
 using VirtualBook.Models.DTO;
 using VirtualBook.Views.UploadBookForm;
 
@@ -160,7 +160,7 @@ namespace VirtualBook.Views
 
         private void dgvShowBooks_SelectionChanged(object sender, EventArgs e)
         {
-            // BtnEliminar.Enabled = dgvShowBooks.SelectedRows.Count > 0;
+            
         }
 
         private async void BtnEliminar_Click(object sender, EventArgs e)
@@ -179,25 +179,9 @@ namespace VirtualBook.Views
             {
                 try
                 {
-                    // NOTA: Asegúrate de que tu repositorio tenga este método implementado
-                    // string resultado = await _apiClient.Libros.EliminarLibroAsync(libro.IdLibro);
-
-                    // Como no veo el método EliminarLibroAsync en tu repo compartido anteriormente,
-                    // dejo esto comentado para que no te de error de compilación si no existe.
-                    // Si ya lo creaste, descoméntalo.
+                    
                     MessageBox.Show("Funcionalidad de eliminar pendiente de implementación en Repositorio.");
 
-                    /*
-                    if (resultado == "OK")
-                    {
-                        MessageBox.Show("Libro eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        await CargarDatosDashboard();
-                    }
-                    else
-                    {
-                        MessageBox.Show($"No se pudo eliminar: {resultado}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    */
                 }
                 catch (Exception ex)
                 {
@@ -206,7 +190,7 @@ namespace VirtualBook.Views
             }
         }
 
-        // --- CÓDIGO DEL BOTÓN DE EXPORTAR A PDF ---
+
         private void btnExportarLibrosASC_Click(object sender, EventArgs e)
         {
             if (dgvShowBooks.Rows.Count == 0)
@@ -215,7 +199,7 @@ namespace VirtualBook.Views
                 return;
             }
 
-            // Llamada al Helper para generar el PDF
+     
             PdfHelper.ExportarDataGridView(dgvShowBooks, "Inventario de Libros - VirtualBook");
         }
     }
