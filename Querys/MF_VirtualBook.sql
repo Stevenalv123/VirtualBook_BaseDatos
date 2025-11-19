@@ -667,6 +667,41 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE sp_ObtenerLibrosPorUsuario
+    @IdPublicador INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        l.IdLibro,
+        l.Titulo,
+        l.Portada,
+        l.Descripcion,
+        l.NumeroPaginas,
+        l.FechaPublicacion,
+        l.Descargas,
+        c.NombreCategoria,
+        f.NombreFormato,
+        i.NombreIdioma,
+        p.Nombres + ' ' + p.Apellidos AS Publicador,
+        (SELECT STRING_AGG(a.NombreAutor, ', ')
+         FROM Autor a
+         INNER JOIN Libro_Autor la ON a.IdAutor = la.IdAutor
+         WHERE la.IdLibro = l.IdLibro) AS Autores
+    FROM
+        Libro l
+    LEFT JOIN Categoria c ON l.IdCategoria = c.IdCategoria
+    LEFT JOIN Formato f ON l.IdFormato = f.IdFormato
+    LEFT JOIN Idioma i ON l.IdIdioma = i.IdIdioma
+    LEFT JOIN Usuario p ON l.IdPublicador = p.IdUsuario
+    WHERE
+        l.IdPublicador = @IdPublicador
+    ORDER BY
+        l.FechaPublicacion DESC;
+END;
+GO
+
 grant execute on sp_ValidarUsuario to virtualbooksystemUser;
 grant execute on sp_RegistrarUsuario to virtualbooksystemUser;
 grant execute on sp_ObtenerUsuarioPorCorreo to virtualbooksystemUser;
@@ -693,3 +728,4 @@ GRANT EXECUTE ON sp_VerificarFavorito TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_ObtenerReporteDescargas TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_PublicarReseña TO virtualbooksystemUser;
 GRANT EXECUTE ON sp_ObtenerResenasPorLibro TO virtualbooksystemUser;
+GRANT EXECUTE ON sp_ObtenerLibrosPorUsuario TO virtualbooksystemUser;

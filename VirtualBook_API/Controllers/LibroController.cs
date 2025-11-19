@@ -24,7 +24,7 @@ namespace VirtualBook_API.Controllers
 
         // GET: api/Libro
         [HttpGet]
-        // [Authorize] // Descomentar si solo usuarios logueados pueden ver libros
+        [Authorize] // Descomentar si solo usuarios logueados pueden ver libros
         public async Task<IActionResult> GetLibros()
         {
             var libros = new List<LibroDto>();
@@ -149,7 +149,6 @@ namespace VirtualBook_API.Controllers
         {
             try
             {
-                // 1. Obtenemos el ID del usuario desde el Token usando el método helper que ya creamos antes
                 var idUsuario = await GetIdUsuarioActualAsync();
 
                 if (idUsuario == null) return Unauthorized();
