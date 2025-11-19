@@ -21,7 +21,15 @@
         public const string SP_AgregarFavorito = "sp_AgregarFavorito";
         public const string SP_EliminarFavorito = "sp_EliminarFavorito";
         public const string SP_VerificarFavorito = "sp_VerificarFavorito";
-        public const string SP_Actualizar_Descargas = "sp_Actualizar_Descarga";
-        public const string SP_CrearAutor = "sp_CrearAutor";
+        public const string SP_ObtenerFavoritosPorUsuario = "sp_ObtenerFavoritosPorUsuario";
+        public const string SP_Actualizar_Descargas = "sp_Actualizar_Descargas";
+        public const string SP_ObtenerReporteDescargas = "sp_ObtenerReporteDescargas";
+        public const string SP_PublicarReseña = "sp_PublicarReseña";
+        public const string SP_ObtenerResenasPorLibro = "sp_ObtenerResenasPorLibro";
+
+        public const string SP_RegistrarAutor = "sp_RegistrarAutor";
+        public const string SP_ObtenerLibrosPorUsuario = "sp_ObtenerLibrosPorUsuario";
+
+
     }
 }

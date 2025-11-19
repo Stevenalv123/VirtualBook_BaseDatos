@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO; // Added for File access
+using System.Net.Http; // Added for MultipartFormDataContent
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
 using VirtualBook.Models.DTO;
 using VirtualBook.Models.Repository.Interfaces;
@@ -84,7 +84,6 @@ namespace VirtualBook.Models.Repository
         {
             try
             {
-                // Llama al nuevo endpoint: api/Libro/{id}
                 var response = await _httpClient.GetAsync($"Libro/{idLibro}");
 
                 if (response.IsSuccessStatusCode)
@@ -111,6 +110,105 @@ namespace VirtualBook.Models.Repository
             else
             {
                 throw new Exception("No se pudo descargar el archivo.");
+            }
+        }
+
+        public async Task<List<ReporteDescargaDto>> GetReporteDescargasAsync()
+        {
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<List<ReporteDescargaDto>>("Libro/reporte-descargas")
+                       ?? new List<ReporteDescargaDto>();
+            }
+            catch
+            {
+                return new List<ReporteDescargaDto>();
+            }
+        }
+
+        public async Task<bool> AgregarFavoritoAsync(int idLibro)
+        {
+            var response = await _httpClient.PostAsync($"Libro/favorito?idLibro={idLibro}", null);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> EliminarFavoritoAsync(int idLibro)
+        {
+            var response = await _httpClient.DeleteAsync($"Libro/favorito?idLibro={idLibro}");
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> VerificarFavoritoAsync(int idLibro)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"Libro/favorito/check?idLibro={idLibro}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    return bool.Parse(result);
+                }
+                return false;
+            }
+            catch { return false; }
+        }
+
+        public async Task<List<LibroDto>> GetFavoritosAsync()
+        {
+            return await _httpClient.GetFromJsonAsync<List<LibroDto>>("Libro/favoritos") ?? new List<LibroDto>();
+        }
+
+        public async Task<bool> PublicarReseñaAsync(int idLibro, string comentario)
+        {
+            var request = new ReseñaUploadRequest
+            {
+                IdLibro = idLibro,
+                Comentario = comentario
+            };
+
+            var response = await _httpClient.PostAsJsonAsync("Libro/reseña", request);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<List<ResenaDTO>> GetReseñasPorLibroAsync(int idLibro)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"Libro/resenas/{idLibro}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    // Log the error or handle it as needed
+                    // throw new Exception($"Error API: {response.StatusCode} - {response.ReasonPhrase}");
+                    return new List<ResenaDTO>();
+                }
+
+                return await response.Content.ReadFromJsonAsync<List<ResenaDTO>>() ?? new List<ResenaDTO>();
+            }
+            catch (Exception ex)
+            {
+                // MessageBox.Show(ex.Message); // Requires System.Windows.Forms reference if used here
+                return new List<ResenaDTO>();
+            }
+        }
+
+        // --- IMPLEMENTACIÓN FALTANTE ---
+        public async Task<List<LibroDto>> GetMisLibrosAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync("Libro/mis-libros");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var libros = await response.Content.ReadFromJsonAsync<List<LibroDto>>();
+                    return libros ?? new List<LibroDto>();
+                }
+                return new List<LibroDto>();
+            }
+            catch
+            {
+                return new List<LibroDto>();
             }
         }
     }

@@ -33,6 +33,9 @@
             panel1 = new Panel();
             panel2 = new Panel();
             PcbCargando = new PictureBox();
+            btnEnviarResena = new VirtualBook.Controls.RJButton();
+            label1 = new Label();
+            txtReseña = new RichTextBox();
             PcbFotoPerfilPublicador = new VirtualBook.Controls.RoundedPictureBox();
             BtnSeguir = new VirtualBook.Controls.RJButton();
             LblNumeroPaginas = new Label();
@@ -58,6 +61,8 @@
             BtnAgregarFavoritos = new FontAwesome.Sharp.Material.MaterialButton();
             BtnLeer = new Button();
             PcbPortada = new PictureBox();
+            label8 = new Label();
+            flpReseñas = new FlowLayoutPanel();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)PcbCargando).BeginInit();
@@ -97,6 +102,9 @@
             // panel2
             // 
             panel2.Controls.Add(PcbCargando);
+            panel2.Controls.Add(btnEnviarResena);
+            panel2.Controls.Add(label1);
+            panel2.Controls.Add(txtReseña);
             panel2.Controls.Add(PcbFotoPerfilPublicador);
             panel2.Controls.Add(BtnSeguir);
             panel2.Controls.Add(LblNumeroPaginas);
@@ -126,7 +134,7 @@
             panel2.Location = new Point(0, 59);
             panel2.Name = "panel2";
             panel2.Padding = new Padding(50);
-            panel2.Size = new Size(1094, 521);
+            panel2.Size = new Size(1094, 642);
             panel2.TabIndex = 2;
             // 
             // PcbCargando
@@ -134,10 +142,51 @@
             PcbCargando.Image = Properties.Resources.cargandoLibro;
             PcbCargando.Location = new Point(23, 18);
             PcbCargando.Name = "PcbCargando";
-            PcbCargando.Size = new Size(1042, 484);
+            PcbCargando.Size = new Size(1042, 443);
             PcbCargando.SizeMode = PictureBoxSizeMode.CenterImage;
             PcbCargando.TabIndex = 25;
             PcbCargando.TabStop = false;
+            // 
+            // btnEnviarResena
+            // 
+            btnEnviarResena.BackColor = Color.FromArgb(45, 154, 134);
+            btnEnviarResena.BackgroundColor = Color.FromArgb(45, 154, 134);
+            btnEnviarResena.BorderColor = Color.PaleVioletRed;
+            btnEnviarResena.BorderRadius = 5;
+            btnEnviarResena.BorderSize = 0;
+            btnEnviarResena.Cursor = Cursors.Hand;
+            btnEnviarResena.FlatAppearance.BorderSize = 0;
+            btnEnviarResena.FlatStyle = FlatStyle.Flat;
+            btnEnviarResena.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnEnviarResena.ForeColor = Color.White;
+            btnEnviarResena.Location = new Point(641, 548);
+            btnEnviarResena.Name = "btnEnviarResena";
+            btnEnviarResena.Size = new Size(94, 28);
+            btnEnviarResena.TabIndex = 28;
+            btnEnviarResena.Text = "Enviar";
+            btnEnviarResena.TextColor = Color.White;
+            btnEnviarResena.UseVisualStyleBackColor = false;
+            btnEnviarResena.Click += btnEnviarResena_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.BackColor = Color.White;
+            label1.Font = new Font("Arial", 12F);
+            label1.ForeColor = Color.FromArgb(113, 113, 122);
+            label1.Location = new Point(357, 527);
+            label1.Name = "label1";
+            label1.Size = new Size(114, 18);
+            label1.TabIndex = 27;
+            label1.Text = "Escribir reseña";
+            // 
+            // txtReseña
+            // 
+            txtReseña.Location = new Point(357, 548);
+            txtReseña.Name = "txtReseña";
+            txtReseña.Size = new Size(278, 66);
+            txtReseña.TabIndex = 26;
+            txtReseña.Text = "";
             // 
             // PcbFotoPerfilPublicador
             // 
@@ -451,13 +500,32 @@
             PcbPortada.TabIndex = 0;
             PcbPortada.TabStop = false;
             // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Arial", 14F, FontStyle.Bold);
+            label8.Location = new Point(32, 716);
+            label8.Name = "label8";
+            label8.Size = new Size(170, 22);
+            label8.TabIndex = 15;
+            label8.Text = "Reseñas del libro";
+            // 
+            // flpReseñas
+            // 
+            flpReseñas.Location = new Point(45, 755);
+            flpReseñas.Name = "flpReseñas";
+            flpReseñas.Size = new Size(1020, 291);
+            flpReseñas.TabIndex = 16;
+            // 
             // BookInfoForms
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             BackColor = Color.White;
-            ClientSize = new Size(1094, 675);
+            ClientSize = new Size(1094, 1100);
+            Controls.Add(flpReseñas);
+            Controls.Add(label8);
             Controls.Add(panel2);
             Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.None;
@@ -471,6 +539,7 @@
             ((System.ComponentModel.ISupportInitialize)iconPictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)PcbPortada).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -504,5 +573,10 @@
         private Controls.RoundedPictureBox PcbFotoPerfilPublicador;
         private Controls.RJButton BtnSeguir;
         private PictureBox PcbCargando;
+        private Label label1;
+        private RichTextBox txtReseña;
+        private Controls.RJButton btnEnviarResena;
+        private Label label8;
+        private FlowLayoutPanel flpReseñas;
     }
 }

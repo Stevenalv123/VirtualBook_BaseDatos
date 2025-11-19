@@ -69,16 +69,31 @@ namespace VirtualBook.Views
                         FechaNacimiento = dtmfechanacimiento.Value,
                         Genero = cbogenero.SelectedItem?.ToString() ?? string.Empty
                     };
-                    bool response = await _apiClient.LoginUsers.RegistrarUsuario(nuevoUsuario);
+                    bool registroExitoso = await _apiClient.LoginUsers.RegistrarUsuario(nuevoUsuario);
 
-                    if (response)
+                    if (registroExitoso)
                     {
-                        CargarFormulario(idRol);
-                        this.Close();
+                        var loginResponse = await _apiClient.LoginUsers.ValidateCredentialsAsync(correo, contrasena);
+
+                        if (!string.IsNullOrEmpty(loginResponse.Token))
+                        {
+                            MessageBox.Show($"¡Bienvenido {loginResponse.Nombres}!", "Registro Exitoso");
+
+                            _apiClient.SetAuthToken(loginResponse.Token);
+
+                            CargarFormulario(loginResponse.IdRol, loginResponse.IdUsuario);
+
+                            this.Close();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Registro exitoso, pero falló el inicio de sesión automático. Por favor inicie sesión manualmente.");
+                            this.Close();
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("Error al registrar el usuario.", "Error de registro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Error al registrar el usuario.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch (Exception ex)
@@ -141,16 +156,16 @@ namespace VirtualBook.Views
             }
         }
 
-        private void CargarFormulario(int idRol)
+        private void CargarFormulario(int idRol, int idUsuario)
         {
             switch (idRol)
             {
                 case 1:
-                    var adminForm = new AdministradorMainForm();
+                    var adminForm = new AdministradorMainForm(idUsuario);
                     adminForm.Show();
                     break;
                 case 2:
-                    var docenForm = new DocentesMainForm();
+                    var docenForm = new DocentesMainForm(idUsuario);
                     docenForm.Show();
                     break;
                 case 3:

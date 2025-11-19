@@ -80,7 +80,7 @@
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(289, 778);
+            panel1.Size = new Size(289, 749);
             panel1.TabIndex = 1;
             panel1.Tag = "NoCambiarTema";
             // 
@@ -91,7 +91,7 @@
             panel2.Controls.Add(LblCorreoUsuario);
             panel2.Controls.Add(LblNombreUsuario);
             panel2.Controls.Add(PcbFotoUsuario);
-            panel2.Location = new Point(21, 718);
+            panel2.Location = new Point(21, 689);
             panel2.Name = "panel2";
             panel2.Size = new Size(258, 57);
             panel2.TabIndex = 3;
@@ -143,7 +143,7 @@
             // panel7
             // 
             panel7.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            panel7.Location = new Point(0, 1383);
+            panel7.Location = new Point(0, 1354);
             panel7.Name = "panel7";
             panel7.Size = new Size(289, 73);
             panel7.TabIndex = 2;
@@ -492,14 +492,14 @@
             PanelCentral.Dock = DockStyle.Fill;
             PanelCentral.Location = new Point(289, 74);
             PanelCentral.Name = "PanelCentral";
-            PanelCentral.Size = new Size(970, 704);
+            PanelCentral.Size = new Size(970, 675);
             PanelCentral.TabIndex = 5;
             // 
             // DocentesMainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1259, 778);
+            ClientSize = new Size(1259, 749);
             Controls.Add(PanelCentral);
             Controls.Add(PanelTop);
             Controls.Add(panel1);
@@ -545,7 +545,6 @@
         private Controls.BorderedPanel borderedPanel1;
         private TextBox TxtBucarLibros;
         private FontAwesome.Sharp.IconPictureBox iconPictureBox1;
-        private Panel PanelCentral;
         private FontAwesome.Sharp.IconButton BtnCambiarTema;
         private Controls.RJButton rjButton1;
         private Controls.RJButton rjButton2;
@@ -554,5 +553,6 @@
         private Controls.RoundedPictureBox PcbFotoUsuario;
         private Label LblCorreoUsuario;
         private PictureBox PcbCargandoUser;
+        private Panel PanelCentral;
     }
 }
