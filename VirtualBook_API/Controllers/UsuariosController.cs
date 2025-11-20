@@ -42,7 +42,6 @@ namespace VirtualBook_API.Controllers
                         Correo_Electronico = reader["Correo_Electronico"].ToString(),
                         NombreRol = reader["NombreRol"].ToString(),
                         FotoPerfil = reader["FotoPerfil"] == DBNull.Value ? null : reader["FotoPerfil"].ToString(),
-                        // Manejo seguro de la columna Estado
                         Estado = reader["Estado"] != DBNull.Value && (bool)reader["Estado"]
                     });
                 }
@@ -55,7 +54,6 @@ namespace VirtualBook_API.Controllers
             }
         }
 
-        // NUEVO ENDPOINT: Cambiar Estado
         [HttpPut("estado")]
         public async Task<IActionResult> CambiarEstado([FromQuery] int idUsuario, [FromQuery] bool nuevoEstado)
         {

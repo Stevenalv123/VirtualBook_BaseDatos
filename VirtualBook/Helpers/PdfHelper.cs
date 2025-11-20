@@ -18,7 +18,6 @@ namespace VirtualBook.Helpers
     {
         public static void ExportarDataGridView(DataGridView dgv, string titulo)
         {
-            // Validaciones rápidas
             if (dgv == null)
             {
                 MessageBox.Show("DataGridView es nulo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -37,7 +36,6 @@ namespace VirtualBook.Helpers
                 FileName = $"{titulo}_{DateTime.Now:yyyyMMdd}.pdf"
             })
             {
-                // Mostrar con owner si hay forms abiertos (mejora UX)
                 DialogResult dr = sfd.ShowDialog(GetActiveWindowOwner());
                 if (dr != DialogResult.OK) return;
 
@@ -50,7 +48,6 @@ namespace VirtualBook.Helpers
                         return;
                     }
 
-                    // Intentar crear fuentes estándar, si falla dejamos null y seguimos
                     PdfFont fuenteNegrita = null;
                     PdfFont fuenteNormal = null;
                     try
@@ -60,12 +57,10 @@ namespace VirtualBook.Helpers
                     }
                     catch
                     {
-                        // En algunos entornos esto puede fallar; no rompemos la exportación.
                         fuenteNegrita = null;
                         fuenteNormal = null;
                     }
 
-                    // Usamos FileStream con Create para detectar problemas de permisos/lock
                     using (FileStream fs = new FileStream(sfd.FileName, FileMode.Create, FileAccess.Write, FileShare.Read))
                     using (PdfWriter writer = new PdfWriter(fs))
                     using (PdfDocument pdf = new PdfDocument(writer))
@@ -73,7 +68,6 @@ namespace VirtualBook.Helpers
                     {
                         documento.SetMargins(20, 20, 20, 20);
 
-                        // Título
                         Paragraph header = new Paragraph(titulo)
                             .SetFontSize(20)
                             .SetTextAlignment(TextAlignment.CENTER);
@@ -83,10 +77,8 @@ namespace VirtualBook.Helpers
                         documento.Add(header);
                         documento.Add(new Paragraph("\n"));
 
-                        // Tabla
                         Table table = new Table(UnitValue.CreatePercentArray(columnasVisibles.Count)).UseAllAvailableWidth();
 
-                        // Encabezados
                         foreach (var columna in columnasVisibles)
                         {
                             Paragraph pHeader = new Paragraph(columna.HeaderText ?? string.Empty)
@@ -103,7 +95,6 @@ namespace VirtualBook.Helpers
                             table.AddHeaderCell(headerCell);
                         }
 
-                        // Filas de datos (evitar IsNewRow y celdas nulas)
                         foreach (DataGridViewRow row in dgv.Rows)
                         {
                             if (row == null) continue;
@@ -120,12 +111,10 @@ namespace VirtualBook.Helpers
                         }
 
                         documento.Add(table);
-                        // documento y pdf se cierran automáticamente al salir del using
                     }
 
                     MessageBox.Show("Reporte generado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Intentar abrir el PDF (no falla la app si no puede)
                     try
                     {
                         ProcessStartInfo psi = new ProcessStartInfo
@@ -135,11 +124,10 @@ namespace VirtualBook.Helpers
                         };
                         Process.Start(psi);
                     }
-                    catch { /* ignoramos errores al abrir */ }
+                    catch { }
                 }
                 catch (UnauthorizedAccessException uex)
                 {
-                    // Permisos/archivo bloqueado
                     MessageBox.Show($"No se puede escribir el archivo (permiso denegado o archivo en uso):\n{uex.Message}\n\nPath: {sfd.FileName}",
                                     "Error de acceso", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -150,7 +138,6 @@ namespace VirtualBook.Helpers
                 }
                 catch (Exception ex)
                 {
-                    // Mensaje con stacktrace para debugging
                     MessageBox.Show($"Error al exportar:\n{ex.Message}\n\nDetalle técnico:\n{ex.ToString()}",
                                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
@@ -163,7 +150,6 @@ namespace VirtualBook.Helpers
             {
                 if (row == null || columna == null) return string.Empty;
 
-                // Primera opción: usar el índice de la columna (más seguro)
                 int idx = columna.Index;
                 if (idx >= 0 && idx < row.Cells.Count)
                 {
@@ -171,7 +157,6 @@ namespace VirtualBook.Helpers
                     return v?.ToString() ?? string.Empty;
                 }
 
-                // Fallback: buscar la celda por OwningColumn.Name (si por alguna razón el índice no coincide)
                 if (!string.IsNullOrWhiteSpace(columna.Name))
                 {
                     foreach (DataGridViewCell cell in row.Cells)
@@ -190,8 +175,6 @@ namespace VirtualBook.Helpers
                 return string.Empty;
             }
         }
-
-        // Obtener owner para ShowDialog
         private static IWin32Window GetActiveWindowOwner()
         {
             if (Application.OpenForms.Count > 0)

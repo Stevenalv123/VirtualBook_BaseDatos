@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-public static class TemaManager
+﻿public static class TemaManager
 {
     public static bool ModoOscuroActivo { get; private set; } = false;
 
@@ -54,7 +48,7 @@ public static class TemaManager
                 dgv.CellBorderStyle = DataGridViewCellBorderStyle.None;
             }
 
-            return; // Ya se aplicó el tema, no hace falta recorrer hijos del DataGridView
+            return; 
         }
 
         if (oscuro)

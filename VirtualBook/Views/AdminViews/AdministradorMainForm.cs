@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using VirtualBook.Controller;
-//using VirtualBook.DTOs;
+﻿using VirtualBook.Controller;
 
 namespace VirtualBook.Views.AdminViews
 {

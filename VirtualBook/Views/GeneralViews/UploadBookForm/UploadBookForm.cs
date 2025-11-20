@@ -31,13 +31,11 @@ namespace VirtualBook.Views.UploadBookForm
             _ = CargarDatosFormulario();
         }
 
-        //DragEnter
         private void ArrastrarArchivo(object sender, DragEventArgs e)
         {
             string[] archivos = (string[])e.Data.GetData(DataFormats.FileDrop);
             string extension = Path.GetExtension(archivos[0]).ToLower();
 
-            // Verifica si es una imagen con extensión válida
             if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".bmp" || extension == ".gif")
             {
                 e.Effect = DragDropEffects.Copy;
@@ -49,7 +47,6 @@ namespace VirtualBook.Views.UploadBookForm
             }
         }
 
-        //DragDrop
         private void SoltarArchivo(object sender, DragEventArgs e)
         {
             string[] archivos = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -109,7 +106,6 @@ namespace VirtualBook.Views.UploadBookForm
             }
         }
 
-        //Dejar de soltar
         private void pcboUploadCover_DragLeave(object sender, EventArgs e)
         {
             lblSoltarAqui.Visible = false;
@@ -126,7 +122,7 @@ namespace VirtualBook.Views.UploadBookForm
             lblSuelteAqui.Visible = false;
 
             PcbLibroPortada.Controls.Add(lblSuelteAqui);
-            lblSuelteAqui.BringToFront(); // Asegura que el texto esté arriba
+            lblSuelteAqui.BringToFront(); 
         }
         private void TxtAutor_Leave(object sender, EventArgs e)
         {
@@ -214,9 +210,7 @@ namespace VirtualBook.Views.UploadBookForm
 
             try
             {
-                //PcbCargando.Visible = true;
                 bool exito = await _apiClient.Libros.SubirLibroAsync(modelo);
-                //PcbCargando.Visible = false;
 
                 if (exito)
                 {
@@ -230,7 +224,6 @@ namespace VirtualBook.Views.UploadBookForm
             }
             catch (Exception ex)
             {
-                //PcbCargando.Visible = false;
                 MessageBox.Show($"Error fatal al conectar con la API: {ex.Message}", "Error de Conexión", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

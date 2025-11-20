@@ -3,8 +3,6 @@ using Microsoft.Data.SqlClient;
 using System.Data;
 using VirtualBook_API.Data;
 using VirtualBook_API.DTO;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
 namespace VirtualBook_API.Controllers
@@ -22,9 +20,8 @@ namespace VirtualBook_API.Controllers
             _env = env;
         }
 
-        // GET: api/Libro
         [HttpGet]
-        [Authorize] // Descomentar si solo usuarios logueados pueden ver libros
+        [Authorize] 
         public async Task<IActionResult> GetLibros()
         {
             var libros = new List<LibroDto>();
@@ -53,7 +50,7 @@ namespace VirtualBook_API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize] // Proteger el endpoint
+        [Authorize] 
         public async Task<IActionResult> GetLibroDetalle(int id)
         {
             try
@@ -83,9 +80,7 @@ namespace VirtualBook_API.Controllers
                 return StatusCode(500, $"Error interno del servidor: {ex.Message}");
             }
         }
-        // ... imports y clase ...
 
-        // POST: api/Libro/favorito
         [HttpPost("favorito")]
         [Authorize]
         public async Task<IActionResult> AgregarFavorito([FromQuery] int idLibro)
@@ -114,7 +109,6 @@ namespace VirtualBook_API.Controllers
             }
         }
 
-        // DELETE: api/Libro/favorito
         [HttpDelete("favorito")]
         [Authorize]
         public async Task<IActionResult> EliminarFavorito([FromQuery] int idLibro)
@@ -143,7 +137,6 @@ namespace VirtualBook_API.Controllers
             }
         }
 
-        // En LibroController.cs
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrador,Docente")]
@@ -210,7 +203,7 @@ namespace VirtualBook_API.Controllers
 
 
         [HttpGet("mis-libros")]
-        [Authorize] // Requiere token
+        [Authorize]
         public async Task<IActionResult> GetMisLibros()
         {
             try
@@ -244,7 +237,6 @@ namespace VirtualBook_API.Controllers
             }
         }
 
-        // GET: api/Libro/favorito/check
         [HttpGet("favorito/check")]
         [Authorize]
         public async Task<IActionResult> VerificarFavorito([FromQuery] int idLibro)
@@ -263,7 +255,7 @@ namespace VirtualBook_API.Controllers
                 command.Parameters.AddWithValue("@IdLibro", idLibro);
 
                 await connection.OpenAsync();
-                var result = await command.ExecuteScalarAsync(); // Devuelve true/false
+                var result = await command.ExecuteScalarAsync(); 
 
                 return Ok(result);
             }
@@ -297,7 +289,6 @@ namespace VirtualBook_API.Controllers
                 pdfPath = await GuardarArchivoAsync(request.ArchivoPDF, "BookPdfs");
                 portadaPath = await GuardarArchivoAsync(request.Portada, "BookCovers");
 
-                // Aquí se ejectura el SP para insertar el libro en la base de datos
                 await using var connection = _dbContext.GetConnection();
                 var command = new SqlCommand(Procedimientos.SP_InsertarLibro, connection)
                 {
@@ -319,7 +310,6 @@ namespace VirtualBook_API.Controllers
 
                 await connection.OpenAsync();
 
-                // Usamos ExecuteScalarAsync porque el SP devuelve el nuevo ID
                 var nuevoIdLibro = await command.ExecuteScalarAsync();
 
                 return Ok(new { message = "Libro subido exitosamente.", idLibro = nuevoIdLibro });
@@ -374,7 +364,7 @@ namespace VirtualBook_API.Controllers
             var userEmail = User.Identity?.Name;
             if (string.IsNullOrEmpty(userEmail))
             {
-                return null; // No hay token o no tiene el claim "Name"
+                return null;
             }
 
             await using var connection = _dbContext.GetConnection();
@@ -392,7 +382,7 @@ namespace VirtualBook_API.Controllers
                 return (int)result;
             }
 
-            return null; // El usuario del token no existe en la DB
+            return null; 
         }
         private LibroDetalleDTO MapReaderToLibroDetalleDto(SqlDataReader reader)
         {

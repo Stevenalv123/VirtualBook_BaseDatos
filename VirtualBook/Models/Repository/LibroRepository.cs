@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO; // Added for File access
-using System.Net.Http; // Added for MultipartFormDataContent
+using System.IO;
+using System.Net.Http; 
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using VirtualBook.Models.DTO;

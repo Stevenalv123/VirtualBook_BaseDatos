@@ -174,7 +174,6 @@ WHERE sid IN (SELECT sid FROM sys.server_principals WHERE name = 'virtualbooksys
 create user virtualbooksystemUser for login virtualbooksystem;
 go
 
---Procedimiento almacenado para validar las credenciales del usuario
 CREATE PROCEDURE sp_ValidarUsuario
 	@CorreoUsuario varchar(100),
 	@Contrasena nvarchar(64)
@@ -201,7 +200,6 @@ BEGIN
 END;
 GO
 
---Procedimiento almacenado para registrar al usuario
 create procedure sp_RegistrarUsuario
 	@Nombres varchar(50),
 	@Apellidos varchar(50),
@@ -221,7 +219,6 @@ begin
 end;
 go
 
---Procedimiento almacenado para encontrar al usuario por email y cargar su informacion
 create procedure sp_ObtenerUsuarioPorCorreo
 	@CorreoUsuario nvarchar(100)
 as
@@ -243,7 +240,6 @@ begin
 end;
 go
 
--- SP para obtener el IdUsuario a partir del email
 CREATE PROCEDURE sp_ObtenerIdUsuarioPorCorreo
     @CorreoUsuario VARCHAR(100)
 AS
@@ -343,16 +339,13 @@ BEGIN
         c.NombreCategoria,
         f.NombreFormato,
         i.NombreIdioma,
-        -- Obtenemos el nombre del publicador (Usuario)
         p.Nombres + ' ' + p.Apellidos AS Publicador,
-        -- Concatenamos todos los autores de este libro
         (SELECT STRING_AGG(a.NombreAutor, ', ')
          FROM Autor a
          INNER JOIN Libro_Autor la ON a.IdAutor = la.IdAutor
          WHERE la.IdLibro = l.IdLibro) AS Autores
     FROM
         Libro l
-    -- Usamos LEFT JOIN para no excluir libros si falta algún dato relacionado
     LEFT JOIN
         Categoria c ON l.IdCategoria = c.IdCategoria
     LEFT JOIN
@@ -366,7 +359,6 @@ BEGIN
 END;
 GO
 
--- Obtener Autores
 CREATE PROCEDURE sp_ObtenerAutores
 AS
 BEGIN
@@ -375,7 +367,6 @@ BEGIN
 END
 GO
 
--- Obtener Categorías
 CREATE PROCEDURE sp_ObtenerCategorias
 AS
 BEGIN
@@ -384,7 +375,6 @@ BEGIN
 END
 GO
 
--- Obtener Formatos
 CREATE PROCEDURE sp_ObtenerFormatos
 AS
 BEGIN
@@ -393,7 +383,6 @@ BEGIN
 END
 GO
 
--- Obtener Idiomas
 CREATE PROCEDURE sp_ObtenerIdiomas
 AS
 BEGIN
@@ -402,7 +391,6 @@ BEGIN
 END
 GO
 
---Actualizar usuario
 CREATE PROCEDURE sp_ActualizarUsuario
     @IdUsuario INT,
     @Nombres NVARCHAR(100),
@@ -807,6 +795,31 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE sp_EliminarLibro
+    @IdLibro INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        DELETE FROM Libro_Autor WHERE IdLibro = @IdLibro;
+        DELETE FROM Favoritos WHERE IdLibro = @IdLibro;
+        DELETE FROM Reseña WHERE IdLibro = @IdLibro;
+        DELETE FROM Notificacion WHERE IdLibro = @IdLibro;
+        
+        DELETE FROM Libro WHERE IdLibro = @IdLibro;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
 grant execute on sp_ValidarUsuario to virtualbooksystemUser;
 grant execute on sp_RegistrarUsuario to virtualbooksystemUser;
 grant execute on sp_ObtenerUsuarioPorCorreo to virtualbooksystemUser;
@@ -839,3 +852,4 @@ GRANT EXECUTE ON SP_VerificarSeguimiento TO virtualbooksystemUser;
 GRANT EXECUTE ON SP_ContarNotificacionesNoLeidas TO virtualbooksystemUser;
 GRANT EXECUTE ON SP_ObtenerMisNotificaciones TO virtualbooksystemUser;
 GRANT EXECUTE ON SP_MarcarNotificacionLeida TO virtualbooksystemUser;
+GRANT EXECUTE ON sp_EliminarLibro TO virtualbooksystemUser;

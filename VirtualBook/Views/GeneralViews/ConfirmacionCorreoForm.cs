@@ -21,11 +21,11 @@
 
             if (e.KeyCode != Keys.Back && current.Text.Length == 1)
             {
-                this.SelectNextControl(current, true, true, true, true); // Salta al siguiente
+                this.SelectNextControl(current, true, true, true, true); 
             }
             else if (e.KeyCode == Keys.Back && current.Text.Length == 0)
             {
-                this.SelectNextControl(current, false, true, true, true); // Regresa al anterior
+                this.SelectNextControl(current, false, true, true, true); 
             }
         }
 
@@ -35,7 +35,7 @@
             LblCodigoEstatus.Visible = true;
             LblCodigoEstatus.Text = "Código reenviado. Por favor, revisa tu correo electrónico.";
             LblCodigoEstatus.ForeColor = Color.Green;
-            LblCodigoEstatus.Location = new Point(((this.Width - LblCodigoEstatus.Width) / 2), 200); // Ajusta la posición según sea necesario
+            LblCodigoEstatus.Location = new Point(((this.Width - LblCodigoEstatus.Width) / 2), 200); 
         }
 
         private string CodigoDigitado()
@@ -61,9 +61,8 @@
                 LblCodigoEstatus.Visible = true;
                 LblCodigoEstatus.Text = "El código ingresado es incorrecto. Por favor, inténtalo de nuevo.";
                 LblCodigoEstatus.ForeColor = Color.Red;
-                LblCodigoEstatus.Location = new Point(((this.Width - LblCodigoEstatus.Width) / 2), 200); // Ajusta la posición según sea necesario
+                LblCodigoEstatus.Location = new Point(((this.Width - LblCodigoEstatus.Width) / 2), 200); 
 
-                // Limpiar los campos de entrada
                 TxtN1.Clear();
                 TxtN2.Clear();
                 TxtN3.Clear();

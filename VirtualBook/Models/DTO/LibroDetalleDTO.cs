@@ -11,7 +11,7 @@ namespace VirtualBook.Models.DTO
         public int IdLibro { get; set; }
         public string? Titulo { get; set; }
         public string? Portada { get; set; }
-        public string? ArchivoPDF { get; set; } // Esta es la RUTA
+        public string? ArchivoPDF { get; set; } 
         public string? Descripcion { get; set; }
         public int? NumeroPaginas { get; set; }
         public DateTime FechaPublicacion { get; set; }

@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using VirtualBook.Controller;
 using VirtualBook.Models.DTO;
-//using VirtualBook.DTOs;
 
 namespace VirtualBook.Views.DocentesViews
 {
@@ -35,29 +34,6 @@ namespace VirtualBook.Views.DocentesViews
             mf.OpenForm(uploadBookForm);
         }
 
-        private async Task CargarCantidadSeguidores(int idUsuario)
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                try
-                {
-                    var response = await client.GetAsync($"https://localhost:7014/api/Seguimientoes/cantidadSeguidores/{idUsuario}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var cantidad = await response.Content.ReadAsStringAsync();
-                        LblFollowers.Text = $"{cantidad} seguidores";
-                    }
-                    else
-                    {
-                        LblFollowers.Text = "0";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al obtener seguidores: {ex.Message}");
-                }
-            }
-        }
         private async Task CargarMisLibros()
         {
             try
@@ -67,9 +43,6 @@ namespace VirtualBook.Views.DocentesViews
                 DgvLibros.DataSource = libros;
 
                 LblTotalBooks.Text = $"{libros.Count} libros";
-
-                // 4. Cargar seguidores (Opcional: esto debería ir en un repositorio también)
-                // _ = CargarCantidadSeguidores(); 
             }
             catch (Exception ex)
             {
@@ -81,13 +54,11 @@ namespace VirtualBook.Views.DocentesViews
             DgvLibros.AutoGenerateColumns = true;
         }
 
-        // EVENTO SELECCION CAMBIO EN EL DATAGRIDVIEW
         private void dgvShowBooks_SelectionChanged(object sender, EventArgs e)
         {
             BtnEliminar.Enabled = DgvLibros.SelectedRows.Count > 0;
         }
 
-        // MAE AQUI VOY ASIGNAR EL EVENTO CLICK DEL BOTON ELIMINAR
         private async void BtnEliminar_Click(object sender, EventArgs e)
         {
             if (DgvLibros.SelectedRows.Count == 0) return;

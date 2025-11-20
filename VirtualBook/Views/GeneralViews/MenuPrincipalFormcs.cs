@@ -3,7 +3,6 @@ using System.Drawing.Drawing2D;
 using VirtualBook.Controller;
 using VirtualBook.Models.DTO;
 using VirtualBook.UserControls;
-//using VirtualBook.DTOs;
 
 namespace VirtualBook.Views
 {
@@ -17,10 +16,10 @@ namespace VirtualBook.Views
         {
             InitializeComponent();
             _apiClient = ApiClient.Instance;
-            _apiRootUrl = ConfigurationManager.AppSettings["ApiRootURL"]!; // URL raíz del App.config
+            _apiRootUrl = ConfigurationManager.AppSettings["ApiRootURL"]!;
 
             pnlTabs.BackColor = Color.White;
-            pnlTabs.Padding = new Padding(15, 10, 0, 10); // Espacio interno
+            pnlTabs.Padding = new Padding(15, 10, 0, 10); 
             pnlTabs.BorderStyle = BorderStyle.None;
 
             RedondearBoton(btnBrowseBooks, 30);
@@ -47,7 +46,6 @@ namespace VirtualBook.Views
                 btn.Padding = new Padding(10, 5, 10, 5);
             }
 
-            // Opción activa destacada
             btnBrowseBooks.BackColor = Color.LightGray;
         }
 
@@ -100,7 +98,6 @@ namespace VirtualBook.Views
 
             if (listaLibros == null || listaLibros.Count == 0)
             {
-                // Opcional: Mostrar un label que diga "No hay resultados"
                 Label LblnoResults = new Label
                 {
                     Text = "No se encontraron libros.",

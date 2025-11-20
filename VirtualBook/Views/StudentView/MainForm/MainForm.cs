@@ -113,7 +113,6 @@ namespace VirtualBook.Views
 
         }
 
-        // Metodos
         public void OpenForm(Form ChildForm)
         {
             if (activeForm != null)
@@ -207,7 +206,6 @@ namespace VirtualBook.Views
             }
         }
 
-        // Eventos
         private void MainForm_Load(object sender, EventArgs e)
         {
 

@@ -19,28 +19,24 @@ namespace VirtualBook_API.Controllers
             _dbContext = dbContext;
         }
 
-        // GET: api/Data/Autores
         [HttpGet("Autores")]
         public async Task<IActionResult> GetAutores()
         {
             return Ok(await GetData(Procedimientos.SP_ObtenerAutores, "IdAutor", "NombreAutor"));
         }
 
-        // GET: api/Data/Categorias
         [HttpGet("Categorias")]
         public async Task<IActionResult> GetCategorias()
         {
             return Ok(await GetData(Procedimientos.SP_ObtenerCategorias, "IdCategoria", "NombreCategoria"));
         }
 
-        // GET: api/Data/Formatos
         [HttpGet("Formatos")]
         public async Task<IActionResult> GetFormatos()
         {
             return Ok(await GetData(Procedimientos.SP_ObtenerFormatos, "IdFormato", "NombreFormato"));
         }
 
-        // GET: api/Data/Idiomas
         [HttpGet("Idiomas")]
         public async Task<IActionResult> GetIdiomas()
         {
@@ -76,7 +72,6 @@ namespace VirtualBook_API.Controllers
             }
         }
 
-        // Método para leer los datos
         private async Task<List<DataDto>> GetData(string spName, string idColumn, string nombreColumn)
         {
             var list = new List<DataDto>();

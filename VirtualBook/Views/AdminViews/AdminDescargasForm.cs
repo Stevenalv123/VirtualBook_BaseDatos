@@ -30,14 +30,12 @@ namespace VirtualBook.Views.AdminViews
 
         private void ConfigurarGrid()
         {
-            // Configuración para que se vea profesional
             dgvDescargas.AutoGenerateColumns = true;
             dgvDescargas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvDescargas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDescargas.ReadOnly = true;
             dgvDescargas.AllowUserToAddRows = false;
 
-            // Evento para pintar de color las descargas
             dgvDescargas.CellFormatting += DgvDescargas_CellFormatting;
         }
 
@@ -46,7 +44,6 @@ namespace VirtualBook.Views.AdminViews
             this.Cursor = Cursors.WaitCursor;
             try
             {
-                // Llamada al repositorio (Paso 3)
                 var reporte = await _apiClient.Libros.GetReporteDescargasAsync();
 
                 if (reporte != null)
@@ -54,11 +51,9 @@ namespace VirtualBook.Views.AdminViews
                     _listaReporte = reporte;
                     dgvDescargas.DataSource = _listaReporte;
 
-                    // Ocultar columna ID que no interesa al usuario
                     if (dgvDescargas.Columns.Contains("IdLibro"))
                         dgvDescargas.Columns["IdLibro"].Visible = false;
 
-                    // Calcular total global
                     int total = _listaReporte.Sum(x => x.TotalDescargas);
                     if (lblTotalDescargas != null) lblTotalDescargas.Text = total.ToString();
                 }
@@ -75,7 +70,6 @@ namespace VirtualBook.Views.AdminViews
 
         private void DgvDescargas_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            // Pintar verde si tiene descargas > 0
             if (dgvDescargas.Columns[e.ColumnIndex].Name == "TotalDescargas" && e.Value != null)
             {
                 if (int.TryParse(e.Value.ToString(), out int descargas))
@@ -93,7 +87,6 @@ namespace VirtualBook.Views.AdminViews
             }
         }
 
-        // Busca el TextBox en tu designer (probablemente txtBuscar) y asocia este evento
         private void txtBuscar_TextChanged(object sender, EventArgs e)
         {
             FiltrarReporte(txtBuscar.Text);

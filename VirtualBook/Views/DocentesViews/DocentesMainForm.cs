@@ -56,7 +56,6 @@ namespace VirtualBook.Views.DocentesViews
 
         private void BtnVerLibros_Click(object sender, EventArgs e)
         {
-            // Verificamos el TIPO del formulario activo
             if (activeForm is DocentesViews) return;
 
             OpenForm(new DocentesViews(this));

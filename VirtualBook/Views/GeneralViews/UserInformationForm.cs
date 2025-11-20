@@ -2,9 +2,6 @@
 using System.Net.Http.Json;
 using VirtualBook.Controller;
 using VirtualBook.Models.DTO;
-
-
-//using VirtualBook.DTOs;
 using VirtualBook.Views.AdminViews;
 using VirtualBook.Views.DocentesViews;
 
@@ -31,7 +28,6 @@ namespace VirtualBook.Views
 
         private async void BtnRegistrar_Click(object sender, EventArgs e)
         {
-            //validamos que los campos no esten vacios
             if (string.IsNullOrWhiteSpace(TxtNombreUsuario.Text) || string.IsNullOrEmpty(TxtApellidosUsuarios.Text))
             {
                 MessageBox.Show("Por favor completa todos los campos obligatorios.", "Campos incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -52,8 +48,7 @@ namespace VirtualBook.Views
             }
 
             int idRol = (int)cborol.SelectedValue;
-
-            //agregar el usuario 
+ 
             using (HttpClient client = new HttpClient())
             {
                 try
@@ -132,7 +127,7 @@ namespace VirtualBook.Views
             {
                 PcbFotoPerfil.BackgroundImage = null;
                 PcbFotoPerfil.Image = new Bitmap(dlgImagenPerfil.FileName);
-                rutaImagenSeleccionada = dlgImagenPerfil.FileName; // Convertir la imagen a bytes
+                rutaImagenSeleccionada = dlgImagenPerfil.FileName; 
             }
         }
 
