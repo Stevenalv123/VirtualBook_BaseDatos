@@ -31,6 +31,7 @@ namespace VirtualBook.Controller
 
         private ApiClient()
         {
+            
             string apiBaseUrl = ConfigurationManager.AppSettings["ApiBaseURL"]!;
             _httpClient = new HttpClient
             {

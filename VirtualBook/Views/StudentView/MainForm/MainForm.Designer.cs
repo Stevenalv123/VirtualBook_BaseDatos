@@ -79,8 +79,9 @@
             panel1.Controls.Add(panel5);
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 0);
+            panel1.Margin = new Padding(3, 4, 3, 4);
             panel1.Name = "panel1";
-            panel1.Size = new Size(289, 778);
+            panel1.Size = new Size(330, 1037);
             panel1.TabIndex = 0;
             panel1.Tag = "NoCambiarTema";
             // 
@@ -91,18 +92,20 @@
             panel7.Controls.Add(PcbFotoPerfil);
             panel7.Controls.Add(LblCorreo);
             panel7.Controls.Add(LblNombre);
-            panel7.Location = new Point(0, 705);
+            panel7.Location = new Point(0, 940);
+            panel7.Margin = new Padding(3, 4, 3, 4);
             panel7.Name = "panel7";
-            panel7.Size = new Size(289, 73);
+            panel7.Size = new Size(330, 97);
             panel7.TabIndex = 2;
             panel7.Tag = "NoCambiarTema";
             // 
             // PcbCargandoUser
             // 
             PcbCargandoUser.Image = Properties.Resources.skeletonAnimation;
-            PcbCargandoUser.Location = new Point(6, 0);
+            PcbCargandoUser.Location = new Point(7, 0);
+            PcbCargandoUser.Margin = new Padding(3, 4, 3, 4);
             PcbCargandoUser.Name = "PcbCargandoUser";
-            PcbCargandoUser.Size = new Size(283, 73);
+            PcbCargandoUser.Size = new Size(323, 97);
             PcbCargandoUser.SizeMode = PictureBoxSizeMode.StretchImage;
             PcbCargandoUser.TabIndex = 6;
             PcbCargandoUser.TabStop = false;
@@ -114,10 +117,9 @@
             PcbFotoPerfil.BorderSize = 0;
             PcbFotoPerfil.Cursor = Cursors.Hand;
             PcbFotoPerfil.Image = Properties.Resources.user;
-            PcbFotoPerfil.Location = new Point(17, 17);
-            PcbFotoPerfil.Margin = new Padding(3, 2, 3, 2);
+            PcbFotoPerfil.Location = new Point(19, 23);
             PcbFotoPerfil.Name = "PcbFotoPerfil";
-            PcbFotoPerfil.Size = new Size(50, 50);
+            PcbFotoPerfil.Size = new Size(57, 67);
             PcbFotoPerfil.SizeMode = PictureBoxSizeMode.Zoom;
             PcbFotoPerfil.TabIndex = 4;
             PcbFotoPerfil.TabStop = false;
@@ -128,9 +130,9 @@
             LblCorreo.AutoSize = true;
             LblCorreo.Cursor = Cursors.Hand;
             LblCorreo.ForeColor = Color.White;
-            LblCorreo.Location = new Point(75, 39);
+            LblCorreo.Location = new Point(86, 52);
             LblCorreo.Name = "LblCorreo";
-            LblCorreo.Size = new Size(0, 15);
+            LblCorreo.Size = new Size(0, 20);
             LblCorreo.TabIndex = 2;
             LblCorreo.Click += LblStudentId_Click;
             // 
@@ -140,9 +142,9 @@
             LblNombre.Cursor = Cursors.Hand;
             LblNombre.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             LblNombre.ForeColor = Color.White;
-            LblNombre.Location = new Point(75, 18);
+            LblNombre.Location = new Point(86, 24);
             LblNombre.Name = "LblNombre";
-            LblNombre.Size = new Size(0, 21);
+            LblNombre.Size = new Size(0, 28);
             LblNombre.TabIndex = 1;
             LblNombre.Click += LblNombre_Click;
             // 
@@ -154,10 +156,11 @@
             panel10.Controls.Add(iconButton3);
             panel10.Controls.Add(MostraMenuPrincipalForms);
             panel10.Dock = DockStyle.Top;
-            panel10.Location = new Point(0, 127);
+            panel10.Location = new Point(0, 169);
+            panel10.Margin = new Padding(3, 4, 3, 4);
             panel10.Name = "panel10";
-            panel10.Padding = new Padding(10, 0, 10, 0);
-            panel10.Size = new Size(289, 582);
+            panel10.Padding = new Padding(11, 0, 11, 0);
+            panel10.Size = new Size(330, 776);
             panel10.TabIndex = 1;
             panel10.Tag = "NoCambiarTema";
             // 
@@ -165,10 +168,11 @@
             // 
             PanelConfiguracion.Controls.Add(BtnCerrarSesion);
             PanelConfiguracion.Dock = DockStyle.Top;
-            PanelConfiguracion.Location = new Point(10, 200);
+            PanelConfiguracion.Location = new Point(11, 268);
+            PanelConfiguracion.Margin = new Padding(3, 4, 3, 4);
             PanelConfiguracion.Name = "PanelConfiguracion";
-            PanelConfiguracion.Padding = new Padding(10, 0, 10, 0);
-            PanelConfiguracion.Size = new Size(269, 123);
+            PanelConfiguracion.Padding = new Padding(11, 0, 11, 0);
+            PanelConfiguracion.Size = new Size(308, 164);
             PanelConfiguracion.TabIndex = 5;
             PanelConfiguracion.Visible = false;
             // 
@@ -184,11 +188,10 @@
             BtnCerrarSesion.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtnCerrarSesion.IconSize = 32;
             BtnCerrarSesion.ImageAlign = ContentAlignment.MiddleLeft;
-            BtnCerrarSesion.Location = new Point(10, 0);
-            BtnCerrarSesion.Margin = new Padding(3, 2, 3, 2);
+            BtnCerrarSesion.Location = new Point(11, 0);
             BtnCerrarSesion.Name = "BtnCerrarSesion";
-            BtnCerrarSesion.Padding = new Padding(20, 0, 32, 0);
-            BtnCerrarSesion.Size = new Size(249, 50);
+            BtnCerrarSesion.Padding = new Padding(23, 0, 37, 0);
+            BtnCerrarSesion.Size = new Size(286, 67);
             BtnCerrarSesion.TabIndex = 4;
             BtnCerrarSesion.Text = "Cerrar Sesión";
             BtnCerrarSesion.UseVisualStyleBackColor = true;
@@ -206,11 +209,10 @@
             BtnConfiguracion.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtnConfiguracion.IconSize = 32;
             BtnConfiguracion.ImageAlign = ContentAlignment.MiddleLeft;
-            BtnConfiguracion.Location = new Point(10, 150);
-            BtnConfiguracion.Margin = new Padding(3, 2, 3, 2);
+            BtnConfiguracion.Location = new Point(11, 201);
             BtnConfiguracion.Name = "BtnConfiguracion";
-            BtnConfiguracion.Padding = new Padding(20, 0, 32, 0);
-            BtnConfiguracion.Size = new Size(269, 50);
+            BtnConfiguracion.Padding = new Padding(23, 0, 37, 0);
+            BtnConfiguracion.Size = new Size(308, 67);
             BtnConfiguracion.TabIndex = 4;
             BtnConfiguracion.Text = "Configuración";
             BtnConfiguracion.UseVisualStyleBackColor = true;
@@ -228,11 +230,10 @@
             BtnMiperfil.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtnMiperfil.IconSize = 32;
             BtnMiperfil.ImageAlign = ContentAlignment.MiddleLeft;
-            BtnMiperfil.Location = new Point(10, 100);
-            BtnMiperfil.Margin = new Padding(3, 2, 3, 2);
+            BtnMiperfil.Location = new Point(11, 134);
             BtnMiperfil.Name = "BtnMiperfil";
-            BtnMiperfil.Padding = new Padding(20, 0, 72, 0);
-            BtnMiperfil.Size = new Size(269, 50);
+            BtnMiperfil.Padding = new Padding(23, 0, 82, 0);
+            BtnMiperfil.Size = new Size(308, 67);
             BtnMiperfil.TabIndex = 3;
             BtnMiperfil.Text = "Mi perfil";
             BtnMiperfil.UseVisualStyleBackColor = true;
@@ -250,11 +251,10 @@
             iconButton3.IconFont = FontAwesome.Sharp.IconFont.Auto;
             iconButton3.IconSize = 32;
             iconButton3.ImageAlign = ContentAlignment.MiddleLeft;
-            iconButton3.Location = new Point(10, 50);
-            iconButton3.Margin = new Padding(3, 2, 3, 2);
+            iconButton3.Location = new Point(11, 67);
             iconButton3.Name = "iconButton3";
-            iconButton3.Padding = new Padding(20, 0, 35, 0);
-            iconButton3.Size = new Size(269, 50);
+            iconButton3.Padding = new Padding(23, 0, 40, 0);
+            iconButton3.Size = new Size(308, 67);
             iconButton3.TabIndex = 2;
             iconButton3.Text = "Mis favoritos";
             iconButton3.UseVisualStyleBackColor = true;
@@ -272,11 +272,11 @@
             MostraMenuPrincipalForms.IconFont = FontAwesome.Sharp.IconFont.Auto;
             MostraMenuPrincipalForms.IconSize = 32;
             MostraMenuPrincipalForms.ImageAlign = ContentAlignment.MiddleLeft;
-            MostraMenuPrincipalForms.Location = new Point(10, 0);
-            MostraMenuPrincipalForms.Margin = new Padding(3, 3, 3, 10);
+            MostraMenuPrincipalForms.Location = new Point(11, 0);
+            MostraMenuPrincipalForms.Margin = new Padding(3, 4, 3, 13);
             MostraMenuPrincipalForms.Name = "MostraMenuPrincipalForms";
-            MostraMenuPrincipalForms.Padding = new Padding(20, 0, 20, 0);
-            MostraMenuPrincipalForms.Size = new Size(269, 50);
+            MostraMenuPrincipalForms.Padding = new Padding(23, 0, 23, 0);
+            MostraMenuPrincipalForms.Size = new Size(308, 67);
             MostraMenuPrincipalForms.TabIndex = 0;
             MostraMenuPrincipalForms.Text = "Menu principal";
             MostraMenuPrincipalForms.UseVisualStyleBackColor = true;
@@ -288,8 +288,9 @@
             panel5.Controls.Add(pictureBox1);
             panel5.Dock = DockStyle.Top;
             panel5.Location = new Point(0, 0);
+            panel5.Margin = new Padding(3, 4, 3, 4);
             panel5.Name = "panel5";
-            panel5.Size = new Size(289, 127);
+            panel5.Size = new Size(330, 169);
             panel5.TabIndex = 0;
             panel5.Tag = "NoCambiarTema";
             // 
@@ -298,18 +299,19 @@
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
             label1.ForeColor = Color.White;
-            label1.Location = new Point(75, 26);
+            label1.Location = new Point(86, 35);
             label1.Name = "label1";
-            label1.Size = new Size(178, 37);
+            label1.Size = new Size(222, 46);
             label1.TabIndex = 1;
             label1.Text = "Virtual Book";
             // 
             // pictureBox1
             // 
             pictureBox1.Image = Properties.Resources.logo;
-            pictureBox1.Location = new Point(3, 9);
+            pictureBox1.Location = new Point(3, 12);
+            pictureBox1.Margin = new Padding(3, 4, 3, 4);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(87, 71);
+            pictureBox1.Size = new Size(99, 95);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -322,9 +324,10 @@
             PanelTop.Controls.Add(BtnAyuda);
             PanelTop.Controls.Add(borderedPanel1);
             PanelTop.Dock = DockStyle.Top;
-            PanelTop.Location = new Point(289, 0);
+            PanelTop.Location = new Point(330, 0);
+            PanelTop.Margin = new Padding(3, 4, 3, 4);
             PanelTop.Name = "PanelTop";
-            PanelTop.Size = new Size(970, 74);
+            PanelTop.Size = new Size(1109, 99);
             PanelTop.TabIndex = 1;
             // 
             // BtnNotificaciones
@@ -337,9 +340,10 @@
             BtnNotificaciones.IconColor = Color.Black;
             BtnNotificaciones.IconFont = FontAwesome.Sharp.IconFont.Regular;
             BtnNotificaciones.ImageAlign = ContentAlignment.MiddleLeft;
-            BtnNotificaciones.Location = new Point(606, 12);
+            BtnNotificaciones.Location = new Point(693, 16);
+            BtnNotificaciones.Margin = new Padding(3, 4, 3, 4);
             BtnNotificaciones.Name = "BtnNotificaciones";
-            BtnNotificaciones.Size = new Size(164, 49);
+            BtnNotificaciones.Size = new Size(187, 65);
             BtnNotificaciones.TabIndex = 7;
             BtnNotificaciones.Text = "Notificaciones";
             BtnNotificaciones.TextAlign = ContentAlignment.MiddleRight;
@@ -356,9 +360,10 @@
             BtnSwitchTheme.IconColor = Color.Black;
             BtnSwitchTheme.IconFont = FontAwesome.Sharp.IconFont.Regular;
             BtnSwitchTheme.IconSize = 30;
-            BtnSwitchTheme.Location = new Point(896, 20);
+            BtnSwitchTheme.Location = new Point(971, 28);
+            BtnSwitchTheme.Margin = new Padding(3, 4, 3, 4);
             BtnSwitchTheme.Name = "BtnSwitchTheme";
-            BtnSwitchTheme.Size = new Size(40, 40);
+            BtnSwitchTheme.Size = new Size(46, 53);
             BtnSwitchTheme.TabIndex = 6;
             BtnSwitchTheme.UseVisualStyleBackColor = true;
             BtnSwitchTheme.Click += BtnSwitchTheme_Click;
@@ -375,13 +380,15 @@
             BtnAyuda.FlatStyle = FlatStyle.Flat;
             BtnAyuda.Font = new Font("Segoe UI", 12F);
             BtnAyuda.ForeColor = Color.Black;
-            BtnAyuda.Location = new Point(776, 18);
+            BtnAyuda.Location = new Point(887, 24);
+            BtnAyuda.Margin = new Padding(3, 4, 3, 4);
             BtnAyuda.Name = "BtnAyuda";
-            BtnAyuda.Size = new Size(114, 40);
+            BtnAyuda.Size = new Size(130, 53);
             BtnAyuda.TabIndex = 5;
             BtnAyuda.Text = "Ayuda";
             BtnAyuda.TextColor = Color.Black;
             BtnAyuda.UseVisualStyleBackColor = false;
+            BtnAyuda.Visible = false;
             // 
             // borderedPanel1
             // 
@@ -391,20 +398,22 @@
             borderedPanel1.BorderSize = 1;
             borderedPanel1.Controls.Add(TxtBucarLibros);
             borderedPanel1.Controls.Add(btnBuscarlibro);
-            borderedPanel1.Location = new Point(6, 20);
+            borderedPanel1.Location = new Point(7, 27);
+            borderedPanel1.Margin = new Padding(3, 4, 3, 4);
             borderedPanel1.Name = "borderedPanel1";
-            borderedPanel1.Padding = new Padding(5);
-            borderedPanel1.Size = new Size(528, 38);
+            borderedPanel1.Padding = new Padding(6, 7, 6, 7);
+            borderedPanel1.Size = new Size(603, 51);
             borderedPanel1.TabIndex = 3;
             // 
             // TxtBucarLibros
             // 
             TxtBucarLibros.BorderStyle = BorderStyle.None;
             TxtBucarLibros.Font = new Font("Segoe UI", 12F);
-            TxtBucarLibros.Location = new Point(43, 8);
+            TxtBucarLibros.Location = new Point(49, 11);
+            TxtBucarLibros.Margin = new Padding(3, 4, 3, 4);
             TxtBucarLibros.Name = "TxtBucarLibros";
             TxtBucarLibros.PlaceholderText = "Buscar libros, autores, o generos";
-            TxtBucarLibros.Size = new Size(442, 22);
+            TxtBucarLibros.Size = new Size(505, 27);
             TxtBucarLibros.TabIndex = 1;
             TxtBucarLibros.TextChanged += TxtBucarLibros_TextChanged;
             // 
@@ -416,10 +425,11 @@
             btnBuscarlibro.IconChar = FontAwesome.Sharp.IconChar.Search;
             btnBuscarlibro.IconColor = Color.FromArgb(113, 113, 122);
             btnBuscarlibro.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            btnBuscarlibro.IconSize = 28;
-            btnBuscarlibro.Location = new Point(5, 5);
+            btnBuscarlibro.IconSize = 37;
+            btnBuscarlibro.Location = new Point(6, 7);
+            btnBuscarlibro.Margin = new Padding(3, 4, 3, 4);
             btnBuscarlibro.Name = "btnBuscarlibro";
-            btnBuscarlibro.Size = new Size(32, 28);
+            btnBuscarlibro.Size = new Size(37, 37);
             btnBuscarlibro.TabIndex = 2;
             btnBuscarlibro.TabStop = false;
             btnBuscarlibro.Click += btnBuscarlibro_Click;
@@ -429,9 +439,9 @@
             LblDerechosReservados.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             LblDerechosReservados.AutoSize = true;
             LblDerechosReservados.ForeColor = Color.FromArgb(113, 113, 122);
-            LblDerechosReservados.Location = new Point(401, 12);
+            LblDerechosReservados.Location = new Point(458, 16);
             LblDerechosReservados.Name = "LblDerechosReservados";
-            LblDerechosReservados.Size = new Size(253, 15);
+            LblDerechosReservados.Size = new Size(319, 20);
             LblDerechosReservados.TabIndex = 0;
             LblDerechosReservados.Text = "© 2025 VirtualBook System. All rights reserved.";
             // 
@@ -439,17 +449,19 @@
             // 
             PanelBottom.Controls.Add(LblDerechosReservados);
             PanelBottom.Dock = DockStyle.Bottom;
-            PanelBottom.Location = new Point(289, 744);
+            PanelBottom.Location = new Point(330, 992);
+            PanelBottom.Margin = new Padding(3, 4, 3, 4);
             PanelBottom.Name = "PanelBottom";
-            PanelBottom.Size = new Size(970, 34);
+            PanelBottom.Size = new Size(1109, 45);
             PanelBottom.TabIndex = 3;
             // 
             // PanelCentral
             // 
             PanelCentral.Dock = DockStyle.Fill;
-            PanelCentral.Location = new Point(289, 74);
+            PanelCentral.Location = new Point(330, 99);
+            PanelCentral.Margin = new Padding(3, 4, 3, 4);
             PanelCentral.Name = "PanelCentral";
-            PanelCentral.Size = new Size(970, 670);
+            PanelCentral.Size = new Size(1109, 893);
             PanelCentral.TabIndex = 4;
             // 
             // tmrNotificaciones
@@ -459,15 +471,16 @@
             // 
             // MainForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(1259, 778);
+            ClientSize = new Size(1439, 1037);
             Controls.Add(PanelCentral);
             Controls.Add(PanelBottom);
             Controls.Add(PanelTop);
             Controls.Add(panel1);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(3, 4, 3, 4);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "VirtualBook";

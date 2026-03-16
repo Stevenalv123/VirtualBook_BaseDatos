@@ -57,5 +57,11 @@ namespace VirtualBook.Models.Repository
                 return 0;
             }
         }
+
+        public async Task<bool> ActualizarBiografiaAutorAsync(int IdAutor, string nuevaBiografia)
+        {
+            var response = await _httpClient.PutAsync($"Libro/ActualizarBiografiaAutor?IdAutor={IdAutor}&nuevaBiografia={nuevaBiografia}", null);
+            return response.IsSuccessStatusCode;
+        }
     }
 }

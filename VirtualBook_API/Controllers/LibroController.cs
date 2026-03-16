@@ -49,6 +49,24 @@ namespace VirtualBook_API.Controllers
             }
         }
 
+        //Actualizar bio autor
+        [HttpPut("ActualizarBiografiaAutor")]
+        public async Task<IActionResult> ActualizarBiografiaAutor(int IdAutor, string nuevaBio)
+        {
+            await using var connection = _dbContext.GetConnection(); //obtenemos la conexion
+            var command = new SqlCommand ("sp_ActualizarBiografiaAutor",connection);//hacemos el SP
+            command.CommandType = CommandType.StoredProcedure; //y le indicamos que es un SP
+
+            //luego le pasamos los parametros del sp
+            command.Parameters.AddWithValue("@IdAutor", IdAutor);
+            command.Parameters.AddWithValue("@NuevaBiografia", nuevaBio);
+
+            await connection.OpenAsync(); //abrimos la conexion
+            await command.ExecuteNonQueryAsync(); //ejecutamos el comando
+
+            return Ok(command); //devuelve ok con el comando ejecutado
+        }
+
         [HttpGet("{id}")]
         [Authorize] 
         public async Task<IActionResult> GetLibroDetalle(int id)
@@ -80,6 +98,8 @@ namespace VirtualBook_API.Controllers
                 return StatusCode(500, $"Error interno del servidor: {ex.Message}");
             }
         }
+
+        
 
         [HttpPost("favorito")]
         [Authorize]
